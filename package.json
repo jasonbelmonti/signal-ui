@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@ant-design/icons": "6.1.0",
+    "@fontsource/azeret-mono": "5.2.11",
+    "@fontsource/oxanium": "5.2.8",
     "antd": "6.3.1",
     "react": "19.2.4",
     "react-dom": "19.2.4"

@@ -1,8 +1,3 @@
-:root {
-  color-scheme: dark;
-  font-family: "SFMono-Regular", "Menlo", "Monaco", "Consolas", monospace;
-}
-
 html,
 body,
 #storybook-root {
@@ -15,10 +10,45 @@ body {
 }
 
 .storybook-shell {
+  position: relative;
+  overflow: hidden;
   min-height: 100vh;
   padding: 32px;
   background:
-    linear-gradient(rgba(124, 252, 0, 0.04), rgba(124, 252, 0, 0.04)),
-    radial-gradient(circle at top, rgba(124, 252, 0, 0.08), transparent 40%),
-    #0a0a0a;
+    linear-gradient(rgba(192, 254, 4, 0.03), rgba(192, 254, 4, 0.03)),
+    radial-gradient(circle at top, rgba(192, 254, 4, 0.12), transparent 40%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent 18%),
+    #050505;
+}
+
+.storybook-shell::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 24px 24px;
+  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.55), transparent 85%);
+}
+
+.storybook-shell::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.025) 0,
+    rgba(255, 255, 255, 0.025) 1px,
+    transparent 1px,
+    transparent 5px
+  );
+  opacity: 0.45;
+}
+
+.storybook-shell > * {
+  position: relative;
+  z-index: 1;
 }

@@ -1,0 +1,153 @@
+:root {
+  --marathon-black: #000000;
+  --marathon-void: #050505;
+  --marathon-panel: #0f0f0f;
+  --marathon-surface: #1c1c1c;
+  --marathon-grid: #2b2b2b;
+  --marathon-muted: #717171;
+  --marathon-text: #f5f5f0;
+  --marathon-primary: #c0fe04;
+  --marathon-primary-deep: #86b400;
+  --marathon-warning: #ff9b2f;
+  --marathon-error: #f24723;
+  color-scheme: dark;
+}
+
+html {
+  background:
+    radial-gradient(circle at top, rgba(192, 254, 4, 0.12), transparent 36%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent 28%),
+    var(--marathon-black);
+}
+
+body {
+  color: var(--marathon-text);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent 20%),
+    repeating-linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.025) 0,
+      rgba(255, 255, 255, 0.025) 1px,
+      transparent 1px,
+      transparent 4px
+    ),
+    linear-gradient(90deg, rgba(192, 254, 4, 0.03), transparent 30%),
+    var(--marathon-black);
+  font-family: "Azeret Mono", "SFMono-Regular", "Menlo", monospace;
+  letter-spacing: 0.01em;
+}
+
+body,
+button,
+input,
+textarea,
+select {
+  font-feature-settings: "ss01" 1, "zero" 1;
+}
+
+::selection {
+  color: var(--marathon-black);
+  background: var(--marathon-primary);
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--marathon-primary) var(--marathon-surface);
+}
+
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+*::-webkit-scrollbar-track {
+  background: var(--marathon-surface);
+}
+
+*::-webkit-scrollbar-thumb {
+  border: 2px solid var(--marathon-surface);
+  background: var(--marathon-primary);
+}
+
+.ant-app {
+  color: var(--marathon-text);
+}
+
+.ant-btn {
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.ant-btn.ant-btn-primary {
+  text-shadow: none;
+}
+
+.ant-btn:not(:disabled):hover,
+.ant-btn:not(:disabled):focus-visible,
+.ant-card:hover,
+.ant-input:hover,
+.ant-input-affix-wrapper:hover {
+  box-shadow: 0 0 0 1px rgba(192, 254, 4, 0.22);
+}
+
+.ant-input,
+.ant-input-affix-wrapper,
+.ant-select-selector,
+.ant-picker,
+.ant-card,
+.ant-modal-content,
+.ant-drawer-content,
+.ant-alert,
+.ant-tag {
+  backdrop-filter: blur(10px);
+}
+
+.ant-input::placeholder,
+.ant-input-affix-wrapper input::placeholder,
+.ant-select-selection-placeholder,
+.ant-picker-input input::placeholder {
+  color: #838383;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.ant-typography h1,
+.ant-typography h2,
+.ant-typography h3,
+.ant-typography h4,
+.ant-typography h5,
+.ant-typography h6,
+h1.ant-typography,
+h2.ant-typography,
+h3.ant-typography,
+h4.ant-typography,
+h5.ant-typography,
+h6.ant-typography {
+  font-family: "Oxanium", "Azeret Mono", sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.ant-card-head-title,
+.ant-form-item-label > label,
+.ant-tag,
+.ant-tabs-tab-btn {
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.ant-card {
+  overflow: hidden;
+}
+
+.ant-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(135deg, rgba(192, 254, 4, 0.08), transparent 28%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 45%);
+  mix-blend-mode: screen;
+  opacity: 0.65;
+}
