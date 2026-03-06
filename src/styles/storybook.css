@@ -1,0 +1,24 @@
+:root {
+  color-scheme: dark;
+  font-family: "SFMono-Regular", "Menlo", "Monaco", "Consolas", monospace;
+}
+
+html,
+body,
+#storybook-root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  background: #0a0a0a;
+}
+
+.storybook-shell {
+  min-height: 100vh;
+  padding: 32px;
+  background:
+    linear-gradient(rgba(124, 252, 0, 0.04), rgba(124, 252, 0, 0.04)),
+    radial-gradient(circle at top, rgba(124, 252, 0, 0.08), transparent 40%),
+    #0a0a0a;
+}
