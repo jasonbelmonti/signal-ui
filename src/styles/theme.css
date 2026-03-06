@@ -10,6 +10,19 @@
   --marathon-primary-deep: #86b400;
   --marathon-warning: #ff9b2f;
   --marathon-error: #f24723;
+  --marathon-font-ui: "Azeret Mono", "SFMono-Regular", "Menlo", monospace;
+  --marathon-font-display: "Oxanium", "Azeret Mono", sans-serif;
+  --marathon-font-display-secondary: "Doto", "Oxanium", "Azeret Mono", sans-serif;
+  --marathon-fx-signal-ink: #f9ffef;
+  --marathon-fx-signal-accent: #d9ff67;
+  --marathon-fx-signal-glow: rgba(192, 254, 4, 0.42);
+  --marathon-fx-signal-noise-opacity: 0.24;
+  --marathon-fx-signal-scan-opacity: 0.18;
+  --marathon-fx-signal-noise-size: 72px;
+  --marathon-fx-signal-noise-speed: 240ms;
+  --marathon-fx-signal-sweep-speed: 1900ms;
+  --marathon-fx-signal-flicker-speed: 640ms;
+  --marathon-fx-signal-flicker-depth: 0.075;
   color-scheme: dark;
 }
 
@@ -33,7 +46,7 @@ body {
     ),
     linear-gradient(90deg, rgba(192, 254, 4, 0.03), transparent 30%),
     var(--marathon-black);
-  font-family: "Azeret Mono", "SFMono-Regular", "Menlo", monospace;
+  font-family: var(--marathon-font-ui);
   letter-spacing: 0.01em;
 }
 
@@ -42,6 +55,7 @@ button,
 input,
 textarea,
 select {
+  font-family: var(--marathon-font-ui);
   font-feature-settings: "ss01" 1, "zero" 1;
 }
 
@@ -123,8 +137,23 @@ h3.ant-typography,
 h4.ant-typography,
 h5.ant-typography,
 h6.ant-typography {
-  font-family: "Oxanium", "Azeret Mono", sans-serif;
+  font-family: var(--marathon-font-display);
+  font-weight: 700;
   letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.marathon-text-display {
+  font-family: var(--marathon-font-display);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.marathon-text-display-secondary {
+  font-family: var(--marathon-font-display-secondary);
+  font-weight: 700;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
 }
 
@@ -150,4 +179,338 @@ h6.ant-typography {
     linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 45%);
   mix-blend-mode: screen;
   opacity: 0.65;
+}
+
+.marathon-signal-text {
+  display: inline-block;
+  vertical-align: baseline;
+  font-family: var(--marathon-font-display-secondary);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--marathon-fx-signal-accent);
+  text-shadow:
+    0 0 0.08em rgba(255, 255, 255, 0.28),
+    0 0 0.58em var(--marathon-fx-signal-glow),
+    0.018em 0 0 rgba(255, 255, 255, 0.1),
+    -0.022em 0 0 rgba(192, 254, 4, 0.18);
+}
+
+@supports ((-webkit-background-clip: text) or (background-clip: text)) {
+  .marathon-signal-text {
+    background-image:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.15' numOctaves='2' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.33 0.33 0.33 0 0 0.33 0.33 0.33 0 0 0.33 0.33 0.33 0 0 0 0 0 0.42 0'/%3E%3C/filter%3E%3Crect width='96' height='96' filter='url(%23n)'/%3E%3C/svg%3E"),
+      linear-gradient(
+        90deg,
+        transparent 0%,
+        transparent 24%,
+        rgba(255, 255, 255, 0.08) 30%,
+        rgba(255, 255, 255, 0.28) 36%,
+        rgba(255, 255, 255, 0.96) 43%,
+        rgba(217, 255, 103, 0.92) 49%,
+        rgba(255, 255, 255, 0.46) 56%,
+        rgba(255, 255, 255, 0.12) 62%,
+        transparent 70%,
+        transparent 100%
+      ),
+      radial-gradient(
+        circle at 24% 28%,
+        rgb(0 0 0 / calc(var(--marathon-fx-signal-noise-opacity) * 0.95)) 0 1.35px,
+        transparent 2.1px
+      ),
+      radial-gradient(
+        circle at 68% 42%,
+        rgb(255 255 255 / calc(var(--marathon-fx-signal-noise-opacity) * 1.1)) 0 1.45px,
+        transparent 2.2px
+      ),
+      radial-gradient(
+        circle at 52% 64%,
+        rgb(192 254 4 / calc(var(--marathon-fx-signal-noise-opacity) * 0.96)) 0 1.6px,
+        transparent 2.35px
+      ),
+      repeating-linear-gradient(
+        180deg,
+        rgb(255 255 255 / var(--marathon-fx-signal-scan-opacity)) 0,
+        rgb(255 255 255 / var(--marathon-fx-signal-scan-opacity)) 1px,
+        rgb(0 0 0 / calc(var(--marathon-fx-signal-scan-opacity) * 0.82)) 1px,
+        rgb(0 0 0 / calc(var(--marathon-fx-signal-scan-opacity) * 0.82)) 3px,
+        transparent 3px,
+        transparent 5px
+      ),
+      repeating-linear-gradient(
+        90deg,
+        rgb(255 255 255 / 0.08) 0,
+        rgb(255 255 255 / 0.08) 1px,
+        rgb(0 0 0 / 0.07) 1px,
+        rgb(0 0 0 / 0.07) 2px,
+        transparent 2px,
+        transparent 5px
+      ),
+      linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 1) 0%,
+        rgba(250, 255, 242, 1) 24%,
+        var(--marathon-fx-signal-ink) 44%,
+        var(--marathon-fx-signal-accent) 72%,
+        rgba(247, 255, 232, 0.99) 100%
+      );
+    background-size:
+      calc(var(--marathon-fx-signal-noise-size) * 0.95)
+        calc(var(--marathon-fx-signal-noise-size) * 0.95),
+      165% 100%,
+      calc(var(--marathon-fx-signal-noise-size) * 0.3)
+        calc(var(--marathon-fx-signal-noise-size) * 0.3),
+      calc(var(--marathon-fx-signal-noise-size) * 0.4)
+        calc(var(--marathon-fx-signal-noise-size) * 0.4),
+      calc(var(--marathon-fx-signal-noise-size) * 0.58)
+        calc(var(--marathon-fx-signal-noise-size) * 0.58),
+      100% 5px,
+      5px 100%,
+      100% 100%;
+    background-position:
+      0 0,
+      -140% 50%,
+      0 0,
+      0 0,
+      0 0,
+      0 0,
+      0 0,
+      50% 50%;
+    background-repeat: repeat, no-repeat, repeat, repeat, repeat, repeat, repeat, no-repeat;
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+    will-change: background-position, opacity, text-shadow;
+    animation:
+      marathon-signal-sweep var(--marathon-fx-signal-sweep-speed) linear infinite,
+      marathon-signal-noise var(--marathon-fx-signal-noise-speed) steps(1, end) infinite,
+      marathon-signal-flicker var(--marathon-fx-signal-flicker-speed) steps(1, end) infinite;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marathon-signal-text {
+    animation: none;
+    opacity: 1;
+    will-change: auto;
+  }
+}
+
+@media (forced-colors: active) {
+  .marathon-signal-text {
+    background: none;
+    color: CanvasText;
+    -webkit-text-fill-color: currentColor;
+    text-shadow: none;
+  }
+}
+
+@keyframes marathon-signal-sweep {
+  0% {
+    background-position:
+      0 0,
+      -140% 50%,
+      0 0,
+      0 0,
+      0 0,
+      0 0,
+      0 0,
+      50% 50%;
+  }
+
+  28% {
+    background-position:
+      0 0,
+      -50% 50%,
+      0 0,
+      0 0,
+      0 0,
+      0 0,
+      0 0,
+      50% 50%;
+  }
+
+  52% {
+    background-position:
+      0 0,
+      18% 50%,
+      0 0,
+      0 0,
+      0 0,
+      0 0,
+      0 0,
+      50% 50%;
+  }
+
+  78% {
+    background-position:
+      0 0,
+      96% 50%,
+      0 0,
+      0 0,
+      0 0,
+      0 0,
+      0 0,
+      50% 50%;
+  }
+
+  100% {
+    background-position:
+      0 0,
+      140% 50%,
+      0 0,
+      0 0,
+      0 0,
+      0 0,
+      0 0,
+      50% 50%;
+  }
+}
+
+@keyframes marathon-signal-noise {
+  0% {
+    background-position:
+      0 0,
+      -140% 50%,
+      0 0,
+      0 0,
+      0 0,
+      0 0,
+      0 0,
+      50% 50%;
+  }
+
+  20% {
+    background-position:
+      11px -7px,
+      -140% 50%,
+      16px -8px,
+      -10px 7px,
+      9px 11px,
+      0 1px,
+      1px 0,
+      50% 50%;
+  }
+
+  40% {
+    background-position:
+      -8px 9px,
+      -140% 50%,
+      -12px 9px,
+      8px -5px,
+      -8px 6px,
+      0 0,
+      0 0,
+      50% 50%;
+  }
+
+  60% {
+    background-position:
+      8px 15px,
+      -140% 50%,
+      7px 14px,
+      -15px -6px,
+      12px -11px,
+      0 2px,
+      2px 0,
+      50% 50%;
+  }
+
+  80% {
+    background-position:
+      -13px -8px,
+      -140% 50%,
+      -14px -9px,
+      12px 9px,
+      -6px -14px,
+      0 1px,
+      1px 0,
+      50% 50%;
+  }
+
+  100% {
+    background-position:
+      0 0,
+      -140% 50%,
+      0 0,
+      0 0,
+      0 0,
+      0 0,
+      0 0,
+      50% 50%;
+  }
+}
+
+@keyframes marathon-signal-flicker {
+  0%,
+  100% {
+    opacity: 1;
+    text-shadow:
+      0 0 0.08em rgba(255, 255, 255, 0.28),
+      0 0 0.58em var(--marathon-fx-signal-glow),
+      0.018em 0 0 rgba(255, 255, 255, 0.1),
+      -0.022em 0 0 rgba(192, 254, 4, 0.18);
+  }
+
+  6% {
+    opacity: calc(1 - (var(--marathon-fx-signal-flicker-depth) * 0.42));
+    text-shadow:
+      0 0 0.06em rgba(255, 255, 255, 0.18),
+      0 0 0.42em var(--marathon-fx-signal-glow),
+      0.012em 0 0 rgba(255, 255, 255, 0.08),
+      -0.014em 0 0 rgba(192, 254, 4, 0.15);
+  }
+
+  12% {
+    opacity: calc(1 - (var(--marathon-fx-signal-flicker-depth) * 1.12));
+    text-shadow:
+      0 0 0.1em rgba(255, 255, 255, 0.34),
+      0 0 0.68em var(--marathon-fx-signal-glow),
+      0.028em 0 0 rgba(255, 255, 255, 0.15),
+      -0.032em 0 0 rgba(192, 254, 4, 0.26);
+  }
+
+  19% {
+    opacity: calc(1 - (var(--marathon-fx-signal-flicker-depth) * 0.36));
+  }
+
+  31% {
+    opacity: calc(1 - (var(--marathon-fx-signal-flicker-depth) * 0.94));
+    text-shadow:
+      0 0 0.07em rgba(255, 255, 255, 0.22),
+      0 0 0.48em var(--marathon-fx-signal-glow),
+      0.025em 0 0 rgba(255, 255, 255, 0.12),
+      -0.03em 0 0 rgba(192, 254, 4, 0.22);
+  }
+
+  44% {
+    opacity: calc(1 - (var(--marathon-fx-signal-flicker-depth) * 0.24));
+  }
+
+  57% {
+    opacity: calc(1 - (var(--marathon-fx-signal-flicker-depth) * 1.18));
+    text-shadow:
+      0 0 0.11em rgba(255, 255, 255, 0.36),
+      0 0 0.74em var(--marathon-fx-signal-glow),
+      0.03em 0 0 rgba(255, 255, 255, 0.16),
+      -0.036em 0 0 rgba(192, 254, 4, 0.28);
+  }
+
+  69% {
+    opacity: calc(1 - (var(--marathon-fx-signal-flicker-depth) * 0.5));
+  }
+
+  82% {
+    opacity: calc(1 - (var(--marathon-fx-signal-flicker-depth) * 1.02));
+    text-shadow:
+      0 0 0.09em rgba(255, 255, 255, 0.3),
+      0 0 0.62em var(--marathon-fx-signal-glow),
+      0.024em 0 0 rgba(255, 255, 255, 0.13),
+      -0.028em 0 0 rgba(192, 254, 4, 0.24);
+  }
+
+  91% {
+    opacity: calc(1 - (var(--marathon-fx-signal-flicker-depth) * 0.4));
+  }
 }

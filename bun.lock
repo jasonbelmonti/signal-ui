@@ -6,6 +6,7 @@
       "dependencies": {
         "@ant-design/icons": "6.1.0",
         "@fontsource/azeret-mono": "5.2.11",
+        "@fontsource/doto": "^5.2.10",
         "@fontsource/oxanium": "5.2.8",
         "antd": "6.3.1",
         "react": "19.2.4",
@@ -131,6 +132,8 @@
     "@esbuild/win32-x64": ["@esbuild/win32-x64@0.27.3", "", { "os": "win32", "cpu": "x64" }, "sha512-4uJGhsxuptu3OcpVAzli+/gWusVGwZZHTlS63hh++ehExkVT8SgiEf7/uC/PclrPPkLhZqGgCTjd0VWLo6xMqA=="],
 
     "@fontsource/azeret-mono": ["@fontsource/azeret-mono@5.2.11", "", {}, "sha512-DlufUsIj1AK6Z/26X/1bZj4SFsfuE6Cb1wYToGX3HoxTYrNzN0TUQ3Yv8bJ3kmvO3vOTCgOjFV81OJe2FERrUg=="],
+
+    "@fontsource/doto": ["@fontsource/doto@5.2.10", "", {}, "sha512-ufujoYfFqlYaDD27ctpsZny3UH+uhCqKNgwIFZvtOAuiao3O2v0tDDxn2lrDgjbDBUrQzJufQk/yzzSyf/wICw=="],
 
     "@fontsource/oxanium": ["@fontsource/oxanium@5.2.8", "", {}, "sha512-69zbaespIFhjwCWgs2axD6wiwUhtEDK/R9512mv5h/U2/iv7zJowneRFt2y1aYet6RDLDWyK23F+ltbOhFIngg=="],
 

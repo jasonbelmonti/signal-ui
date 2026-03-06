@@ -20,7 +20,7 @@ const meta = {
       >
         <Space direction="vertical" size={10}>
           <Typography.Text style={eyebrowStyle}>Channel 06 / Foundation Scan</Typography.Text>
-          <Typography.Title level={1} style={{ margin: 0 }}>
+          <Typography.Title level={1} className="marathon-text-display" style={{ margin: 0 }}>
             Marathon DOS Theme Deck
           </Typography.Title>
           <Typography.Paragraph style={{ margin: 0, maxWidth: 760 }}>
@@ -52,13 +52,32 @@ const meta = {
             <Space direction="vertical" size="large" style={{ width: "100%" }}>
               <div>
                 <Typography.Text style={eyebrowStyle}>Display</Typography.Text>
-                <Typography.Title level={2} style={{ marginBottom: 8 }}>
+                <Typography.Title
+                  level={2}
+                  className="marathon-text-display-secondary"
+                  style={{ marginBottom: 8 }}
+                >
                   Deep Signal Operator
                 </Typography.Title>
                 <Typography.Paragraph style={{ margin: 0 }}>
-                  Heading lines use a sharper sci-fi display face while body copy stays in a mono
-                  rhythm for tool-like density.
+                  Oxanium stays on the primary headline tier, while Doto slots in as a secondary
+                  display accent where a little extra weirdness actually helps.
                 </Typography.Paragraph>
+              </div>
+
+              <div>
+                <Typography.Text style={eyebrowStyle}>Headline Pairing</Typography.Text>
+                <Space direction="vertical" size={4}>
+                  <Typography.Text className="marathon-text-display" style={fontSampleStyle}>
+                    Oxanium stays on the top-line headline
+                  </Typography.Text>
+                  <Typography.Text
+                    className="marathon-text-display-secondary"
+                    style={fontSampleStyle}
+                  >
+                    Doto handles the secondary headline
+                  </Typography.Text>
+                </Space>
               </div>
 
               <Space wrap size={[12, 12]}>
@@ -168,4 +187,10 @@ const swatchStyle = {
 const innerCardStyle = {
   height: "100%",
   background: "#0b0b0b",
+};
+
+const fontSampleStyle = {
+  display: "block",
+  fontSize: 18,
+  lineHeight: 1.2,
 };
