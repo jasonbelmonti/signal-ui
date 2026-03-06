@@ -218,7 +218,7 @@ h6.ant-typography {
   padding-top: 16px;
 }
 
-.marathon-panel-tab::before {
+.marathon-panel-tab::after {
   content: "";
   position: absolute;
   top: 0;
@@ -226,10 +226,11 @@ h6.ant-typography {
   width: 88px;
   height: 12px;
   background: var(--marathon-field-primary);
+  pointer-events: none;
   box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.35);
 }
 
-.marathon-panel-tab--secondary::before {
+.marathon-panel-tab--secondary::after {
   background: var(--marathon-field-violet);
 }
 
