@@ -1,6 +1,7 @@
 import { Button, Card, Col, Flex, Input, Row, Space, Typography } from "antd";
 import type { Meta, StoryObj } from "@storybook/react-webpack5";
 
+import { Panel } from "../components/Panel";
 import { marathonDosPalette } from "../theme/marathonDosTheme";
 
 const meta = {
@@ -102,16 +103,24 @@ const meta = {
           <Card title="Surface Hierarchy" extra="Panels">
             <Row gutter={[16, 16]}>
               <Col xs={24} md={12}>
-                <Card size="small" title="Primary Surface" style={innerCardStyle}>
+                <Panel
+                  size="small"
+                  title="Primary Surface"
+                  cutCornerPreset="tactical"
+                  style={innerCardStyle}
+                >
                   <Typography.Paragraph style={{ margin: 0 }}>
-                    Primary interaction surface with muted frame and luminous edge hover.
+                    Primary interaction surface using the tactical preset for a phosphor corner tag
+                    and a little extra diagonal velocity.
                   </Typography.Paragraph>
-                </Card>
+                </Panel>
               </Col>
               <Col xs={24} md={12}>
-                <Card
+                <Panel
                   size="small"
                   title="Elevated Surface"
+                  cutCornerPreset="architectural"
+                  cutCornerColor={marathonDosPalette.accentViolet}
                   style={{
                     ...innerCardStyle,
                     background:
@@ -119,9 +128,10 @@ const meta = {
                   }}
                 >
                   <Typography.Paragraph style={{ margin: 0 }}>
-                    Elevated panels stay dark, but pick up more sheen and tighter contrast.
+                    Elevated panels stay dark, but the architectural preset gives them a cleaner 45
+                    degree silhouette.
                   </Typography.Paragraph>
-                </Card>
+                </Panel>
               </Col>
             </Row>
           </Card>

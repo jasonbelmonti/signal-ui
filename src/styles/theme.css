@@ -184,6 +184,100 @@ h6.ant-typography {
   opacity: 0.65;
 }
 
+.marathon-panel.ant-card {
+  position: relative;
+  isolation: isolate;
+  --marathon-panel-cut-color: var(--marathon-primary);
+  --marathon-panel-cut-size: 26px;
+}
+
+.marathon-panel--cut-accent::after {
+  content: "";
+  position: absolute;
+  width: var(--marathon-panel-cut-size);
+  height: var(--marathon-panel-cut-size);
+  pointer-events: none;
+  z-index: 2;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.18), transparent 55%),
+    var(--marathon-panel-cut-color);
+  box-shadow:
+    inset 0 0 0 1px rgba(0, 0, 0, 0.24),
+    0 0 0 1px rgba(255, 255, 255, 0.04);
+}
+
+.marathon-panel--corner-top-right.marathon-panel--cut-accent::after {
+  top: 0;
+  right: 0;
+  clip-path: polygon(100% 0, 0 0, 100% 100%);
+}
+
+.marathon-panel--corner-top-left.marathon-panel--cut-accent::after {
+  top: 0;
+  left: 0;
+  clip-path: polygon(0 0, 100% 0, 0 100%);
+}
+
+.marathon-panel--corner-bottom-right.marathon-panel--cut-accent::after {
+  right: 0;
+  bottom: 0;
+  clip-path: polygon(100% 0, 100% 100%, 0 100%);
+}
+
+.marathon-panel--corner-bottom-left.marathon-panel--cut-accent::after {
+  bottom: 0;
+  left: 0;
+  clip-path: polygon(0 0, 100% 100%, 0 100%);
+}
+
+.marathon-panel--corner-top-right.marathon-panel--cut-notch {
+  border-color: color-mix(in srgb, var(--marathon-panel-cut-color) 32%, var(--marathon-muted));
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--marathon-panel-cut-color) 16%, transparent);
+  clip-path: polygon(
+    0 0,
+    calc(100% - var(--marathon-panel-cut-size)) 0,
+    100% var(--marathon-panel-cut-size),
+    100% 100%,
+    0 100%
+  );
+}
+
+.marathon-panel--corner-top-left.marathon-panel--cut-notch {
+  border-color: color-mix(in srgb, var(--marathon-panel-cut-color) 32%, var(--marathon-muted));
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--marathon-panel-cut-color) 16%, transparent);
+  clip-path: polygon(
+    var(--marathon-panel-cut-size) 0,
+    100% 0,
+    100% 100%,
+    0 100%,
+    0 var(--marathon-panel-cut-size)
+  );
+}
+
+.marathon-panel--corner-bottom-right.marathon-panel--cut-notch {
+  border-color: color-mix(in srgb, var(--marathon-panel-cut-color) 32%, var(--marathon-muted));
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--marathon-panel-cut-color) 16%, transparent);
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% calc(100% - var(--marathon-panel-cut-size)),
+    calc(100% - var(--marathon-panel-cut-size)) 100%,
+    0 100%
+  );
+}
+
+.marathon-panel--corner-bottom-left.marathon-panel--cut-notch {
+  border-color: color-mix(in srgb, var(--marathon-panel-cut-color) 32%, var(--marathon-muted));
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--marathon-panel-cut-color) 16%, transparent);
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% 100%,
+    var(--marathon-panel-cut-size) 100%,
+    0 calc(100% - var(--marathon-panel-cut-size))
+  );
+}
+
 .marathon-signal-text {
   display: inline-block;
   vertical-align: baseline;
