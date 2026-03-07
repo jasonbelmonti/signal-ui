@@ -22,3 +22,4 @@
 - Current loader preference is a square-framed, faster mechanical loop with a small settle jolt and a reusable legendless mini variant that can sit inline with text.
 - User notices small alignment drift quickly and prefers motion components to be geometrically centered rather than visually "close enough."
 - When building new effect work in a separate git worktree, check whether the main worktree carries uncommitted visual-system changes first; syncing those files can matter more than starting from clean `HEAD`.
+- User is evaluating runtime Ant Design theme customization and prefers a constrained set of end-user color controls over exposing the full token surface.

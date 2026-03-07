@@ -7,7 +7,12 @@ import "@fontsource/oxanium/600.css";
 import "@fontsource/oxanium/700.css";
 import "./styles/theme.css";
 
-export { AntdThemeProvider, installStaticAntdTheme } from "./providers/AntdThemeProvider";
+export {
+  AntdThemeProvider,
+  installStaticAntdTheme,
+  type AntdThemeProviderProps,
+  type InstallStaticAntdThemeOptions,
+} from "./providers/AntdThemeProvider";
 export { Panel, panelCutCornerPresets } from "./components/Panel";
 export type {
   PanelCutCorner,
@@ -26,4 +31,17 @@ export type {
   PixelCubeLoaderProps,
   PixelCubeLoaderTone,
 } from "./components/PixelCubeLoader";
-export { marathonDosFontStacks, marathonDosPalette, marathonDosTheme } from "./theme/marathonDosTheme";
+export {
+  createMarathonDosTheme,
+  createMarathonDosThemeCssVariables,
+  marathonDosFontStacks,
+  marathonDosPalette,
+  marathonDosTheme,
+  resolveMarathonDosPalette,
+} from "./theme/marathonDosTheme";
+export type {
+  HexColor,
+  MarathonDosPalette,
+  MarathonDosThemeColorPreferences,
+  MarathonDosThemePreferences,
+} from "./theme/marathonDosTheme";

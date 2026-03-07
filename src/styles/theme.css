@@ -6,11 +6,14 @@
   --marathon-grid: #2b2b2b;
   --marathon-muted: #717171;
   --marathon-text: #f5f5f0;
+  --marathon-text-rgb: 245 245 240;
   --marathon-primary: #c0fe04;
+  --marathon-primary-rgb: 192 254 4;
   --marathon-primary-deep: #86b400;
   --marathon-field-primary: #d9ff67;
   --marathon-field-ink: #050505;
   --marathon-accent-violet: #9f4dff;
+  --marathon-accent-violet-rgb: 159 77 255;
   --marathon-field-violet: #9f4dff;
   --marathon-warning: #ff9b2f;
   --marathon-error: #f24723;
@@ -18,10 +21,10 @@
   --marathon-font-display: "Oxanium", "Azeret Mono", sans-serif;
   --marathon-font-display-secondary: "Doto", "Oxanium", "Azeret Mono", sans-serif;
   --marathon-fx-signal-ink: #f9ffef;
-  --marathon-fx-signal-accent: #d9ff67;
-  --marathon-fx-signal-glow: rgba(192, 254, 4, 0.42);
+  --marathon-fx-signal-accent: var(--marathon-field-primary);
+  --marathon-fx-signal-glow: rgb(var(--marathon-primary-rgb) / 0.42);
   --marathon-fx-signal-alt-accent: var(--marathon-accent-violet);
-  --marathon-fx-signal-alt-glow: rgba(159, 77, 255, 0.38);
+  --marathon-fx-signal-alt-glow: rgb(var(--marathon-accent-violet-rgb) / 0.38);
   --marathon-fx-signal-noise-opacity: 0.24;
   --marathon-fx-signal-scan-opacity: 0.18;
   --marathon-fx-signal-noise-size: 72px;
@@ -34,7 +37,7 @@
 
 html {
   background:
-    radial-gradient(circle at top, rgba(192, 254, 4, 0.12), transparent 36%),
+    radial-gradient(circle at top, rgb(var(--marathon-primary-rgb) / 0.12), transparent 36%),
     linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent 28%),
     var(--marathon-black);
 }
@@ -50,7 +53,7 @@ body {
       transparent 1px,
       transparent 4px
     ),
-    linear-gradient(90deg, rgba(192, 254, 4, 0.03), transparent 30%),
+    linear-gradient(90deg, rgb(var(--marathon-primary-rgb) / 0.03), transparent 30%),
     var(--marathon-black);
   font-family: var(--marathon-font-ui);
   letter-spacing: 0.01em;
@@ -106,16 +109,16 @@ select {
 .ant-btn:not(:disabled):focus-visible,
 .ant-input:hover,
 .ant-input-affix-wrapper:hover {
-  box-shadow: 0 0 0 1px rgba(192, 254, 4, 0.22);
+  box-shadow: 0 0 0 1px rgb(var(--marathon-primary-rgb) / 0.22);
 }
 
 .ant-card:hover {
-  box-shadow: 0 0 0 1px rgba(192, 254, 4, 0.22);
+  box-shadow: 0 0 0 1px rgb(var(--marathon-primary-rgb) / 0.22);
 }
 
 .marathon-panel.ant-card:hover {
   box-shadow:
-    0 0 0 1px rgba(192, 254, 4, 0.22),
+    0 0 0 1px rgb(var(--marathon-primary-rgb) / 0.22),
     var(--marathon-panel-frame-shadow, 0 0 0 0 transparent);
 }
 
@@ -261,7 +264,7 @@ h6.ant-typography {
   inset: 0;
   pointer-events: none;
   background:
-    linear-gradient(135deg, rgba(192, 254, 4, 0.08), transparent 28%),
+    linear-gradient(135deg, rgb(var(--marathon-primary-rgb) / 0.08), transparent 28%),
     linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 45%);
   mix-blend-mode: screen;
   opacity: 0.65;
@@ -378,7 +381,7 @@ h6.ant-typography {
     0 0 0.08em rgba(255, 255, 255, 0.28),
     0 0 0.58em var(--marathon-fx-signal-glow),
     0.018em 0 0 rgba(255, 255, 255, 0.1),
-    -0.022em 0 0 rgba(192, 254, 4, 0.18);
+    -0.022em 0 0 rgb(var(--marathon-primary-rgb) / 0.18);
 }
 
 .marathon-accent-violet {
@@ -387,8 +390,8 @@ h6.ant-typography {
 
 .marathon-frame-violet {
   box-shadow:
-    inset 0 0 0 1px rgba(159, 77, 255, 0.42),
-    0 0 0 1px rgba(159, 77, 255, 0.18);
+    inset 0 0 0 1px rgb(var(--marathon-accent-violet-rgb) / 0.42),
+    0 0 0 1px rgb(var(--marathon-accent-violet-rgb) / 0.18);
 }
 
 .marathon-pixel-cube-path {
@@ -405,16 +408,16 @@ h6.ant-typography {
   --marathon-cube-path-step-duration: calc(
     var(--marathon-cube-path-cycle) / var(--marathon-cube-path-count)
   );
-  --marathon-cube-path-accent-rgb: 192 254 4;
+  --marathon-cube-path-accent-rgb: var(--marathon-primary-rgb);
   --marathon-cube-path-front-rest: rgba(20, 20, 20, 0.98);
   --marathon-cube-path-side-rest: rgba(10, 10, 10, 0.96);
-  --marathon-cube-path-top-rest: rgba(245, 245, 240, 0.16);
-  --marathon-cube-path-front-tail: rgba(192, 254, 4, 0.54);
-  --marathon-cube-path-side-tail: rgba(192, 254, 4, 0.32);
-  --marathon-cube-path-top-tail: rgba(245, 245, 240, 0.54);
+  --marathon-cube-path-top-rest: rgb(var(--marathon-text-rgb) / 0.16);
+  --marathon-cube-path-front-tail: rgb(var(--marathon-primary-rgb) / 0.54);
+  --marathon-cube-path-side-tail: rgb(var(--marathon-primary-rgb) / 0.32);
+  --marathon-cube-path-top-tail: rgb(var(--marathon-text-rgb) / 0.54);
   --marathon-cube-path-front-active: rgb(var(--marathon-cube-path-accent-rgb) / 0.96);
   --marathon-cube-path-side-active: rgb(var(--marathon-cube-path-accent-rgb) / 0.66);
-  --marathon-cube-path-top-active: rgba(245, 245, 240, 0.96);
+  --marathon-cube-path-top-active: rgb(var(--marathon-text-rgb) / 0.96);
   display: inline-grid;
   min-width: calc(var(--marathon-cube-path-scene-width) + 32px);
   place-items: center;
@@ -423,9 +426,9 @@ h6.ant-typography {
 }
 
 .marathon-pixel-cube-path--violet {
-  --marathon-cube-path-accent-rgb: 159 77 255;
-  --marathon-cube-path-front-tail: rgba(159, 77, 255, 0.56);
-  --marathon-cube-path-side-tail: rgba(159, 77, 255, 0.34);
+  --marathon-cube-path-accent-rgb: var(--marathon-accent-violet-rgb);
+  --marathon-cube-path-front-tail: rgb(var(--marathon-accent-violet-rgb) / 0.56);
+  --marathon-cube-path-side-tail: rgb(var(--marathon-accent-violet-rgb) / 0.34);
 }
 
 .marathon-pixel-cube-path__viewport {
@@ -445,13 +448,13 @@ h6.ant-typography {
   width: calc(var(--marathon-cube-path-cell-size) * 4.8);
   height: calc(var(--marathon-cube-path-cell-size) * 1.3);
   transform: translateX(-50%);
-  background: radial-gradient(circle, rgba(192, 254, 4, 0.16), transparent 68%);
+  background: radial-gradient(circle, rgb(var(--marathon-primary-rgb) / 0.16), transparent 68%);
   opacity: 0.34;
   filter: blur(14px);
 }
 
 .marathon-pixel-cube-path--violet .marathon-pixel-cube-path__viewport::after {
-  background: radial-gradient(circle, rgba(159, 77, 255, 0.16), transparent 68%);
+  background: radial-gradient(circle, rgb(var(--marathon-accent-violet-rgb) / 0.16), transparent 68%);
 }
 
 .marathon-pixel-cube-path__scene {
@@ -563,7 +566,7 @@ h6.ant-typography {
       ),
       radial-gradient(
         circle at 52% 64%,
-        rgb(192 254 4 / calc(var(--marathon-fx-signal-noise-opacity) * 0.96)) 0 1.6px,
+        rgb(var(--marathon-primary-rgb) / calc(var(--marathon-fx-signal-noise-opacity) * 0.96)) 0 1.6px,
         transparent 2.35px
       ),
       repeating-linear-gradient(
@@ -788,7 +791,7 @@ h6.ant-typography {
       0 0 0.08em rgba(255, 255, 255, 0.28),
       0 0 0.58em var(--marathon-fx-signal-glow),
       0.018em 0 0 rgba(255, 255, 255, 0.1),
-      -0.022em 0 0 rgba(192, 254, 4, 0.18);
+      -0.022em 0 0 rgb(var(--marathon-primary-rgb) / 0.18);
   }
 
   6% {
@@ -797,7 +800,7 @@ h6.ant-typography {
       0 0 0.06em rgba(255, 255, 255, 0.18),
       0 0 0.42em var(--marathon-fx-signal-glow),
       0.012em 0 0 rgba(255, 255, 255, 0.08),
-      -0.014em 0 0 rgba(192, 254, 4, 0.15);
+      -0.014em 0 0 rgb(var(--marathon-primary-rgb) / 0.15);
   }
 
   12% {
@@ -806,7 +809,7 @@ h6.ant-typography {
       0 0 0.1em rgba(255, 255, 255, 0.34),
       0 0 0.68em var(--marathon-fx-signal-glow),
       0.028em 0 0 rgba(255, 255, 255, 0.15),
-      -0.032em 0 0 rgba(192, 254, 4, 0.26);
+      -0.032em 0 0 rgb(var(--marathon-primary-rgb) / 0.26);
   }
 
   19% {
@@ -819,7 +822,7 @@ h6.ant-typography {
       0 0 0.07em rgba(255, 255, 255, 0.22),
       0 0 0.48em var(--marathon-fx-signal-glow),
       0.025em 0 0 rgba(255, 255, 255, 0.12),
-      -0.03em 0 0 rgba(192, 254, 4, 0.22);
+      -0.03em 0 0 rgb(var(--marathon-primary-rgb) / 0.22);
   }
 
   44% {
@@ -832,7 +835,7 @@ h6.ant-typography {
       0 0 0.11em rgba(255, 255, 255, 0.36),
       0 0 0.74em var(--marathon-fx-signal-glow),
       0.03em 0 0 rgba(255, 255, 255, 0.16),
-      -0.036em 0 0 rgba(192, 254, 4, 0.28);
+      -0.036em 0 0 rgb(var(--marathon-primary-rgb) / 0.28);
   }
 
   69% {
@@ -845,7 +848,7 @@ h6.ant-typography {
       0 0 0.09em rgba(255, 255, 255, 0.3),
       0 0 0.62em var(--marathon-fx-signal-glow),
       0.024em 0 0 rgba(255, 255, 255, 0.13),
-      -0.028em 0 0 rgba(192, 254, 4, 0.24);
+      -0.028em 0 0 rgb(var(--marathon-primary-rgb) / 0.24);
   }
 
   91% {
@@ -863,12 +866,12 @@ h6.ant-typography {
   --marathon-loader-depth-origin: 56px;
   --marathon-loader-step: 56px;
   --marathon-loader-cycle: 2100ms;
-  --marathon-loader-accent-rgb: 192 254 4;
-  --marathon-loader-frame: rgba(192, 254, 4, 0.36);
-  --marathon-loader-detail: rgba(245, 245, 240, 0.72);
+  --marathon-loader-accent-rgb: var(--marathon-primary-rgb);
+  --marathon-loader-frame: rgb(var(--marathon-primary-rgb) / 0.36);
+  --marathon-loader-detail: rgb(var(--marathon-text-rgb) / 0.72);
   --marathon-loader-front-face: rgb(var(--marathon-loader-accent-rgb) / 0.96);
   --marathon-loader-left-face: rgb(var(--marathon-loader-accent-rgb) / 0.72);
-  --marathon-loader-top-face: rgba(245, 245, 240, 0.94);
+  --marathon-loader-top-face: rgb(var(--marathon-text-rgb) / 0.94);
   display: inline-flex;
   min-width: calc(var(--marathon-loader-size) + 36px);
   flex-direction: column;
@@ -879,8 +882,8 @@ h6.ant-typography {
 }
 
 .marathon-pixel-cube-loader--violet {
-  --marathon-loader-accent-rgb: 159 77 255;
-  --marathon-loader-frame: rgba(159, 77, 255, 0.4);
+  --marathon-loader-accent-rgb: var(--marathon-accent-violet-rgb);
+  --marathon-loader-frame: rgb(var(--marathon-accent-violet-rgb) / 0.4);
 }
 
 .marathon-pixel-cube-loader__stage {
