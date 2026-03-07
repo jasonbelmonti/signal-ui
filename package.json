@@ -13,9 +13,11 @@
     "@fontsource/azeret-mono": "5.2.11",
     "@fontsource/doto": "^5.2.10",
     "@fontsource/oxanium": "5.2.8",
+    "@react-three/fiber": "9.5.0",
     "antd": "6.3.1",
     "react": "19.2.4",
-    "react-dom": "19.2.4"
+    "react-dom": "19.2.4",
+    "three": "0.183.2"
   },
   "devDependencies": {
     "@storybook/addon-a11y": "10.2.16",
@@ -24,6 +26,7 @@
     "@storybook/react-webpack5": "10.2.16",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
+    "@types/three": "0.183.1",
     "storybook": "10.2.16",
     "typescript": "^5.9.3"
   }
