@@ -11,7 +11,10 @@ export const marathonDosPalette = {
   text: "#f5f5f0",
   primary: "#c0fe04",
   primaryDeep: "#86b400",
+  fieldPrimary: "#d9ff67",
+  fieldInk: "#050505",
   accentViolet: "#9f4dff",
+  fieldViolet: "#9f4dff",
   warning: "#ff9b2f",
   error: "#f24723",
 } as const;

@@ -1,13 +1,15 @@
-import type { ComponentPropsWithoutRef, CSSProperties } from "react";
+import type { CSSProperties, HTMLAttributes } from "react";
 
 type VoxelTone = "solid" | "lit" | "shade";
 
 export type PixelCubeLoaderGridSize = 2 | 3;
 export type PixelCubeLoaderTone = "primary" | "violet";
+export type PixelCubeLoaderRootElement = "div" | "span";
 
 type LoaderStyle = CSSProperties & Record<`--marathon-loader-${string}`, string | number>;
 
-export type PixelCubeLoaderProps = Omit<ComponentPropsWithoutRef<"div">, "children" | "style"> & {
+export type PixelCubeLoaderProps = Omit<HTMLAttributes<HTMLElement>, "children" | "style"> & {
+  as?: PixelCubeLoaderRootElement;
   detail?: string;
   gridSize?: PixelCubeLoaderGridSize;
   label?: string;
@@ -29,6 +31,7 @@ type VoxelDescriptor = {
 };
 
 export function PixelCubeLoader({
+  as,
   className,
   detail = "forming cube volume",
   gridSize = 3,
@@ -44,6 +47,7 @@ export function PixelCubeLoader({
   const stepSize = cellSize + gapSize;
   const depthOrigin = ((gridSize - 1) / 2) * stepSize;
   const voxels = createVoxelDescriptors(gridSize);
+  const Root = showLegend ? "div" : (as ?? "span");
   const loaderClassName = [
     "marathon-pixel-cube-loader",
     toneClassName[tone],
@@ -63,7 +67,7 @@ export function PixelCubeLoader({
   };
 
   return (
-    <div
+    <Root
       aria-label={`${label}: ${detail}`}
       aria-live="polite"
       className={loaderClassName}
@@ -109,7 +113,7 @@ export function PixelCubeLoader({
           </span>
         </div>
       ) : null}
-    </div>
+    </Root>
   );
 }
 

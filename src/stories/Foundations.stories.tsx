@@ -19,14 +19,22 @@ const meta = {
         }}
       >
         <Space direction="vertical" size={10}>
-          <Typography.Text style={eyebrowStyle}>Channel 06 / Foundation Scan</Typography.Text>
-          <Typography.Title level={1} className="marathon-text-display" style={{ margin: 0 }}>
-            Marathon DOS Theme Deck
-          </Typography.Title>
-          <Typography.Paragraph style={{ margin: 0, maxWidth: 760 }}>
-            A modernized terminal skin for Ant Design: phosphor-lime signals, hard-edge panels,
-            mono-forward UI, and a cleaner sci-fi silhouette than straight DOS nostalgia.
-          </Typography.Paragraph>
+          <div style={accentLabelRowStyle}>
+            <span className="marathon-accent-field">Channel 06</span>
+            <Typography.Text style={{ ...eyebrowStyle, marginBottom: 0 }}>Foundation Scan</Typography.Text>
+          </div>
+          <div className="marathon-heading-lockup">
+            <span className="marathon-accent-bar" aria-hidden="true" />
+            <div className="marathon-heading-lockup__body">
+              <Typography.Title level={1} className="marathon-text-display" style={{ margin: 0 }}>
+                Marathon DOS Theme Deck
+              </Typography.Title>
+              <Typography.Paragraph style={{ margin: "8px 0 0", maxWidth: 760 }}>
+                A modernized terminal skin for Ant Design: phosphor-lime signals, hard-edge panels,
+                mono-forward UI, and a cleaner sci-fi silhouette than straight DOS nostalgia.
+              </Typography.Paragraph>
+            </div>
+          </div>
         </Space>
       </Card>
 
@@ -102,7 +110,7 @@ const meta = {
           <Card title="Surface Hierarchy" extra="Panels">
             <Row gutter={[16, 16]}>
               <Col xs={24} md={12}>
-                <Card size="small" title="Primary Surface" style={innerCardStyle}>
+                <Card size="small" title="Primary Surface" className="marathon-panel-tab" style={innerCardStyle}>
                   <Typography.Paragraph style={{ margin: 0 }}>
                     Primary interaction surface with muted frame and luminous edge hover.
                   </Typography.Paragraph>
@@ -112,6 +120,7 @@ const meta = {
                 <Card
                   size="small"
                   title="Elevated Surface"
+                  className="marathon-panel-tab marathon-panel-tab--secondary"
                   style={{
                     ...innerCardStyle,
                     background:
@@ -142,6 +151,79 @@ const meta = {
           </Card>
         </Col>
       </Row>
+
+      <Card title="Flat Accent Fields" extra="Sparse Punctuation">
+        <Row gutter={[24, 24]}>
+          <Col xs={24} lg={13}>
+            <Space direction="vertical" size={18} style={{ width: "100%" }}>
+              <div>
+                <div style={accentLabelRowStyle}>
+                  <span className="marathon-accent-field">Section Tag</span>
+                  <Typography.Text style={{ ...eyebrowStyle, marginBottom: 0 }}>
+                    Use on eyebrow-tier labels, not body UI
+                  </Typography.Text>
+                </div>
+                <Typography.Title level={3} className="marathon-text-display" style={{ margin: "12px 0 8px" }}>
+                  Flat color reads best when it cuts through the texture
+                </Typography.Title>
+                <Typography.Paragraph style={{ margin: 0, maxWidth: 640 }}>
+                  The block should feel like a crisp print layer dropped on top of the screen
+                  treatment, not another glowing sci-fi effect competing for attention.
+                </Typography.Paragraph>
+              </div>
+
+              <div className="marathon-heading-lockup">
+                <span className="marathon-accent-bar marathon-accent-bar--secondary" aria-hidden="true" />
+                <div className="marathon-heading-lockup__body">
+                  <Typography.Text style={{ ...eyebrowStyle, color: marathonDosPalette.accentViolet }}>
+                    Signal Bar
+                  </Typography.Text>
+                  <Typography.Title
+                    level={3}
+                    className="marathon-text-display-secondary"
+                    style={{ margin: "4px 0 8px" }}
+                  >
+                    Let the bar punctuate the heading, not decorate the whole panel
+                  </Typography.Title>
+                  <Typography.Paragraph style={{ margin: 0, maxWidth: 640 }}>
+                    This works because the field is blunt, opaque, and quiet. The minute it picks
+                    up gradients or glow, it stops doing the Marathon thing.
+                  </Typography.Paragraph>
+                </div>
+              </div>
+            </Space>
+          </Col>
+
+          <Col xs={24} lg={11}>
+            <Space direction="vertical" size={14} style={{ width: "100%" }}>
+              <div style={contrastChipRowStyle}>
+                <span className="marathon-accent-field">Navigation</span>
+                <span className="marathon-accent-field marathon-accent-field--secondary">
+                  Transmission
+                </span>
+              </div>
+              <Card
+                size="small"
+                title="Rare Callout"
+                className="marathon-panel-tab"
+                style={{
+                  ...innerCardStyle,
+                  background:
+                    "linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 52%), #0a0a0a",
+                }}
+              >
+                <Space direction="vertical" size={10}>
+                  <span className="marathon-accent-field">Do Use</span>
+                  <Typography.Paragraph style={{ margin: 0 }}>
+                    Tags, bars, and tabs can punctuate a section transition or label a special
+                    state. Keep them sparse so the field still feels like a deliberate interruption.
+                  </Typography.Paragraph>
+                </Space>
+              </Card>
+            </Space>
+          </Col>
+        </Row>
+      </Card>
 
       <Card
         title="Secondary Accent Trial"
@@ -182,7 +264,7 @@ const meta = {
                   style={{
                     ...contrastChipStyle,
                     background: marathonDosPalette.accentViolet,
-                    color: marathonDosPalette.text,
+                    color: marathonDosPalette.fieldInk,
                   }}
                 >
                   Violet Accent
@@ -208,7 +290,9 @@ export const ThemeFoundations: Story = {};
 
 const paletteEntries = Object.entries({
   Primary: marathonDosPalette.primary,
+  "Field Lime": marathonDosPalette.fieldPrimary,
   "Accent Violet": marathonDosPalette.accentViolet,
+  "Field Violet": marathonDosPalette.fieldViolet,
   Error: marathonDosPalette.error,
   Warning: marathonDosPalette.warning,
   Text: marathonDosPalette.text,
@@ -269,4 +353,11 @@ const contrastChipStyle = {
   fontWeight: 700,
   letterSpacing: "0.14em",
   textTransform: "uppercase" as const,
+};
+
+const accentLabelRowStyle = {
+  display: "flex",
+  alignItems: "center",
+  flexWrap: "wrap" as const,
+  gap: 12,
 };
