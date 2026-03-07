@@ -2892,3 +2892,366 @@ h6.ant-typography {
   background: rgb(var(--marathon-signal-wireframe-accent-rgb) / 0.88);
   animation: marathon-loader-cursor 960ms steps(1, end) infinite;
 }
+
+.marathon-markdown {
+  color: rgba(245, 245, 240, 0.88);
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.marathon-markdown > * {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.marathon-markdown > * + * {
+  margin-top: 1.15rem;
+}
+
+.marathon-markdown > :first-child {
+  margin-top: 0;
+}
+
+.marathon-markdown > :last-child {
+  margin-bottom: 0;
+}
+
+.marathon-markdown :where(p, li) {
+  max-width: 72ch;
+}
+
+.marathon-markdown :where(h1, h2, h3, h4, h5, h6) {
+  margin-top: 2.3rem;
+  color: var(--marathon-text);
+  font-family: var(--marathon-font-display);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.marathon-markdown h1 {
+  margin-top: 0.5rem;
+  padding-bottom: 0.8rem;
+  border-bottom: 1px solid rgba(192, 254, 4, 0.26);
+  box-shadow: inset 0 -3px 0 rgba(192, 254, 4, 0.08);
+  font-size: clamp(2.3rem, 4.3vw, 3.6rem);
+}
+
+.marathon-markdown h2 {
+  padding-top: 0.65rem;
+  border-top: 1px solid rgba(192, 254, 4, 0.16);
+  font-size: clamp(1.2rem, 2vw, 1.6rem);
+}
+
+.marathon-markdown h3 {
+  font-size: clamp(1.05rem, 1.6vw, 1.26rem);
+}
+
+.marathon-markdown h4,
+.marathon-markdown h5,
+.marathon-markdown h6 {
+  font-size: 0.95rem;
+  font-family: var(--marathon-font-ui);
+  letter-spacing: 0.12em;
+}
+
+.marathon-markdown :where(h1, h2, h3, h4, h5, h6) + * {
+  margin-top: 0.7rem;
+}
+
+.marathon-markdown strong {
+  color: var(--marathon-field-primary);
+}
+
+.marathon-markdown em {
+  color: rgba(245, 245, 240, 0.96);
+}
+
+.marathon-markdown a {
+  color: var(--marathon-primary);
+  text-decoration: none;
+  box-shadow: inset 0 -1px 0 rgba(192, 254, 4, 0.38);
+  transition:
+    color 140ms ease,
+    background-color 140ms ease,
+    box-shadow 140ms ease;
+}
+
+.marathon-markdown a:hover,
+.marathon-markdown a:focus-visible {
+  color: var(--marathon-field-primary);
+  background: rgba(192, 254, 4, 0.08);
+  box-shadow: inset 0 -1px 0 rgba(217, 255, 103, 0.7);
+}
+
+.marathon-markdown ul,
+.marathon-markdown ol {
+  padding-left: 1.4rem;
+}
+
+.marathon-markdown li + li {
+  margin-top: 0.45rem;
+}
+
+.marathon-markdown li::marker {
+  color: var(--marathon-primary);
+  font-weight: 700;
+}
+
+.marathon-markdown blockquote {
+  margin-right: 0;
+  margin-left: 0;
+  padding: 1rem 1.2rem 1rem 1.4rem;
+  border-left: 4px solid var(--marathon-primary);
+  background:
+    linear-gradient(135deg, rgba(192, 254, 4, 0.1), transparent 38%),
+    rgba(9, 9, 9, 0.9);
+  box-shadow:
+    inset 0 0 0 1px rgba(192, 254, 4, 0.14),
+    0 0 0 1px rgba(255, 255, 255, 0.03);
+}
+
+.marathon-markdown blockquote > * + * {
+  margin-top: 0.7rem;
+}
+
+.marathon-markdown code,
+.marathon-markdown kbd {
+  display: inline-block;
+  padding: 0.12rem 0.42rem;
+  border: 1px solid rgba(192, 254, 4, 0.18);
+  background: rgba(8, 8, 8, 0.95);
+  color: var(--marathon-field-primary);
+  font-family: var(--marathon-font-ui);
+  font-size: 0.92em;
+  line-height: 1.35;
+  vertical-align: baseline;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.marathon-markdown pre {
+  margin: 1.45rem 0;
+  padding: 1rem 1.15rem 1rem 1.3rem;
+  overflow-x: auto;
+  border: 1px solid rgba(192, 254, 4, 0.16);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.05), transparent 46%),
+    linear-gradient(90deg, rgba(192, 254, 4, 0.08), transparent 22%),
+    rgba(9, 9, 9, 0.98);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.03),
+    0 18px 34px rgba(0, 0, 0, 0.26);
+}
+
+.marathon-markdown pre code {
+  display: block;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.marathon-markdown pre code:not(.hljs) {
+  color: rgba(245, 245, 240, 0.9);
+}
+
+.marathon-markdown pre code.hljs {
+  color: rgba(245, 245, 240, 0.9);
+  white-space: pre;
+}
+
+.marathon-markdown pre code .hljs-subst,
+.marathon-markdown pre code .hljs-punctuation {
+  color: rgba(245, 245, 240, 0.78);
+}
+
+.marathon-markdown pre code .hljs-comment,
+.marathon-markdown pre code .hljs-quote {
+  color: var(--marathon-muted);
+  font-style: italic;
+}
+
+.marathon-markdown pre code .hljs-keyword,
+.marathon-markdown pre code .hljs-literal,
+.marathon-markdown pre code .hljs-selector-tag,
+.marathon-markdown pre code .hljs-doctag,
+.marathon-markdown pre code .hljs-meta .hljs-keyword {
+  color: var(--marathon-accent-violet);
+}
+
+.marathon-markdown pre code .hljs-string,
+.marathon-markdown pre code .hljs-regexp,
+.marathon-markdown pre code .hljs-attr,
+.marathon-markdown pre code .hljs-template-variable {
+  color: var(--marathon-field-primary);
+}
+
+.marathon-markdown pre code .hljs-title,
+.marathon-markdown pre code .hljs-title.class_,
+.marathon-markdown pre code .hljs-title.function_,
+.marathon-markdown pre code .hljs-type,
+.marathon-markdown pre code .hljs-property {
+  color: var(--marathon-text);
+}
+
+.marathon-markdown pre code .hljs-number,
+.marathon-markdown pre code .hljs-symbol,
+.marathon-markdown pre code .hljs-bullet,
+.marathon-markdown pre code .hljs-variable,
+.marathon-markdown pre code .hljs-template-tag,
+.marathon-markdown pre code .hljs-meta,
+.marathon-markdown pre code .hljs-link {
+  color: var(--marathon-warning);
+}
+
+.marathon-markdown pre code .hljs-built_in,
+.marathon-markdown pre code .hljs-params,
+.marathon-markdown pre code .hljs-operator {
+  color: rgba(245, 245, 240, 0.84);
+}
+
+.marathon-markdown pre code .hljs-addition {
+  color: var(--marathon-field-primary);
+  background: rgba(192, 254, 4, 0.08);
+}
+
+.marathon-markdown pre code .hljs-deletion {
+  color: var(--marathon-error);
+  background: rgba(242, 71, 35, 0.08);
+}
+
+.marathon-markdown pre code .hljs-emphasis {
+  font-style: italic;
+}
+
+.marathon-markdown pre code .hljs-strong {
+  font-weight: 700;
+}
+
+.marathon-markdown hr {
+  height: 1px;
+  border: 0;
+  background: linear-gradient(90deg, rgba(192, 254, 4, 0.64), transparent 88%);
+  opacity: 0.82;
+}
+
+.marathon-markdown table {
+  display: block;
+  width: 100%;
+  margin: 1.5rem 0;
+  overflow-x: auto;
+  border-collapse: collapse;
+  background: rgba(10, 10, 10, 0.9);
+}
+
+.marathon-markdown thead {
+  background: rgba(192, 254, 4, 0.08);
+}
+
+.marathon-markdown tbody tr:nth-child(even) {
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.marathon-markdown th,
+.marathon-markdown td {
+  padding: 0.8rem 0.95rem;
+  border: 1px solid rgba(192, 254, 4, 0.12);
+  text-align: left;
+  vertical-align: top;
+}
+
+.marathon-markdown th {
+  color: var(--marathon-field-primary);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.marathon-markdown mark {
+  padding: 0 0.22em;
+  background: var(--marathon-primary);
+  color: var(--marathon-black);
+}
+
+.marathon-markdown img {
+  display: block;
+  max-width: 100%;
+  border: 1px solid rgba(192, 254, 4, 0.16);
+}
+
+.marathon-markdown figure {
+  margin-right: 0;
+  margin-left: 0;
+}
+
+.marathon-markdown figcaption {
+  margin-top: 0.65rem;
+  color: var(--marathon-muted);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.marathon-markdown details,
+.marathon-markdown-callout,
+.marathon-markdown [data-callout] {
+  padding: 1rem 1.05rem;
+  border: 1px solid rgba(192, 254, 4, 0.16);
+  background:
+    linear-gradient(135deg, rgba(192, 254, 4, 0.06), transparent 44%),
+    rgba(10, 10, 10, 0.92);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.03);
+}
+
+.marathon-markdown summary {
+  cursor: pointer;
+  color: var(--marathon-text);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.marathon-markdown summary + * {
+  margin-top: 0.9rem;
+}
+
+.marathon-markdown-callout,
+.marathon-markdown [data-callout] {
+  position: relative;
+  padding-top: 1.9rem;
+}
+
+.marathon-markdown-callout::before,
+.marathon-markdown [data-callout]::before {
+  content: "callout";
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: inline-flex;
+  min-height: 26px;
+  align-items: center;
+  padding: 0 0.7rem;
+  background: var(--marathon-field-primary);
+  color: var(--marathon-field-ink);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.3);
+}
+
+.marathon-markdown [data-callout]::before {
+  content: attr(data-callout);
+}
+
+.marathon-markdown [data-callout="warning"]::before {
+  background: var(--marathon-warning);
+}
+
+.marathon-markdown [data-callout="critical"]::before,
+.marathon-markdown [data-callout="danger"]::before {
+  background: var(--marathon-error);
+  color: var(--marathon-text);
+}

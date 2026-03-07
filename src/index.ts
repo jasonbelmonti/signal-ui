@@ -12,6 +12,7 @@ export { AntdThemeProvider, installStaticAntdTheme } from "./providers/AntdTheme
 export { HashCube } from "./components/HashCube";
 export { GraphCanvas } from "./components/GraphCanvas";
 export type { GraphCanvasProps, GraphCanvasReactFlowProps } from "./components/GraphCanvas";
+export { MarkdownTheme } from "./components/MarkdownTheme";
 export {
   GRAPH_CANVAS_EDGE_TYPE,
   GraphCanvasEdge,
