@@ -40,8 +40,18 @@ export function isHexColor(color: string | undefined): color is HexColor {
   return /^#(?:[0-9a-fA-F]{3,4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/.test(normalized);
 }
 
+export function normalizeHexColor(color: string | undefined): HexColor | null {
+  if (!isHexColor(color)) {
+    return null;
+  }
+
+  const parsed = parseHexColor(color);
+
+  return parsed ? formatHexColor(parsed) : null;
+}
+
 export function resolveHexColor(color: string | undefined, fallback: HexColor): HexColor {
-  return isHexColor(color) ? color : fallback;
+  return normalizeHexColor(color) ?? fallback;
 }
 
 function parseHexColor(color: string): RgbColor | null {
@@ -59,10 +69,10 @@ function parseHexColor(color: string): RgbColor | null {
   return { red, green, blue };
 }
 
-function formatHexColor({ red, green, blue }: RgbColor) {
+function formatHexColor({ red, green, blue }: RgbColor): HexColor {
   return `#${[red, green, blue]
     .map((channel) => clamp(Math.round(channel), 0, 255).toString(16).padStart(2, "0"))
-    .join("")}`;
+    .join("")}` as HexColor;
 }
 
 export function mixHexColors(color: string, mixWith: string, mixAmount: number) {

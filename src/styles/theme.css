@@ -480,11 +480,14 @@ h6.ant-typography {
 }
 
 .signal-ui-panel-tab {
-  position: relative;
   padding-top: 16px;
 }
 
-.signal-ui-panel-tab::after {
+.signal-ui-panel-tab > .ant-card-head {
+  position: relative;
+}
+
+.signal-ui-panel-tab > .ant-card-head::after {
   content: "";
   position: absolute;
   top: 0;
@@ -496,7 +499,7 @@ h6.ant-typography {
   box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.35);
 }
 
-.signal-ui-panel-tab--secondary::after {
+.signal-ui-panel-tab--secondary > .ant-card-head::after {
   background: var(--signal-ui-field-violet);
 }
 

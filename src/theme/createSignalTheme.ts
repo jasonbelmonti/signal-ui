@@ -4,10 +4,9 @@ import type { CSSProperties } from "react";
 
 import {
   darkenHexColor,
-  isHexColor,
   lightenHexColor,
   mixHexColors,
-  resolveHexColor,
+  normalizeHexColor,
   toRgbTriplet,
   withAlpha,
 } from "./colorUtils.js";
@@ -19,53 +18,68 @@ function resolveBorderRadius(borderRadius = 2) {
   return Math.max(Math.round(borderRadius), 0);
 }
 
+function resolveHexOverride(color: string | undefined, fallback: ResolvedSignalPalette[keyof ResolvedSignalPalette]) {
+  const normalized = normalizeHexColor(color);
+
+  if (!normalized || normalized === fallback) {
+    return { hasOverride: false, value: fallback };
+  }
+
+  return { hasOverride: true, value: normalized };
+}
+
 export function resolveSignalPalette(
   preferences: SignalThemePreferences = {},
 ): ResolvedSignalPalette {
   const colors = preferences.colors ?? {};
-  const hasBackgroundOverride = isHexColor(colors.background);
-  const hasPanelOverride = isHexColor(colors.panel);
-  const hasPrimaryOverride = isHexColor(colors.primary);
-  const hasTextOverride = isHexColor(colors.text);
-  const hasAccentOverride = isHexColor(colors.accent);
+  const backgroundOverride = resolveHexOverride(colors.background, signalPalette.black);
+  const panelOverride = resolveHexOverride(colors.panel, signalPalette.panel);
+  const primaryOverride = resolveHexOverride(colors.primary, signalPalette.primary);
+  const textOverride = resolveHexOverride(colors.text, signalPalette.text);
+  const accentOverride = resolveHexOverride(colors.accent, signalPalette.accentViolet);
 
   if (
-    !hasBackgroundOverride &&
-    !hasPanelOverride &&
-    !hasPrimaryOverride &&
-    !hasTextOverride &&
-    !hasAccentOverride
+    !backgroundOverride.hasOverride &&
+    !panelOverride.hasOverride &&
+    !primaryOverride.hasOverride &&
+    !textOverride.hasOverride &&
+    !accentOverride.hasOverride
   ) {
     return signalPalette;
   }
 
-  const background = resolveHexColor(colors.background, signalPalette.black);
-  const panel = resolveHexColor(colors.panel, signalPalette.panel);
-  const primary = resolveHexColor(colors.primary, signalPalette.primary);
-  const text = resolveHexColor(colors.text, signalPalette.text);
-  const accent = resolveHexColor(colors.accent, signalPalette.accentViolet);
+  const background = backgroundOverride.value;
+  const panel = panelOverride.value;
+  const primary = primaryOverride.value;
+  const text = textOverride.value;
+  const accent = accentOverride.value;
 
   return {
     ...signalPalette,
     black: background,
-    void: hasBackgroundOverride ? lightenHexColor(background, 0.02) : signalPalette.void,
+    void: backgroundOverride.hasOverride ? lightenHexColor(background, 0.02) : signalPalette.void,
     panel,
     surface:
-      hasPanelOverride || hasTextOverride ? mixHexColors(panel, text, 0.06) : signalPalette.surface,
-    grid: hasPanelOverride || hasTextOverride ? mixHexColors(panel, text, 0.12) : signalPalette.grid,
+      panelOverride.hasOverride || textOverride.hasOverride
+        ? mixHexColors(panel, text, 0.06)
+        : signalPalette.surface,
+    grid:
+      panelOverride.hasOverride || textOverride.hasOverride
+        ? mixHexColors(panel, text, 0.12)
+        : signalPalette.grid,
     muted:
-      hasTextOverride || hasBackgroundOverride
+      textOverride.hasOverride || backgroundOverride.hasOverride
         ? mixHexColors(text, background, 0.55)
         : signalPalette.muted,
     text,
     primary,
-    primaryDeep: hasPrimaryOverride ? darkenHexColor(primary, 0.28) : signalPalette.primaryDeep,
-    fieldPrimary: hasPrimaryOverride
+    primaryDeep: primaryOverride.hasOverride ? darkenHexColor(primary, 0.28) : signalPalette.primaryDeep,
+    fieldPrimary: primaryOverride.hasOverride
       ? lightenHexColor(primary, 0.12)
       : signalPalette.fieldPrimary,
-    fieldInk: hasBackgroundOverride ? background : signalPalette.fieldInk,
+    fieldInk: backgroundOverride.hasOverride ? background : signalPalette.fieldInk,
     accentViolet: accent,
-    fieldViolet: hasAccentOverride ? accent : signalPalette.fieldViolet,
+    fieldViolet: accentOverride.hasOverride ? accent : signalPalette.fieldViolet,
   };
 }
 
