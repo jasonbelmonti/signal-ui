@@ -13,6 +13,9 @@ export {
 } from "./components/GraphCanvasNode.js";
 export { Panel, panelCutCornerPresets } from "./components/Panel.js";
 export { SignalButton } from "./components/SignalButton.js";
+export { SignalEmptyState } from "./components/SignalEmptyState.js";
+export { SignalHeaderLockup } from "./components/SignalHeaderLockup.js";
+export { SignalStatusTag } from "./components/SignalStatusTag.js";
 export type {
   HashCubeProps,
   HashCubeTone,
@@ -34,6 +37,22 @@ export type {
   PanelProps,
 } from "./components/Panel.js";
 export type { SignalButtonProps, SignalButtonTone } from "./components/SignalButton.js";
+export type {
+  SignalEmptyStateProps,
+  SignalEmptyStateTone,
+  SignalEmptyStateVisual,
+} from "./components/SignalEmptyState.js";
+export type {
+  SignalHeaderLockupProps,
+  SignalHeaderLockupTitleFont,
+  SignalHeaderLockupTitleLevel,
+  SignalHeaderLockupTone,
+} from "./components/SignalHeaderLockup.js";
+export type {
+  SignalStatusTagContext,
+  SignalStatusTagProps,
+  SignalStatusTagTone,
+} from "./components/SignalStatusTag.js";
 export { PixelCubePath } from "./components/PixelCubePath.js";
 export { PixelCubeLoader } from "./components/PixelCubeLoader.js";
 export { SignalWireframe } from "./components/SignalWireframe.js";

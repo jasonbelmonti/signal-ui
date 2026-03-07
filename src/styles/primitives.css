@@ -1,0 +1,238 @@
+.signal-ui-header-lockup {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.signal-ui-header-lockup__main {
+  min-width: 0;
+  flex: 1 1 420px;
+}
+
+.signal-ui-header-lockup__topline,
+.signal-ui-empty-state__topline {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+
+.signal-ui-header-lockup__eyebrow,
+.signal-ui-empty-state__eyebrow {
+  color: var(--signal-ui-primary);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.signal-ui-header-lockup__description,
+.signal-ui-empty-state__description {
+  margin: 8px 0 0;
+  max-width: 68ch;
+  color: rgba(245, 245, 240, 0.82);
+}
+
+.signal-ui-header-lockup__detail,
+.signal-ui-empty-state__detail {
+  margin-top: 14px;
+}
+
+.signal-ui-header-lockup__aside {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.signal-ui-empty-state {
+  --signal-ui-empty-state-border: rgba(192, 254, 4, 0.24);
+  --signal-ui-empty-state-field: var(--signal-ui-field-primary);
+  --signal-ui-empty-state-glow: rgba(192, 254, 4, 0.12);
+  display: grid;
+  gap: 24px;
+  align-items: center;
+}
+
+.signal-ui-empty-state--framed {
+  position: relative;
+  overflow: hidden;
+  padding: 24px;
+  border: 1px solid var(--signal-ui-empty-state-border);
+  background:
+    linear-gradient(135deg, var(--signal-ui-empty-state-glow), transparent 38%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.035), transparent 56%),
+    rgba(10, 10, 10, 0.94);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.03),
+    0 0 0 1px rgba(0, 0, 0, 0.36);
+}
+
+.signal-ui-empty-state--framed::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 92px;
+  height: 14px;
+  background: var(--signal-ui-empty-state-field);
+  box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.32);
+}
+
+.signal-ui-empty-state--with-visual {
+  grid-template-columns: minmax(160px, 260px) minmax(0, 1fr);
+}
+
+.signal-ui-empty-state--compact {
+  gap: 18px;
+}
+
+.signal-ui-empty-state--compact.signal-ui-empty-state--framed {
+  padding: 20px;
+}
+
+.signal-ui-empty-state__visual {
+  min-width: 0;
+}
+
+.signal-ui-empty-state__content {
+  min-width: 0;
+}
+
+.signal-ui-empty-state__actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 18px;
+}
+
+.signal-ui-empty-state--tone-default {
+  --signal-ui-empty-state-border: rgba(255, 255, 255, 0.14);
+  --signal-ui-empty-state-field: var(--signal-ui-field-primary);
+  --signal-ui-empty-state-glow: rgba(255, 255, 255, 0.04);
+}
+
+.signal-ui-empty-state--tone-primary {
+  --signal-ui-empty-state-border: rgba(192, 254, 4, 0.28);
+  --signal-ui-empty-state-field: var(--signal-ui-field-primary);
+  --signal-ui-empty-state-glow: rgba(192, 254, 4, 0.12);
+}
+
+.signal-ui-empty-state--tone-violet {
+  --signal-ui-empty-state-border: rgba(159, 77, 255, 0.28);
+  --signal-ui-empty-state-field: var(--signal-ui-field-violet);
+  --signal-ui-empty-state-glow: rgba(159, 77, 255, 0.12);
+}
+
+.signal-ui-empty-state--tone-warning {
+  --signal-ui-empty-state-border: rgba(255, 155, 47, 0.28);
+  --signal-ui-empty-state-field: var(--signal-ui-warning);
+  --signal-ui-empty-state-glow: rgba(255, 155, 47, 0.12);
+}
+
+.signal-ui-empty-state--tone-error {
+  --signal-ui-empty-state-border: rgba(242, 71, 35, 0.3);
+  --signal-ui-empty-state-field: var(--signal-ui-error);
+  --signal-ui-empty-state-glow: rgba(242, 71, 35, 0.12);
+}
+
+.signal-ui-empty-state--tone-violet .signal-ui-accent-field {
+  --signal-ui-accent-field-bg: var(--signal-ui-field-violet);
+}
+
+.signal-ui-empty-state--tone-warning .signal-ui-accent-field {
+  --signal-ui-accent-field-bg: var(--signal-ui-warning);
+}
+
+.signal-ui-empty-state--tone-error .signal-ui-accent-field {
+  --signal-ui-accent-field-bg: var(--signal-ui-error);
+}
+
+.signal-ui-empty-state--tone-violet .signal-ui-empty-state__eyebrow {
+  color: var(--signal-ui-accent-violet);
+}
+
+.signal-ui-empty-state--tone-warning .signal-ui-empty-state__eyebrow {
+  color: var(--signal-ui-warning);
+}
+
+.signal-ui-empty-state--tone-error .signal-ui-empty-state__eyebrow {
+  color: var(--signal-ui-error);
+}
+
+.signal-ui-status-tag {
+  --signal-ui-status-tag-bg: rgba(255, 255, 255, 0.06);
+  --signal-ui-status-tag-border: rgba(255, 255, 255, 0.16);
+  --signal-ui-status-tag-fg: rgba(245, 245, 240, 0.9);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 28px;
+  padding: 0.32rem 0.76rem 0.26rem;
+  border: 1px solid var(--signal-ui-status-tag-border);
+  background: var(--signal-ui-status-tag-bg);
+  color: var(--signal-ui-status-tag-fg);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.signal-ui-status-tag--neutral {
+  --signal-ui-status-tag-bg: rgba(113, 113, 113, 0.12);
+  --signal-ui-status-tag-border: rgba(113, 113, 113, 0.34);
+  --signal-ui-status-tag-fg: rgba(245, 245, 240, 0.82);
+}
+
+.signal-ui-status-tag--primary {
+  --signal-ui-status-tag-bg: rgba(192, 254, 4, 0.12);
+  --signal-ui-status-tag-border: rgba(192, 254, 4, 0.36);
+  --signal-ui-status-tag-fg: #f7ffd7;
+}
+
+.signal-ui-status-tag--violet {
+  --signal-ui-status-tag-bg: rgba(159, 77, 255, 0.12);
+  --signal-ui-status-tag-border: rgba(159, 77, 255, 0.36);
+  --signal-ui-status-tag-fg: #eadbff;
+}
+
+.signal-ui-status-tag--info {
+  --signal-ui-status-tag-bg: rgba(84, 236, 255, 0.12);
+  --signal-ui-status-tag-border: rgba(84, 236, 255, 0.34);
+  --signal-ui-status-tag-fg: #d8fdff;
+}
+
+.signal-ui-status-tag--success {
+  --signal-ui-status-tag-bg: rgba(52, 211, 153, 0.14);
+  --signal-ui-status-tag-border: rgba(52, 211, 153, 0.34);
+  --signal-ui-status-tag-fg: #dbfff2;
+}
+
+.signal-ui-status-tag--warning {
+  --signal-ui-status-tag-bg: rgba(255, 155, 47, 0.14);
+  --signal-ui-status-tag-border: rgba(255, 155, 47, 0.34);
+  --signal-ui-status-tag-fg: #ffe7c6;
+}
+
+.signal-ui-status-tag--danger {
+  --signal-ui-status-tag-bg: rgba(242, 71, 35, 0.14);
+  --signal-ui-status-tag-border: rgba(242, 71, 35, 0.34);
+  --signal-ui-status-tag-fg: #ffd6cd;
+}
+
+@media (max-width: 900px) {
+  .signal-ui-empty-state--with-visual {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .signal-ui-empty-state__visual {
+    max-width: 320px;
+  }
+}

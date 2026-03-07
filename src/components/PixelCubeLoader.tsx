@@ -10,6 +10,7 @@ type LoaderStyle = CSSProperties & Record<`--signal-ui-loader-${string}`, string
 
 export type PixelCubeLoaderProps = Omit<HTMLAttributes<HTMLElement>, "children" | "style"> & {
   as?: PixelCubeLoaderRootElement;
+  compact?: boolean;
   detail?: string;
   gridSize?: PixelCubeLoaderGridSize;
   label?: string;
@@ -33,6 +34,7 @@ type VoxelDescriptor = {
 export function PixelCubeLoader({
   as,
   className,
+  compact,
   detail = "forming cube volume",
   gridSize = 3,
   label = "cli construct",
@@ -47,12 +49,13 @@ export function PixelCubeLoader({
   const stepSize = cellSize + gapSize;
   const depthOrigin = ((gridSize - 1) / 2) * stepSize;
   const voxels = createVoxelDescriptors(gridSize);
-  const Root = as ?? (showLegend ? "div" : "span");
+  const resolvedCompact = compact ?? !showLegend;
+  const Root = as ?? (resolvedCompact ? "span" : "div");
   const Wrapper = Root === "span" ? "span" : "div";
   const loaderClassName = [
     "signal-ui-pixel-cube-loader",
     toneClassName[tone],
-    showLegend ? undefined : "signal-ui-pixel-cube-loader--mini",
+    resolvedCompact ? "signal-ui-pixel-cube-loader--mini" : undefined,
     className,
   ]
     .filter(Boolean)
