@@ -1,4 +1,4 @@
-import type { HexColor } from "./colorUtils";
+import type { HexColor } from "./colorUtils.js";
 
 export type MarathonDosThemeColorPreferences = {
   accent?: HexColor;

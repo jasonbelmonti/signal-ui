@@ -22,4 +22,5 @@ export const marathonDosFontStacks = {
   ui: "\"Azeret Mono\", \"SFMono-Regular\", \"Menlo\", monospace",
   display: "\"Oxanium\", \"Azeret Mono\", sans-serif",
   displaySecondary: "\"Doto\", \"Oxanium\", \"Azeret Mono\", sans-serif",
+  pixel: "\"Micro 5\", \"Oxanium\", \"Azeret Mono\", sans-serif",
 } as const;

@@ -1,8 +1,8 @@
 import { Button, Card, Col, Flex, Input, Row, Space, Typography } from "antd";
 import type { Meta, StoryObj } from "@storybook/react-webpack5";
 
-import { Panel } from "../components/Panel";
-import { marathonDosPalette } from "../theme/marathonDosTheme";
+import { Panel } from "../components/Panel.js";
+import { marathonDosPalette } from "../theme/marathonDosTheme.js";
 
 const meta = {
   title: "Foundations/Signal Deck",

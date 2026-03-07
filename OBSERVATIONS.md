@@ -5,7 +5,9 @@
 - Preferred initial direction for `agent-ui` is Storybook-first, not a separate app shell.
 - Locked visual direction is a modernized MS-DOS / hacker aesthetic with palette inspiration from Marathon (`#000000`, `#1c1c1c`, `#717171`, `#c0fe04`, `#f24723`), open-source fonts, and restrained terminal effects.
 - Current font direction is `Oxanium` for display headings and `Azeret Mono` for UI/body copy.
-- Theme assets that depend on global CSS or font-face imports should be wired through `src/index.ts`, not only Storybook preview, so package consumers match the stories.
+- Theme assets that depend on global CSS or font-face imports need a first-class consumer entry, not just Storybook preview; for packaged use, an explicit `styles.css` export is safer than hiding global side effects in `src/index.ts`.
+- For a checked-in TypeScript `dist/` package that ships as Node ESM, source-level relative imports/exports should already use `.js` specifiers; otherwise `tsc` preserves extensionless paths and the published package breaks at runtime.
+- If Storybook webpack consumes TS source files that use explicit `.js` specifiers for ESM-correct package output, `.storybook/main.ts` needs `resolve.extensionAlias` so `.js` can map back to `.ts/.tsx` during local story resolution.
 - Theme motion effects should be exposed as opt-in CSS utilities plus Storybook demos, not forced into Ant Design token config.
 - User prefers motion texture with rapid but subtle "zzt zzt" energy rather than slow ambient shimmer.
 - User is interested in folding more stylized pixel/display fonts into the Marathon theme when they are applied as purposeful accents rather than indiscriminate body copy.
@@ -17,9 +19,31 @@
 - User is interested in optional 45 degree panel corner treatments, especially either a bold accent triangle or a clipped/notched corner to add diagonal rhythm without changing every surface by default.
 - User prefers stylized treatments to have named presets when possible so the system can stay consistent without requiring repeated hand-tuning of low-level props.
 - User likes Marathon-style flat areas of color and is considering them as sparse, clean accents, especially around headings or section punctuation rather than as broad background treatment.
+- User responds well to bold CTA treatments when the motion feels intentional and crunchy, especially fill-based effects with visible pixel creep/flicker and layered text.
+- User notices when visual compositing is only approximated; prefers text/effect treatments to be driven by the same live source rather than loosely synchronized CSS stand-ins.
+- User likes interaction effects that escalate through readable payoff phases, such as fill, saturation/wake-up, then a short burst event, rather than remaining in a single ambient loop.
+- For post-payoff states, user prefers a distinct confirmation cooldown or color-resolve phase instead of leaving the control parked on the same peak-effect color.
+- User wants payoff endpoint colors to stay configurable, not locked to a hidden default, and expects pulse effects to visibly drive that outcome color onto the surface.
+- User wants Storybook examples to demonstrate the intended real interaction model, especially hold-to-trigger flows that reverse on early release and clamp on success.
+- For expressive CTAs, user still prioritizes headline readability; blend effects should interact with the live surface without sacrificing legibility at a glance.
+- User is open to `Micro 5` specifically for button/CTA label treatments when it reads intentional and crisp, not as a general-purpose display font.
+- For high-stakes CTA buttons, user wants the default label size to skew large and unmistakable rather than merely balanced.
+- For payoff motion, user prefers tangible geometry leaving the control or a strong flash/glow event over subtle particle noise that stays visually inside the button.
+- When a burst gimmick feels wrong, user prefers pivoting back to internal procedural motion, like rings or surface pulses, plus symmetric vibration instead of directional recoil.
 - User is interested in loader motion that begins as raw CLI/pixel assembly, then reveals a sharper 3D form such as a rotating cube without losing the low-fi terminal texture.
 - Preferred loader expression is a low-count 2x2 or 3x3 front grid with mostly solid theme color, using smooth real 3D transforms and voxel/cube reference motion rather than dense noisy particle fields.
 - Current loader preference is a square-framed, faster mechanical loop with a small settle jolt and a reusable legendless mini variant that can sit inline with text.
 - User notices small alignment drift quickly and prefers motion components to be geometrically centered rather than visually "close enough."
 - When building new effect work in a separate git worktree, check whether the main worktree carries uncommitted visual-system changes first; syncing those files can matter more than starting from clean `HEAD`.
 - User is evaluating runtime Ant Design theme customization and prefers a constrained set of end-user color controls over exposing the full token surface.
+- User often frames visual-system requests as terse outcome statements, so the most useful default is a reusable exported primitive plus a Storybook demo rather than only isolated CSS.
+- User prefers visual-system stories to accept real content through Storybook controls when evaluating a surface, rather than only static hand-authored demo markup.
+- User expects markdown demos to exercise realistic fenced-code behavior, including language-tagged syntax highlighting rather than flat monochrome code blocks.
+- User is interested in adding an opt-in Three.js layer for bold graph or hero visuals, especially wireframes traced by Tron-style beam motion rather than generic floating 3D decoration.
+- For motion-heavy components, the user prefers the structure and glow to read immediately at normal scale; perfectly synchronized loops feel less "loader-like" than slightly desynced seeded timing.
+- User is interested in deterministic hash-driven 3D cube visualizations that mix wireframe, solid, and color-coded voxel states instead of flat text-only identifiers.
+- User wants visually expressive encodings to be defensible and meaningfully distinct, not just aesthetically novel.
+- For graph work, the user wants the React Flow chrome and styling to live in reusable package-owned primitives rather than story-local or app-local overrides.
+- User expects a self-review pass on visual changes before considering the PR ready.
+- User wants graph visualization in `agent-ui` to land as a reusable package capability rather than agent-console-specific glue, with a layered `GraphCanvas` plus `WorkflowDag` API, read-only v1 behavior, canvas-first ownership, and dagre-based auto-layout.
+- Local shell setup can expose Homebrew Node 16 in login/non-interactive sessions unless `nvm` is initialized from `~/.zprofile`; interactive `~/.zshrc` alone is not enough for toolchain commands.

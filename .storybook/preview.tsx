@@ -1,9 +1,9 @@
 import type { Preview } from "@storybook/react-webpack5";
 
-import "antd/dist/reset.css";
+import "../src/styles.css";
 import "../src/styles/storybook.css";
 
-import { AntdThemeProvider } from "../src";
+import { AntdThemeProvider } from "../src/index.js";
 
 const preview: Preview = {
   decorators: [

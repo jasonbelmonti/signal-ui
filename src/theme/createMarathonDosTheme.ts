@@ -1,6 +1,6 @@
-import type { CSSProperties } from "react";
 import { theme } from "antd";
 import type { ThemeConfig } from "antd";
+import type { CSSProperties } from "react";
 
 import {
   darkenHexColor,
@@ -9,10 +9,10 @@ import {
   resolveHexColor,
   toRgbTriplet,
   withAlpha,
-} from "./colorUtils";
-import { marathonDosFontStacks, marathonDosPalette } from "./marathonDosPalette";
-import type { MarathonDosPalette as ResolvedMarathonDosPalette } from "./marathonDosPalette";
-import type { MarathonDosThemePreferences } from "./marathonDosThemePreferences";
+} from "./colorUtils.js";
+import { marathonDosFontStacks, marathonDosPalette } from "./marathonDosPalette.js";
+import type { MarathonDosPalette as ResolvedMarathonDosPalette } from "./marathonDosPalette.js";
+import type { MarathonDosThemePreferences } from "./marathonDosThemePreferences.js";
 
 function resolveBorderRadius(borderRadius = 2) {
   return Math.max(Math.round(borderRadius), 0);
@@ -77,6 +77,7 @@ export function createMarathonDosThemeCssVariables(
     "--marathon-font-ui": marathonDosFontStacks.ui,
     "--marathon-font-display": marathonDosFontStacks.display,
     "--marathon-font-display-secondary": marathonDosFontStacks.displaySecondary,
+    "--marathon-font-pixel": marathonDosFontStacks.pixel,
     "--marathon-fx-signal-ink": lightenHexColor(palette.text, 0.02),
     "--marathon-fx-signal-accent": palette.fieldPrimary,
     "--marathon-fx-signal-glow": withAlpha(palette.primary, 0.42),

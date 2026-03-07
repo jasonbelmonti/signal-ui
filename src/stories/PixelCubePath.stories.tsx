@@ -2,8 +2,8 @@ import { Card, Flex, Space, Typography } from "antd";
 import type { Meta, StoryObj } from "@storybook/react-webpack5";
 import type { CSSProperties } from "react";
 
-import { PixelCubePath } from "../components/PixelCubePath";
-import { marathonDosPalette } from "../theme/marathonDosTheme";
+import { PixelCubePath } from "../components/PixelCubePath.js";
+import { marathonDosPalette } from "../theme/marathonDosTheme.js";
 
 const meta = {
   title: "Effects/Pixel Cube Path",
@@ -58,6 +58,22 @@ const meta = {
             <Typography.Paragraph style={copyStyle}>
               `usage=&quot;loader&quot;` keeps the same visual treatment but promotes the component
               into a real live status node for pending-state UI instead of decorative chrome.
+            </Typography.Paragraph>
+          </Space>
+        </Card>
+
+        <Card title="Async Sweep Bank" style={cardStyle}>
+          <Space direction="vertical" size={12}>
+            <Typography.Text style={eyebrowStyle}>Desynced Instances</Typography.Text>
+            <Flex gap={14} wrap="wrap">
+              <PixelCubePath size={132} />
+              <PixelCubePath size={132} />
+              <PixelCubePath size={132} />
+            </Flex>
+            <Typography.Paragraph style={copyStyle}>
+              Each instance seeds its own step cadence and phase offset, so the path keeps the
+              same geometry while feeling closer to a jittery loader bank than a synchronized demo
+              loop.
             </Typography.Paragraph>
           </Space>
         </Card>

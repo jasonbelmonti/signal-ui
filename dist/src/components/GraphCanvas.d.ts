@@ -1,0 +1,34 @@
+import type { BackgroundProps, ControlProps, Edge, MiniMapProps, Node, ReactFlowProps } from "@xyflow/react";
+import type { CSSProperties, ReactNode } from "react";
+type ReservedReactFlowProps = "children" | "className" | "colorMode" | "edgeTypes" | "edges" | "fitView" | "fitViewOptions" | "nodeTypes" | "nodes" | "onEdgeClick" | "onEdgesChange" | "onNodeClick" | "onNodesChange" | "onSelectionChange" | "style";
+type GraphCanvasBaseProps<NodeType extends Node, EdgeType extends Edge> = ReactFlowProps<NodeType, EdgeType>;
+export type GraphCanvasReactFlowProps<NodeType extends Node = Node, EdgeType extends Edge = Edge> = Partial<Omit<GraphCanvasBaseProps<NodeType, EdgeType>, ReservedReactFlowProps>>;
+export interface GraphCanvasProps<NodeType extends Node = Node, EdgeType extends Edge = Edge> {
+    backgroundProps?: Partial<BackgroundProps>;
+    children?: ReactNode;
+    className?: string;
+    colorMode?: GraphCanvasBaseProps<NodeType, EdgeType>["colorMode"];
+    controlProps?: Partial<ControlProps>;
+    edgeTypes?: GraphCanvasBaseProps<NodeType, EdgeType>["edgeTypes"];
+    edges: EdgeType[];
+    emptyState?: ReactNode;
+    fitView?: boolean;
+    fitViewOptions?: GraphCanvasBaseProps<NodeType, EdgeType>["fitViewOptions"];
+    loading?: boolean;
+    loadingState?: ReactNode;
+    miniMapProps?: Partial<MiniMapProps<NodeType>>;
+    nodeTypes?: GraphCanvasBaseProps<NodeType, EdgeType>["nodeTypes"];
+    nodes: NodeType[];
+    onEdgeClick?: GraphCanvasBaseProps<NodeType, EdgeType>["onEdgeClick"];
+    onEdgesChange?: GraphCanvasBaseProps<NodeType, EdgeType>["onEdgesChange"];
+    onNodeClick?: GraphCanvasBaseProps<NodeType, EdgeType>["onNodeClick"];
+    onNodesChange?: GraphCanvasBaseProps<NodeType, EdgeType>["onNodesChange"];
+    onSelectionChange?: GraphCanvasBaseProps<NodeType, EdgeType>["onSelectionChange"];
+    reactFlowProps?: GraphCanvasReactFlowProps<NodeType, EdgeType>;
+    showBackground?: boolean;
+    showControls?: boolean;
+    showMiniMap?: boolean;
+    style?: CSSProperties;
+}
+export declare function GraphCanvas<NodeType extends Node = Node, EdgeType extends Edge = Edge>({ backgroundProps, children, className, colorMode, controlProps, edgeTypes, edges, emptyState, fitView, fitViewOptions, loading, loadingState, miniMapProps, nodeTypes, nodes, onEdgeClick, onEdgesChange, onNodeClick, onNodesChange, onSelectionChange, reactFlowProps, showBackground, showControls, showMiniMap, style, }: GraphCanvasProps<NodeType, EdgeType>): import("react/jsx-runtime").JSX.Element;
+export {};

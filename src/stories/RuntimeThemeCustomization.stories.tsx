@@ -2,13 +2,13 @@ import { Button, Card, ColorPicker, Flex, Input, InputNumber, Space, Typography 
 import type { Meta, StoryObj } from "@storybook/react-webpack5";
 import { useState } from "react";
 
-import { Panel } from "../components/Panel";
-import { AntdThemeProvider } from "../providers/AntdThemeProvider";
+import { Panel } from "../components/Panel.js";
+import { AntdThemeProvider } from "../providers/AntdThemeProvider.js";
 import {
   marathonDosPalette,
   type HexColor,
   type MarathonDosThemePreferences,
-} from "../theme/marathonDosTheme";
+} from "../theme/marathonDosTheme.js";
 
 type RuntimeThemeState = {
   accent: HexColor;
