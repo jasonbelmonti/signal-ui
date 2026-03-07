@@ -264,7 +264,7 @@ const meta = {
                   style={{
                     ...contrastChipStyle,
                     background: marathonDosPalette.accentViolet,
-                    color: marathonDosPalette.text,
+                    color: marathonDosPalette.fieldInk,
                   }}
                 >
                   Violet Accent

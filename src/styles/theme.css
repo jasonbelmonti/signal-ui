@@ -185,7 +185,7 @@ h6.ant-typography {
 
 .marathon-accent-field--secondary {
   --marathon-accent-field-bg: var(--marathon-field-violet);
-  --marathon-accent-field-fg: var(--marathon-text);
+  --marathon-accent-field-fg: var(--marathon-field-ink);
 }
 
 .marathon-heading-lockup {
