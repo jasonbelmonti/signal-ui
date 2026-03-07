@@ -17,13 +17,24 @@ bun run build
 - `dist/index.d.ts`
 - `dist/styles.css`
 
-`dist/` is checked into the repo on purpose so Bun consumers using
-`"@jasonbelmonti/signal-ui": "file:../signal-ui"` can install the package from a fresh clone without
-depending on blocked lifecycle scripts.
+`dist/` is generated, not checked into git. Local builds, CI, and the release workflow recreate it
+from source.
 
 ## Consumption
 
-Add the package as a sibling file dependency:
+When published, install it from npm:
+
+```bash
+bun add @jasonbelmonti/signal-ui
+# or
+npm install @jasonbelmonti/signal-ui
+```
+
+For a local checkout, build the package first and then add it as a sibling file dependency:
+
+```bash
+bun run build
+```
 
 ```json
 {
@@ -42,3 +53,20 @@ import { AntdThemeProvider } from "@jasonbelmonti/signal-ui";
 
 The package exports the provider, theme tokens, and shared components including `Panel`,
 `PixelCubeLoader`, and `PixelCubePath`.
+
+## Release
+
+Create a changeset for any user-facing package change:
+
+```bash
+bun run changeset
+```
+
+Versioning and publishing are handled through GitHub Actions:
+
+```bash
+bun run version-packages
+```
+
+Configure the repository `NPM_TOKEN` secret so the release workflow can publish
+`@jasonbelmonti/signal-ui` to npm after the Changesets version PR merges.
