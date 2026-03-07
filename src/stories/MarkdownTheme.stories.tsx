@@ -29,9 +29,23 @@ import { MarkdownTheme, Panel } from "agent-ui";
   </MarkdownTheme>
 </Panel>`;
 
-const trustedHtmlCode = `import rehypeHighlight from "rehype-highlight";
+const trustedHtmlCode = `import ReactMarkdown from "react-markdown";
+import rehypeHighlight from "rehype-highlight";
 import rehypeRaw from "rehype-raw";
-import rehypeSanitize from "rehype-sanitize";
+import rehypeSanitize, { defaultSchema } from "rehype-sanitize";
+import remarkGfm from "remark-gfm";
+
+const trustedHtmlSchema = {
+  ...defaultSchema,
+  attributes: {
+    ...defaultSchema.attributes,
+    div: [
+      ...(defaultSchema.attributes?.div ?? []),
+      ["className", "marathon-markdown-callout"],
+      ["data-callout"],
+    ],
+  },
+};
 
 <ReactMarkdown
   remarkPlugins={[remarkGfm]}
