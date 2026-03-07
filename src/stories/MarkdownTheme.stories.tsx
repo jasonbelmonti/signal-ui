@@ -1,7 +1,6 @@
 import { Col, Flex, Row, Space, Typography } from "antd";
 import type { Meta, StoryObj } from "@storybook/react-webpack5";
 import rehypeHighlight from "rehype-highlight";
-import rehypeRaw from "rehype-raw";
 import type { CSSProperties } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -32,10 +31,15 @@ import { MarkdownTheme, Panel } from "agent-ui";
 
 const trustedHtmlCode = `import rehypeHighlight from "rehype-highlight";
 import rehypeRaw from "rehype-raw";
+import rehypeSanitize from "rehype-sanitize";
 
 <ReactMarkdown
   remarkPlugins={[remarkGfm]}
-  rehypePlugins={[rehypeRaw, rehypeHighlight]}
+  rehypePlugins={[
+    rehypeRaw,
+    [rehypeSanitize, trustedHtmlSchema],
+    rehypeHighlight,
+  ]}
 >
   {trustedMarkdown}
 </ReactMarkdown>`;
@@ -94,16 +98,9 @@ export function collectSignal(channel: string, state: SignalState) {
 
 ## Inline language
 
-Links like [Storybook docs](https://storybook.js.org/docs) stay clearly interactive, shortcuts such as <kbd>Cmd</kbd> + <kbd>K</kbd> are framed, and <mark>critical notes</mark> keep high contrast without turning the document into a neon puddle.
+Links like [Storybook docs](https://storybook.js.org/docs) stay clearly interactive, shortcuts such as \`Cmd\` + \`K\` are framed, and critical notes stay readable without turning the document into a neon puddle.
 
-<div class="marathon-markdown-callout" data-callout="warning">
-  <p><strong>Optional callouts.</strong> Plain markdown still works on its own. This helper block is only here so richer renderers have somewhere intentional to land.</p>
-</div>
-
-<details>
-  <summary>Renderer note</summary>
-  <p>If your renderer adds extra wrappers around tables or code fences, keep them. The theme targets semantic descendants and stays out of the way unless the markup gets truly avant-garde.</p>
-</details>
+> Optional callouts and disclosure blocks are still supported as trusted HTML helpers, but they are demonstrated separately from this live markdown control so pasted Storybook args stay inert.
 `;
 
 function MarkdownThemeStory({ markdown }: MarkdownThemeStoryProps) {
@@ -148,10 +145,7 @@ function MarkdownThemeStory({ markdown }: MarkdownThemeStoryProps) {
             cutCornerPreset="architectural"
           >
             <MarkdownTheme>
-              <ReactMarkdown
-                rehypePlugins={[rehypeRaw, rehypeHighlight]}
-                remarkPlugins={[remarkGfm]}
-              >
+              <ReactMarkdown rehypePlugins={[rehypeHighlight]} remarkPlugins={[remarkGfm]}>
                 {markdown}
               </ReactMarkdown>
             </MarkdownTheme>
@@ -179,13 +173,17 @@ function MarkdownThemeStory({ markdown }: MarkdownThemeStoryProps) {
                   <li>Standard markdown headings, lists, links, emphasis, and code fences</li>
                   <li>GFM tables, task lists, and strikethrough via <code>remark-gfm</code></li>
                   <li>Syntax-highlighted fenced blocks via <code>rehype-highlight</code></li>
-                  <li>Trusted inline HTML blocks via <code>rehype-raw</code></li>
+                  <li>Trusted HTML helpers are shown below, but disabled in the live control</li>
                 </ul>
 
                 <h3>Consumer rule</h3>
                 <p>
                   The package exports only the wrapper and CSS skin. Consumers still choose their
                   own markdown renderer, highlight plugin, and trust policy.
+                </p>
+                <p>
+                  If you enable raw HTML for trusted markdown, pair it with sanitization instead
+                  of feeding Storybook or user-provided args straight into <code>rehype-raw</code>.
                 </p>
               </MarkdownTheme>
             </Panel>
@@ -204,14 +202,30 @@ function MarkdownThemeStory({ markdown }: MarkdownThemeStoryProps) {
             </Panel>
 
             <Panel
-              title="Trusted HTML"
+              title="Trusted HTML Add-Ons"
               extra="Optional"
               className="marathon-panel-tab marathon-panel-tab--secondary"
               style={trustedHtmlPanelStyle}
             >
               <MarkdownTheme>
+                <div className="marathon-markdown-callout" data-callout="warning">
+                  <p>
+                    <strong>Trusted HTML only.</strong>
+                    {" "}
+                    This helper surface is rendered from fixed JSX, not the user-editable markdown
+                    control.
+                  </p>
+                </div>
+                <details open>
+                  <summary>Sanitization note</summary>
+                  <p>
+                    Use raw HTML only for trusted or sanitized content. The live story keeps it off
+                    so pasted controls stay inert.
+                  </p>
+                </details>
                 <p>
-                  Enable raw HTML only when the markdown source is trusted or sanitized upstream.
+                  If a CMS or docs pipeline emits helper HTML, pass it through a sanitization
+                  schema that explicitly allows the classes and attributes you want to keep.
                 </p>
                 <pre>
                   <code>{trustedHtmlCode}</code>
