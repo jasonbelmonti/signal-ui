@@ -6,7 +6,16 @@ function resolveBorderRadius(borderRadius = 2) {
 }
 export function resolveSignalPalette(preferences = {}) {
     const colors = preferences.colors ?? {};
-    if (!Object.values(colors).some((value) => isHexColor(value))) {
+    const hasBackgroundOverride = isHexColor(colors.background);
+    const hasPanelOverride = isHexColor(colors.panel);
+    const hasPrimaryOverride = isHexColor(colors.primary);
+    const hasTextOverride = isHexColor(colors.text);
+    const hasAccentOverride = isHexColor(colors.accent);
+    if (!hasBackgroundOverride &&
+        !hasPanelOverride &&
+        !hasPrimaryOverride &&
+        !hasTextOverride &&
+        !hasAccentOverride) {
         return signalPalette;
     }
     const background = resolveHexColor(colors.background, signalPalette.black);
@@ -17,18 +26,22 @@ export function resolveSignalPalette(preferences = {}) {
     return {
         ...signalPalette,
         black: background,
-        void: lightenHexColor(background, 0.02),
+        void: hasBackgroundOverride ? lightenHexColor(background, 0.02) : signalPalette.void,
         panel,
-        surface: mixHexColors(panel, text, 0.06),
-        grid: mixHexColors(panel, text, 0.12),
-        muted: mixHexColors(text, background, 0.55),
+        surface: hasPanelOverride || hasTextOverride ? mixHexColors(panel, text, 0.06) : signalPalette.surface,
+        grid: hasPanelOverride || hasTextOverride ? mixHexColors(panel, text, 0.12) : signalPalette.grid,
+        muted: hasTextOverride || hasBackgroundOverride
+            ? mixHexColors(text, background, 0.55)
+            : signalPalette.muted,
         text,
         primary,
-        primaryDeep: darkenHexColor(primary, 0.28),
-        fieldPrimary: lightenHexColor(primary, 0.12),
-        fieldInk: background,
+        primaryDeep: hasPrimaryOverride ? darkenHexColor(primary, 0.28) : signalPalette.primaryDeep,
+        fieldPrimary: hasPrimaryOverride
+            ? lightenHexColor(primary, 0.12)
+            : signalPalette.fieldPrimary,
+        fieldInk: hasBackgroundOverride ? background : signalPalette.fieldInk,
         accentViolet: accent,
-        fieldViolet: accent,
+        fieldViolet: hasAccentOverride ? accent : signalPalette.fieldViolet,
     };
 }
 export function createSignalThemeCssVariables(preferences = {}) {
