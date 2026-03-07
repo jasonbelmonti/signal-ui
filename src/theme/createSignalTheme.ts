@@ -4,6 +4,7 @@ import type { CSSProperties } from "react";
 
 import {
   darkenHexColor,
+  isHexColor,
   lightenHexColor,
   mixHexColors,
   resolveHexColor,
@@ -23,7 +24,7 @@ export function resolveSignalPalette(
 ): ResolvedSignalPalette {
   const colors = preferences.colors ?? {};
 
-  if (!Object.values(colors).some((value) => value !== undefined)) {
+  if (!Object.values(colors).some((value) => isHexColor(value))) {
     return signalPalette;
   }
 
