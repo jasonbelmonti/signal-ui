@@ -284,6 +284,7 @@ h6.ant-typography {
 }
 
 .marathon-pixel-cube-path__cube {
+  --marathon-cube-path-cube-base-filter: saturate(1) brightness(1);
   position: absolute;
   top: 0;
   left: 0;
@@ -299,12 +300,13 @@ h6.ant-typography {
   transform-origin: center;
   transform-style: preserve-3d;
   will-change: filter, transform;
+  filter: var(--marathon-cube-path-cube-base-filter);
   animation: marathon-cube-path-cube var(--marathon-cube-path-cycle) linear infinite;
   animation-delay: calc(var(--marathon-cube-path-phase) * var(--marathon-cube-path-step-duration) * -1);
 }
 
 .marathon-pixel-cube-path__cube[data-surface="false"] {
-  filter: saturate(0.78) brightness(0.9);
+  --marathon-cube-path-cube-base-filter: saturate(0.78) brightness(0.9);
 }
 
 .marathon-pixel-cube-path__face {
@@ -914,7 +916,7 @@ h6.ant-typography {
   }
 
   .marathon-pixel-cube-path__cube {
-    filter: none;
+    filter: var(--marathon-cube-path-cube-base-filter);
     transform: translate3d(
       var(--marathon-cube-path-cube-x),
       var(--marathon-cube-path-cube-y),
@@ -1218,7 +1220,7 @@ h6.ant-typography {
 @keyframes marathon-cube-path-cube {
   0%,
   100% {
-    filter: drop-shadow(0 0 0 rgba(0, 0, 0, 0));
+    filter: var(--marathon-cube-path-cube-base-filter) drop-shadow(0 0 0 rgba(0, 0, 0, 0));
     transform: translate3d(
         var(--marathon-cube-path-cube-x),
         var(--marathon-cube-path-cube-y),
@@ -1228,7 +1230,8 @@ h6.ant-typography {
   }
 
   4% {
-    filter: drop-shadow(0 0 12px rgb(var(--marathon-cube-path-accent-rgb) / 0.16));
+    filter: var(--marathon-cube-path-cube-base-filter)
+      drop-shadow(0 0 12px rgb(var(--marathon-cube-path-accent-rgb) / 0.16));
     transform: translate3d(
         var(--marathon-cube-path-cube-x),
         calc(var(--marathon-cube-path-cube-y) - 1px),
@@ -1238,7 +1241,8 @@ h6.ant-typography {
   }
 
   8% {
-    filter: drop-shadow(0 0 18px rgb(var(--marathon-cube-path-accent-rgb) / 0.24));
+    filter: var(--marathon-cube-path-cube-base-filter)
+      drop-shadow(0 0 18px rgb(var(--marathon-cube-path-accent-rgb) / 0.24));
     transform: translate3d(
         var(--marathon-cube-path-cube-x),
         calc(var(--marathon-cube-path-cube-y) - 2px),
@@ -1248,7 +1252,8 @@ h6.ant-typography {
   }
 
   14% {
-    filter: drop-shadow(0 0 10px rgb(var(--marathon-cube-path-accent-rgb) / 0.14));
+    filter: var(--marathon-cube-path-cube-base-filter)
+      drop-shadow(0 0 10px rgb(var(--marathon-cube-path-accent-rgb) / 0.14));
     transform: translate3d(
         var(--marathon-cube-path-cube-x),
         calc(var(--marathon-cube-path-cube-y) - 1px),
@@ -1259,7 +1264,7 @@ h6.ant-typography {
 
   20%,
   100% {
-    filter: drop-shadow(0 0 0 rgba(0, 0, 0, 0));
+    filter: var(--marathon-cube-path-cube-base-filter) drop-shadow(0 0 0 rgba(0, 0, 0, 0));
     transform: translate3d(
         var(--marathon-cube-path-cube-x),
         var(--marathon-cube-path-cube-y),
