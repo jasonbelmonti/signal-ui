@@ -9,16 +9,34 @@ import "@xyflow/react/dist/base.css";
 import "./styles/theme.css";
 
 export { AntdThemeProvider, installStaticAntdTheme } from "./providers/AntdThemeProvider";
+export { HashCube } from "./components/HashCube";
 export { GraphCanvas } from "./components/GraphCanvas";
 export type { GraphCanvasProps, GraphCanvasReactFlowProps } from "./components/GraphCanvas";
-export { HashCube } from "./components/HashCube";
 export { MarkdownTheme } from "./components/MarkdownTheme";
+export {
+  GRAPH_CANVAS_EDGE_TYPE,
+  GraphCanvasEdge,
+} from "./components/GraphCanvasEdge";
+export {
+  GRAPH_CANVAS_NODE_TYPE,
+  GraphCanvasNode,
+} from "./components/GraphCanvasNode";
 export { Panel, panelCutCornerPresets } from "./components/Panel";
 export { SignalButton } from "./components/SignalButton";
 export type {
   HashCubeProps,
   HashCubeTone,
 } from "./components/HashCube";
+export type {
+  GraphCanvasEdgeData,
+  GraphCanvasEdgeDefinition,
+} from "./components/GraphCanvasEdge";
+export type {
+  GraphCanvasBadge,
+  GraphCanvasNodeData,
+  GraphCanvasNodeDefinition,
+} from "./components/GraphCanvasNode";
+export type { GraphCanvasTone } from "./components/graphCanvasTheme";
 export type {
   PanelCutCorner,
   PanelCutCornerPlacement,
