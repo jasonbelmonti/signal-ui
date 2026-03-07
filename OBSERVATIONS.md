@@ -22,3 +22,4 @@
 - Current loader preference is a square-framed, faster mechanical loop with a small settle jolt and a reusable legendless mini variant that can sit inline with text.
 - User notices small alignment drift quickly and prefers motion components to be geometrically centered rather than visually "close enough."
 - When building new effect work in a separate git worktree, check whether the main worktree carries uncommitted visual-system changes first; syncing those files can matter more than starting from clean `HEAD`.
+- Local `node` is `v16.13.0`, which is too old for Storybook 10's current CLI; `bun run build-storybook` fails in this environment, but the build succeeds when Storybook is launched under Node 20 directly.

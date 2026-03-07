@@ -10,9 +10,11 @@
   },
   "dependencies": {
     "@ant-design/icons": "6.1.0",
+    "@dagrejs/dagre": "^2.0.4",
     "@fontsource/azeret-mono": "5.2.11",
     "@fontsource/doto": "^5.2.10",
     "@fontsource/oxanium": "5.2.8",
+    "@xyflow/react": "^12.10.1",
     "antd": "6.3.1",
     "react": "19.2.4",
     "react-dom": "19.2.4"
