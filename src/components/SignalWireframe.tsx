@@ -155,6 +155,7 @@ export function SignalWireframe({
         <Canvas
           camera={{ fov: 34, position: [0, 0.4, 10.25] }}
           dpr={[1, 2]}
+          frameloop={animated ? "always" : "demand"}
           gl={{ alpha: true, antialias: true, powerPreference: "high-performance" }}
           style={{ width: "100%", height: "100%" }}
         >
