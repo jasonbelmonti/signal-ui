@@ -19,3 +19,4 @@
 - Preferred loader expression is a low-count 2x2 or 3x3 front grid with mostly solid theme color, using smooth real 3D transforms and voxel/cube reference motion rather than dense noisy particle fields.
 - Current loader preference is a square-framed, faster mechanical loop with a small settle jolt and a reusable legendless mini variant that can sit inline with text.
 - User notices small alignment drift quickly and prefers motion components to be geometrically centered rather than visually "close enough."
+- When building new effect work in a separate git worktree, check whether the main worktree carries uncommitted visual-system changes first; syncing those files can matter more than starting from clean `HEAD`.
