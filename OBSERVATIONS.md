@@ -23,4 +23,7 @@
 - Current loader preference is a square-framed, faster mechanical loop with a small settle jolt and a reusable legendless mini variant that can sit inline with text.
 - User notices small alignment drift quickly and prefers motion components to be geometrically centered rather than visually "close enough."
 - When building new effect work in a separate git worktree, check whether the main worktree carries uncommitted visual-system changes first; syncing those files can matter more than starting from clean `HEAD`.
-- Local `node` is `v16.13.0`, which is too old for Storybook 10's current CLI; `bun run build-storybook` fails in this environment, but the build succeeds when Storybook is launched under Node 20 directly.
+- User is interested in adding an opt-in Three.js layer for bold graph or hero visuals, especially wireframes traced by Tron-style beam motion rather than generic floating 3D decoration.
+- For motion-heavy components, the user prefers the structure and glow to read immediately at normal scale; perfectly synchronized loops feel less "loader-like" than slightly desynced seeded timing.
+- User is interested in deterministic hash-driven 3D cube visualizations that mix wireframe, solid, and color-coded voxel states instead of flat text-only identifiers.
+- User wants visually expressive encodings to be defensible and meaningfully distinct, not just aesthetically novel.

@@ -30,13 +30,15 @@
     "@fontsource/doto": "^5.2.10",
     "@fontsource/oxanium": "5.2.8",
     "@dagrejs/dagre": "^2.0.4",
-    "@xyflow/react": "^12.10.1"
+    "@react-three/fiber": "9.5.0",
+    "@xyflow/react": "^12.10.1",
+    "three": "0.183.2"
   },
   "peerDependencies": {
     "@ant-design/icons": "6.1.0",
     "antd": "6.3.1",
-    "react": "^18.3.1 || ^19.0.0",
-    "react-dom": "^18.3.1 || ^19.0.0"
+    "react": ">=19 <19.3",
+    "react-dom": ">=19 <19.3"
   },
   "devDependencies": {
     "@ant-design/icons": "6.1.0",
@@ -44,11 +46,12 @@
     "@storybook/addon-docs": "10.2.16",
     "@storybook/addon-webpack5-compiler-swc": "4.0.2",
     "@storybook/react-webpack5": "10.2.16",
-    "@types/react": "^18.3.12",
-    "@types/react-dom": "^18.3.1",
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3",
+    "@types/three": "0.183.1",
     "antd": "6.3.1",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
     "storybook": "10.2.16",
     "typescript": "^5.9.3"
   }
