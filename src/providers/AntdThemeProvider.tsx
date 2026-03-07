@@ -4,6 +4,7 @@ import { useInsertionEffect } from "react";
 import type { PropsWithChildren } from "react";
 import { useRef } from "react";
 
+import { mergeThemeConfig } from "../theme/mergeThemeConfig.js";
 import {
   createSignalTheme,
   createSignalThemeCssVariables,
@@ -27,6 +28,19 @@ export type AntdThemeProviderProps = PropsWithChildren<{
   theme?: ThemeConfig;
   themePreferences?: SignalThemePreferences;
 }>;
+
+function resolveAntdTheme(
+  theme: ThemeConfig | undefined,
+  themePreferences: SignalThemePreferences | undefined,
+) {
+  if (!themePreferences) {
+    return theme ?? signalTheme;
+  }
+
+  const generatedTheme = createSignalTheme(themePreferences);
+
+  return theme ? mergeThemeConfig(generatedTheme, theme) : generatedTheme;
+}
 
 function syncDocumentThemeVariables() {
   if (typeof document === "undefined") {
@@ -135,8 +149,7 @@ export function AntdThemeProvider({
   theme,
   themePreferences,
 }: AntdThemeProviderProps) {
-  const resolvedTheme =
-    theme ?? (themePreferences ? createSignalTheme(themePreferences) : signalTheme);
+  const resolvedTheme = resolveAntdTheme(theme, themePreferences);
 
   useDocumentThemeVariables(themePreferences);
 

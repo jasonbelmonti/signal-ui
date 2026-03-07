@@ -2,11 +2,19 @@ import { jsx as _jsx } from "react/jsx-runtime";
 import { App, ConfigProvider } from "antd";
 import { useInsertionEffect } from "react";
 import { useRef } from "react";
+import { mergeThemeConfig } from "../theme/mergeThemeConfig.js";
 import { createSignalTheme, createSignalThemeCssVariables, signalTheme, } from "../theme/signalTheme.js";
 // Portals read vars from documentElement, so keep the newest themed provider authoritative
 // and restore the previous layer when a nested/themed preview unmounts.
 const activeDocumentThemeEntries = [];
 const documentThemeBaseline = new Map();
+function resolveAntdTheme(theme, themePreferences) {
+    if (!themePreferences) {
+        return theme ?? signalTheme;
+    }
+    const generatedTheme = createSignalTheme(themePreferences);
+    return theme ? mergeThemeConfig(generatedTheme, theme) : generatedTheme;
+}
 function syncDocumentThemeVariables() {
     if (typeof document === "undefined") {
         return;
@@ -85,7 +93,7 @@ function useDocumentThemeVariables(themePreferences) {
     }, [themePreferences]);
 }
 export function AntdThemeProvider({ children, theme, themePreferences, }) {
-    const resolvedTheme = theme ?? (themePreferences ? createSignalTheme(themePreferences) : signalTheme);
+    const resolvedTheme = resolveAntdTheme(theme, themePreferences);
     useDocumentThemeVariables(themePreferences);
     return (_jsx(ConfigProvider, { theme: resolvedTheme, children: _jsx(App, { children: children }) }));
 }
