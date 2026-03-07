@@ -101,9 +101,12 @@ select {
 
 .ant-btn:not(:disabled):hover,
 .ant-btn:not(:disabled):focus-visible,
-.ant-card:hover,
 .ant-input:hover,
 .ant-input-affix-wrapper:hover {
+  box-shadow: 0 0 0 1px rgba(192, 254, 4, 0.22);
+}
+
+.ant-card:hover {
   box-shadow:
     0 0 0 1px rgba(192, 254, 4, 0.22),
     var(--marathon-panel-frame-shadow, none);
