@@ -2227,5 +2227,5 @@ h6.ant-typography {
   width: 8px;
   height: 12px;
   background: rgb(var(--marathon-signal-wireframe-accent-rgb) / 0.88);
-  animation: marathon-pixel-cube-loader-cursor 960ms steps(1, end) infinite;
+  animation: marathon-loader-cursor 960ms steps(1, end) infinite;
 }
