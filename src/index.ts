@@ -13,6 +13,7 @@ export { HashCube } from "./components/HashCube";
 export { GraphCanvas } from "./components/GraphCanvas";
 export type { GraphCanvasProps, GraphCanvasReactFlowProps } from "./components/GraphCanvas";
 export { Panel, panelCutCornerPresets } from "./components/Panel";
+export { SignalButton } from "./components/SignalButton";
 export type {
   HashCubeProps,
   HashCubeTone,
@@ -23,6 +24,7 @@ export type {
   PanelCutCornerPreset,
   PanelProps,
 } from "./components/Panel";
+export type { SignalButtonProps, SignalButtonTone } from "./components/SignalButton";
 export { PixelCubePath } from "./components/PixelCubePath";
 export { PixelCubeLoader } from "./components/PixelCubeLoader";
 export { SignalWireframe } from "./components/SignalWireframe";

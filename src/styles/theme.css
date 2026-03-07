@@ -102,6 +102,215 @@ select {
   text-shadow: none;
 }
 
+.marathon-signal-button.ant-btn {
+  --marathon-signal-button-accent-rgb: 192 254 4;
+  --marathon-signal-button-burst-flash: 0;
+  --marathon-signal-button-edge-width: 24px;
+  --marathon-signal-button-fill-size: 64%;
+  --marathon-signal-button-shake-amp: 0px;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  overflow: visible;
+  isolation: isolate;
+  border-color: rgb(var(--marathon-signal-button-accent-rgb) / 0.34);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.045), transparent 52%),
+    linear-gradient(135deg, rgb(var(--marathon-signal-button-accent-rgb) / 0.12), transparent 32%),
+    rgba(8, 8, 8, 0.96);
+  color: rgb(var(--marathon-signal-button-accent-rgb) / 0.96);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.04),
+    0 0 0 1px rgba(0, 0, 0, 0.54),
+    0 10px 24px rgba(0, 0, 0, 0.28),
+    0 0 calc(12px + var(--marathon-signal-button-burst-flash) * 34px)
+      rgb(var(--marathon-signal-button-accent-rgb) / calc(0.08 + var(--marathon-signal-button-burst-flash) * 0.38));
+  filter: brightness(calc(1 + var(--marathon-signal-button-burst-flash) * 0.18));
+  text-shadow: 0 0 0.5em rgb(var(--marathon-signal-button-accent-rgb) / 0.18);
+  transform-origin: center;
+  will-change: transform;
+  animation: marathon-signal-button-vibrate 78ms steps(1, end) infinite;
+  transition:
+    border-color 160ms ease,
+    color 160ms ease,
+    box-shadow 160ms ease,
+    background-color 160ms ease;
+}
+
+.marathon-signal-button.ant-btn::before {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  z-index: 0;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  pointer-events: none;
+}
+
+.marathon-signal-button.ant-btn::after {
+  content: "";
+  position: absolute;
+  inset: -8px;
+  z-index: 1;
+  pointer-events: none;
+  opacity: calc(var(--marathon-signal-button-burst-flash) * 0.74);
+  background:
+    radial-gradient(
+      circle at center,
+      rgb(255 255 255 / calc(var(--marathon-signal-button-burst-flash) * 0.14)) 0 24%,
+      rgb(var(--marathon-signal-button-accent-rgb) / calc(var(--marathon-signal-button-burst-flash) * 0.28))
+        24% 58%,
+      transparent 72%
+    );
+  mix-blend-mode: screen;
+}
+
+.marathon-signal-button__surface::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(
+      circle at center,
+      rgb(255 255 255 / calc(var(--marathon-signal-button-burst-flash) * 0.18)) 0 16%,
+      rgb(var(--marathon-signal-button-accent-rgb) / calc(var(--marathon-signal-button-burst-flash) * 0.2))
+        16% 46%,
+      transparent 64%
+    );
+  mix-blend-mode: screen;
+  opacity: calc(var(--marathon-signal-button-burst-flash) * 0.72);
+}
+
+.marathon-signal-button.ant-btn:not(:disabled):hover,
+.marathon-signal-button.ant-btn:not(:disabled):focus-visible {
+  border-color: rgb(var(--marathon-signal-button-accent-rgb) / 0.56);
+  color: var(--marathon-fx-signal-ink);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.06),
+    0 0 0 1px rgb(var(--marathon-signal-button-accent-rgb) / 0.18),
+    0 0 24px rgb(var(--marathon-signal-button-accent-rgb) / 0.18);
+}
+
+.marathon-signal-button.ant-btn:active {
+  border-color: rgb(var(--marathon-signal-button-accent-rgb) / 0.62);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent 52%),
+    linear-gradient(135deg, rgb(var(--marathon-signal-button-accent-rgb) / 0.16), transparent 32%),
+    rgba(5, 5, 5, 0.98);
+}
+
+.marathon-signal-button.ant-btn:disabled,
+.marathon-signal-button.ant-btn.ant-btn-disabled {
+  color: rgb(var(--marathon-signal-button-accent-rgb) / 0.56);
+  border-color: rgb(var(--marathon-signal-button-accent-rgb) / 0.2);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.02),
+    0 0 0 1px rgba(0, 0, 0, 0.48);
+  filter: saturate(0.72);
+}
+
+.marathon-signal-button.ant-btn:disabled .marathon-signal-button__surface,
+.marathon-signal-button.ant-btn.ant-btn-disabled .marathon-signal-button__surface {
+  opacity: 0.48;
+}
+
+.marathon-signal-button__surface {
+  position: absolute;
+  inset: 1px;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 52%),
+    rgba(6, 6, 6, 0.9);
+}
+
+.marathon-signal-button__surface::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.04) 0,
+      rgba(255, 255, 255, 0.04) 1px,
+      transparent 1px,
+      transparent 2px
+    ),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.08), transparent 48%);
+  mix-blend-mode: screen;
+  opacity: 0.24;
+}
+
+.marathon-signal-button__canvas,
+.marathon-signal-button__sheen {
+  position: absolute;
+  inset: 0;
+}
+
+.marathon-signal-button__canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+.marathon-signal-button__sheen {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.06), transparent 46%),
+    linear-gradient(
+      90deg,
+      transparent 0 78%,
+      rgb(var(--marathon-signal-button-accent-rgb) / 0.08) 78% 92%,
+      rgb(var(--marathon-signal-button-accent-rgb) / 0.14) 92% 100%
+    );
+  mix-blend-mode: screen;
+  opacity: 0.42;
+}
+
+.marathon-signal-button__label {
+  position: relative;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 100%;
+  color: var(--marathon-fx-signal-ink);
+  text-shadow: 0 0 0.45em rgb(0 0 0 / 0.22);
+}
+
+.marathon-signal-button__content {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.68em;
+  inline-size: 100%;
+}
+
+.marathon-signal-button__icon {
+  display: inline-flex;
+  font-size: 1.04em;
+}
+
+.marathon-signal-button__text {
+  font-family: var(--marathon-font-display-secondary);
+  font-size: 1em;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+@supports (mix-blend-mode: difference) {
+  .marathon-signal-button__label {
+    color: #fff;
+    text-shadow: none;
+    mix-blend-mode: difference;
+  }
+}
+
 .ant-btn:not(:disabled):hover,
 .ant-btn:not(:disabled):focus-visible,
 .ant-input:hover,
@@ -762,9 +971,34 @@ h6.ant-typography {
     opacity: 1;
     will-change: auto;
   }
+
+  .marathon-signal-button.ant-btn {
+    animation: none;
+    transform: none;
+    will-change: auto;
+  }
 }
 
 @media (forced-colors: active) {
+  .marathon-signal-button.ant-btn {
+    color: ButtonText;
+    border-color: ButtonText;
+    background: Canvas;
+    box-shadow: none;
+  }
+
+  .marathon-signal-button__surface,
+  .marathon-signal-button.ant-btn::before,
+  .marathon-signal-button.ant-btn::after {
+    display: none;
+  }
+
+  .marathon-signal-button__label {
+    color: ButtonText;
+    mix-blend-mode: normal;
+    text-shadow: none;
+  }
+
   .marathon-signal-text {
     background: none;
     color: CanvasText;
@@ -832,6 +1066,45 @@ h6.ant-typography {
       0 0,
       0 0,
       50% 50%;
+  }
+}
+
+@keyframes marathon-signal-button-vibrate {
+  0% {
+    transform: translate3d(calc(var(--marathon-signal-button-shake-amp) * -0.8), 0, 0)
+      scale(calc(1 + var(--marathon-signal-button-burst-flash) * 0.008));
+  }
+
+  25% {
+    transform: translate3d(
+        calc(var(--marathon-signal-button-shake-amp) * 0.7),
+        calc(var(--marathon-signal-button-shake-amp) * -0.55),
+        0
+      )
+      scale(calc(1 + var(--marathon-signal-button-burst-flash) * 0.008));
+  }
+
+  50% {
+    transform: translate3d(
+        calc(var(--marathon-signal-button-shake-amp) * -0.5),
+        calc(var(--marathon-signal-button-shake-amp) * 0.72),
+        0
+      )
+      scale(calc(1 + var(--marathon-signal-button-burst-flash) * 0.008));
+  }
+
+  75% {
+    transform: translate3d(
+        calc(var(--marathon-signal-button-shake-amp) * 0.55),
+        calc(var(--marathon-signal-button-shake-amp) * 0.46),
+        0
+      )
+      scale(calc(1 + var(--marathon-signal-button-burst-flash) * 0.008));
+  }
+
+  100% {
+    transform: translate3d(calc(var(--marathon-signal-button-shake-amp) * -0.35), 0, 0)
+      scale(calc(1 + var(--marathon-signal-button-burst-flash) * 0.008));
   }
 }
 

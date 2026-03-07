@@ -17,6 +17,11 @@
 - User is interested in optional 45 degree panel corner treatments, especially either a bold accent triangle or a clipped/notched corner to add diagonal rhythm without changing every surface by default.
 - User prefers stylized treatments to have named presets when possible so the system can stay consistent without requiring repeated hand-tuning of low-level props.
 - User likes Marathon-style flat areas of color and is considering them as sparse, clean accents, especially around headings or section punctuation rather than as broad background treatment.
+- User responds well to bold CTA treatments when the motion feels intentional and crunchy, especially fill-based effects with visible pixel creep/flicker and layered text.
+- User notices when visual compositing is only approximated; prefers text/effect treatments to be driven by the same live source rather than loosely synchronized CSS stand-ins.
+- User likes interaction effects that escalate through readable payoff phases, such as fill, saturation/wake-up, then a short burst event, rather than remaining in a single ambient loop.
+- For payoff motion, user prefers tangible geometry leaving the control or a strong flash/glow event over subtle particle noise that stays visually inside the button.
+- When a burst gimmick feels wrong, user prefers pivoting back to internal procedural motion, like rings or surface pulses, plus symmetric vibration instead of directional recoil.
 - User is interested in loader motion that begins as raw CLI/pixel assembly, then reveals a sharper 3D form such as a rotating cube without losing the low-fi terminal texture.
 - Preferred loader expression is a low-count 2x2 or 3x3 front grid with mostly solid theme color, using smooth real 3D transforms and voxel/cube reference motion rather than dense noisy particle fields.
 - Current loader preference is a square-framed, faster mechanical loop with a small settle jolt and a reusable legendless mini variant that can sit inline with text.
