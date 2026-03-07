@@ -61,6 +61,22 @@ const meta = {
             </Typography.Paragraph>
           </Space>
         </Card>
+
+        <Card title="Async Sweep Bank" style={cardStyle}>
+          <Space direction="vertical" size={12}>
+            <Typography.Text style={eyebrowStyle}>Desynced Instances</Typography.Text>
+            <Flex gap={14} wrap="wrap">
+              <PixelCubePath size={132} />
+              <PixelCubePath size={132} />
+              <PixelCubePath size={132} />
+            </Flex>
+            <Typography.Paragraph style={copyStyle}>
+              Each instance seeds its own step cadence and phase offset, so the path keeps the
+              same geometry while feeling closer to a jittery loader bank than a synchronized demo
+              loop.
+            </Typography.Paragraph>
+          </Space>
+        </Card>
       </Flex>
     </Flex>
   ),
