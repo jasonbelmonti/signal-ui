@@ -3,6 +3,7 @@ import { mkdir } from "node:fs/promises";
 const stylesheetTargets = [
   ["src/styles.css", "dist/styles.css"],
   ["src/styles/theme.css", "dist/styles/theme.css"],
+  ["src/styles/primitives.css", "dist/styles/primitives.css"],
 ] as const;
 
 for (const [sourcePath, targetPath] of stylesheetTargets) {
