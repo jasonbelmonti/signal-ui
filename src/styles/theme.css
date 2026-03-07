@@ -107,6 +107,10 @@ select {
 }
 
 .ant-card:hover {
+  box-shadow: 0 0 0 1px rgba(192, 254, 4, 0.22);
+}
+
+.marathon-panel.ant-card:hover {
   box-shadow:
     0 0 0 1px rgba(192, 254, 4, 0.22),
     var(--marathon-panel-frame-shadow, 0 0 0 0 transparent);
