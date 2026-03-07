@@ -23,3 +23,5 @@
 - User notices small alignment drift quickly and prefers motion components to be geometrically centered rather than visually "close enough."
 - When building new effect work in a separate git worktree, check whether the main worktree carries uncommitted visual-system changes first; syncing those files can matter more than starting from clean `HEAD`.
 - For motion-heavy components, the user prefers the structure and glow to read immediately at normal scale; perfectly synchronized loops feel less "loader-like" than slightly desynced seeded timing.
+- User is interested in deterministic hash-driven 3D cube visualizations that mix wireframe, solid, and color-coded voxel states instead of flat text-only identifiers.
+- User wants visually expressive encodings to be defensible and meaningfully distinct, not just aesthetically novel.
