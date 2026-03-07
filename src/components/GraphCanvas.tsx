@@ -120,22 +120,6 @@ function getNodeTone(node: Node) {
   return resolveGraphCanvasTone((node.data as { tone?: unknown }).tone);
 }
 
-function withDefaultNodeType<NodeType extends Node>(node: NodeType) {
-  if (node.type) {
-    return node;
-  }
-
-  return { ...node, type: GRAPH_CANVAS_NODE_TYPE } as NodeType;
-}
-
-function withDefaultEdgeType<EdgeType extends Edge>(edge: EdgeType) {
-  if (edge.type) {
-    return edge;
-  }
-
-  return { ...edge, type: GRAPH_CANVAS_EDGE_TYPE } as EdgeType;
-}
-
 export function GraphCanvas<NodeType extends Node = Node, EdgeType extends Edge = Edge>({
   backgroundProps,
   children,
@@ -178,8 +162,6 @@ export function GraphCanvas<NodeType extends Node = Node, EdgeType extends Edge 
     className: joinClassNames("marathon-graph-canvas__controls", controlProps?.className),
   };
   const rootStyle = { ...defaultRootStyle, ...style };
-  const resolvedNodes = useMemo(() => nodes.map(withDefaultNodeType), [nodes]);
-  const resolvedEdges = useMemo(() => edges.map(withDefaultEdgeType), [edges]);
   const resolvedNodeTypes = useMemo(
     () => ({
       [GRAPH_CANVAS_NODE_TYPE]: GraphCanvasNode,
@@ -226,14 +208,14 @@ export function GraphCanvas<NodeType extends Node = Node, EdgeType extends Edge 
           className="marathon-graph-canvas__surface"
           colorMode={colorMode}
           edgeTypes={resolvedEdgeTypes}
-          edges={resolvedEdges}
+          edges={edges}
           elementsSelectable
           fitView={fitView}
           fitViewOptions={fitViewOptions}
           maxZoom={1.6}
           minZoom={0.25}
           nodeTypes={resolvedNodeTypes}
-          nodes={resolvedNodes}
+          nodes={nodes}
           nodesConnectable={false}
           nodesDraggable={false}
           onEdgeClick={onEdgeClick}

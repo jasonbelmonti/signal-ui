@@ -5,13 +5,23 @@ import type { CSSProperties } from "react";
 
 import { GraphCanvas } from "../components/GraphCanvas";
 import type { GraphCanvasProps } from "../components/GraphCanvas";
+import { GRAPH_CANVAS_EDGE_TYPE } from "../components/GraphCanvasEdge";
 import type { GraphCanvasEdgeDefinition } from "../components/GraphCanvasEdge";
+import { GRAPH_CANVAS_NODE_TYPE } from "../components/GraphCanvasNode";
 import type { GraphCanvasNodeDefinition } from "../components/GraphCanvasNode";
 import { marathonDosPalette } from "../theme/marathonDosTheme";
 
 type GraphCanvasStoryArgs = GraphCanvasProps<GraphCanvasNodeDefinition, GraphCanvasEdgeDefinition>;
 
-const foundationNodes: GraphCanvasNodeDefinition[] = [
+function withGraphCanvasNodeType(nodes: GraphCanvasNodeDefinition[]) {
+  return nodes.map((node): GraphCanvasNodeDefinition => ({ ...node, type: GRAPH_CANVAS_NODE_TYPE }));
+}
+
+function withGraphCanvasEdgeType(edges: GraphCanvasEdgeDefinition[]) {
+  return edges.map((edge): GraphCanvasEdgeDefinition => ({ ...edge, type: GRAPH_CANVAS_EDGE_TYPE }));
+}
+
+const foundationNodes = withGraphCanvasNodeType([
   {
     data: {
       badges: [{ label: "Spec" }],
@@ -73,9 +83,9 @@ const foundationNodes: GraphCanvasNodeDefinition[] = [
     selected: true,
     targetPosition: Position.Left,
   },
-];
+]);
 
-const foundationEdges: GraphCanvasEdgeDefinition[] = [
+const foundationEdges = withGraphCanvasEdgeType([
   {
     data: { label: "parse", tone: "neutral" },
     id: "spec-plan",
@@ -107,9 +117,9 @@ const foundationEdges: GraphCanvasEdgeDefinition[] = [
     source: "collect",
     target: "summary",
   },
-];
+]);
 
-const denseNodes: GraphCanvasNodeDefinition[] = [
+const denseNodes = withGraphCanvasNodeType([
   {
     data: { eyebrow: "Ingress", title: "Prompt Intake" },
     id: "ingress",
@@ -214,9 +224,9 @@ const denseNodes: GraphCanvasNodeDefinition[] = [
     selected: true,
     targetPosition: Position.Left,
   },
-];
+]);
 
-const denseEdges: GraphCanvasEdgeDefinition[] = [
+const denseEdges = withGraphCanvasEdgeType([
   { data: { label: "seed", tone: "neutral" }, id: "ingress-context", source: "ingress", target: "context" },
   {
     data: { label: "guard", tone: "warning" },
@@ -263,7 +273,7 @@ const denseEdges: GraphCanvasEdgeDefinition[] = [
     source: "review",
     target: "pr",
   },
-];
+]);
 
 const meta = {
   title: "Graphs/GraphCanvas",
@@ -314,6 +324,46 @@ export const DenseSignals: Story = {
       extra: "Density Check",
       eyebrow: "Stress View",
       title: "More nodes. Same visual language.",
+    }),
+};
+
+export const LoadingOverlay: Story = {
+  args: {
+    edges: foundationEdges,
+    loading: true,
+    loadingState: "Syncing Graph",
+    nodes: foundationNodes,
+  },
+  render: (args) =>
+    renderShowcase({
+      args,
+      cardTitle: "Loading Overlay",
+      copy:
+        "The graph can keep its context visible while a themed status card sits over the canvas. This covers the loading branch without falling back to generic app chrome.",
+      extra: "Verification",
+      eyebrow: "Overlay State",
+      title: "Loading should still look deliberate.",
+    }),
+};
+
+export const EmptyOverlay: Story = {
+  args: {
+    edges: [],
+    emptyState: "No Graph Data",
+    nodes: [],
+    showControls: false,
+    showMiniMap: false,
+    style: { height: 420 },
+  },
+  render: (args) =>
+    renderShowcase({
+      args,
+      cardTitle: "Empty Overlay",
+      copy:
+        "An empty graph should still feel like part of the system. This verifies the fallback canvas state instead of letting it drift untested behind the happy path stories.",
+      extra: "Verification",
+      eyebrow: "Overlay State",
+      title: "Empty should be a first-class state too.",
     }),
 };
 

@@ -484,7 +484,11 @@ h6.ant-typography {
 }
 
 .marathon-graph-canvas__surface .react-flow__node:focus,
-.marathon-graph-canvas__surface .react-flow__node:focus-visible,
+.marathon-graph-canvas__surface .react-flow__node:focus-visible {
+  outline: 1px solid rgba(192, 254, 4, 0.74);
+  outline-offset: 4px;
+}
+
 .marathon-graph-canvas__surface .react-flow__edge:focus,
 .marathon-graph-canvas__surface .react-flow__edge:focus-visible {
   outline: none;
@@ -554,6 +558,8 @@ h6.ant-typography {
 }
 
 .marathon-graph-canvas__surface .react-flow__node.selected .marathon-graph-node,
+.marathon-graph-canvas__surface .react-flow__node:focus .marathon-graph-node,
+.marathon-graph-canvas__surface .react-flow__node:focus-visible .marathon-graph-node,
 .marathon-graph-node--selected {
   border-color: rgba(192, 254, 4, 0.54);
   box-shadow:
@@ -651,7 +657,9 @@ h6.ant-typography {
 }
 
 .marathon-graph-canvas__surface .react-flow__edge.selected .marathon-graph-edge__path,
-.marathon-graph-canvas__surface .react-flow__edge.selectable:hover .marathon-graph-edge__path {
+.marathon-graph-canvas__surface .react-flow__edge.selectable:hover .marathon-graph-edge__path,
+.marathon-graph-canvas__surface .react-flow__edge.selectable:focus .marathon-graph-edge__path,
+.marathon-graph-canvas__surface .react-flow__edge.selectable:focus-visible .marathon-graph-edge__path {
   stroke: var(--marathon-graph-edge-selected-stroke);
   stroke-width: 1.75;
   filter: drop-shadow(0 0 10px rgba(192, 254, 4, 0.18));

@@ -26,3 +26,4 @@
 - User is interested in deterministic hash-driven 3D cube visualizations that mix wireframe, solid, and color-coded voxel states instead of flat text-only identifiers.
 - User wants visually expressive encodings to be defensible and meaningfully distinct, not just aesthetically novel.
 - For graph work, the user wants the React Flow chrome and styling to live in reusable package-owned primitives rather than story-local or app-local overrides.
+- User expects a self-review pass on visual changes before considering the PR ready.
