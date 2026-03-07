@@ -15,6 +15,15 @@ import type {
   ReactFlowProps,
 } from "@xyflow/react";
 import type { CSSProperties, ReactNode } from "react";
+import { useMemo } from "react";
+
+import { GRAPH_CANVAS_EDGE_TYPE, GraphCanvasEdge } from "./GraphCanvasEdge";
+import { GRAPH_CANVAS_NODE_TYPE, GraphCanvasNode } from "./GraphCanvasNode";
+import {
+  graphCanvasToneAccentColor,
+  graphCanvasToneStrokeColor,
+  resolveGraphCanvasTone,
+} from "./graphCanvasTheme";
 
 type ReservedReactFlowProps =
   | "children"
@@ -70,12 +79,15 @@ export interface GraphCanvasProps<NodeType extends Node = Node, EdgeType extends
 }
 
 const defaultBackgroundProps: BackgroundProps = {
+  bgColor: "#090909",
+  color: "rgba(245, 245, 240, 0.15)",
   gap: 24,
   lineWidth: 1,
   variant: BackgroundVariant.Lines,
 };
 
 const defaultControlProps: ControlProps = {
+  position: "top-right",
   showInteractive: false,
 };
 
@@ -86,41 +98,26 @@ const defaultRootStyle: CSSProperties = {
   width: "100%",
 };
 
-const overlayStyle: CSSProperties = {
-  alignItems: "center",
-  display: "flex",
-  inset: 0,
-  justifyContent: "center",
-  pointerEvents: "none",
-  position: "absolute",
-  zIndex: 2,
-};
-
-const overlayCardStyle: CSSProperties = {
-  background: "rgba(10, 10, 10, 0.9)",
-  border: "1px solid rgba(245, 245, 240, 0.12)",
-  color: "rgba(245, 245, 240, 0.78)",
-  fontFamily: "var(--marathon-font-ui)",
-  fontSize: 12,
-  letterSpacing: "0.12em",
-  maxWidth: 280,
-  padding: "14px 18px",
-  textAlign: "center",
-  textTransform: "uppercase",
-};
-
 function joinClassNames(...classNames: Array<string | undefined>) {
   return classNames.filter(Boolean).join(" ");
 }
 
 function renderOverlay(content: ReactNode, stateLabel: string) {
   return (
-    <div aria-live="polite" style={overlayStyle}>
-      <div aria-label={stateLabel} role="status" style={overlayCardStyle}>
+    <div aria-live="polite" className="marathon-graph-canvas__overlay">
+      <div aria-label={stateLabel} className="marathon-graph-canvas__overlay-card" role="status">
         {content}
       </div>
     </div>
   );
+}
+
+function getNodeTone(node: Node) {
+  if (typeof node.data !== "object" || node.data === null) {
+    return "primary";
+  }
+
+  return resolveGraphCanvasTone((node.data as { tone?: unknown }).tone);
 }
 
 export function GraphCanvas<NodeType extends Node = Node, EdgeType extends Edge = Edge>({
@@ -150,9 +147,53 @@ export function GraphCanvas<NodeType extends Node = Node, EdgeType extends Edge 
   showMiniMap = false,
   style,
 }: GraphCanvasProps<NodeType, EdgeType>) {
-  const backgroundConfig = { ...defaultBackgroundProps, ...backgroundProps };
-  const controlsConfig = { ...defaultControlProps, ...controlProps };
+  const backgroundConfig = {
+    ...defaultBackgroundProps,
+    ...backgroundProps,
+    className: joinClassNames("marathon-graph-canvas__background", backgroundProps?.className),
+    patternClassName: joinClassNames(
+      "marathon-graph-canvas__background-pattern",
+      backgroundProps?.patternClassName,
+    ),
+  };
+  const controlsConfig = {
+    ...defaultControlProps,
+    ...controlProps,
+    className: joinClassNames("marathon-graph-canvas__controls", controlProps?.className),
+  };
   const rootStyle = { ...defaultRootStyle, ...style };
+  const resolvedNodeTypes = useMemo(
+    () => ({
+      [GRAPH_CANVAS_NODE_TYPE]: GraphCanvasNode,
+      ...(nodeTypes ?? {}),
+    }),
+    [nodeTypes],
+  );
+  const resolvedEdgeTypes = useMemo(
+    () => ({
+      [GRAPH_CANVAS_EDGE_TYPE]: GraphCanvasEdge,
+      ...(edgeTypes ?? {}),
+    }),
+    [edgeTypes],
+  );
+  const resolvedMiniMapProps = {
+    bgColor: "#060606",
+    className: "marathon-graph-canvas__minimap",
+    maskColor: "rgba(5, 5, 5, 0.72)",
+    maskStrokeColor: "rgba(192, 254, 4, 0.38)",
+    maskStrokeWidth: 1,
+    nodeBorderRadius: 2,
+    nodeColor: (node: Node) =>
+      node.selected
+        ? graphCanvasToneAccentColor.primary
+        : graphCanvasToneAccentColor[getNodeTone(node)],
+    nodeStrokeColor: (node: Node) =>
+      node.selected
+        ? "rgba(249, 255, 239, 0.92)"
+        : graphCanvasToneStrokeColor[getNodeTone(node)],
+    nodeStrokeWidth: 1,
+    ...miniMapProps,
+  } satisfies Partial<MiniMapProps<NodeType>>;
   const overlay =
     loading && loadingState !== null
       ? renderOverlay(loadingState ?? "Loading Graph", "Graph loading")
@@ -166,14 +207,14 @@ export function GraphCanvas<NodeType extends Node = Node, EdgeType extends Edge 
         <ReactFlow<NodeType, EdgeType>
           className="marathon-graph-canvas__surface"
           colorMode={colorMode}
-          edgeTypes={edgeTypes}
+          edgeTypes={resolvedEdgeTypes}
           edges={edges}
           elementsSelectable
           fitView={fitView}
           fitViewOptions={fitViewOptions}
           maxZoom={1.6}
           minZoom={0.25}
-          nodeTypes={nodeTypes}
+          nodeTypes={resolvedNodeTypes}
           nodes={nodes}
           nodesConnectable={false}
           nodesDraggable={false}
@@ -188,7 +229,7 @@ export function GraphCanvas<NodeType extends Node = Node, EdgeType extends Edge 
         >
           {showBackground ? <Background {...backgroundConfig} /> : null}
           {showControls ? <Controls {...controlsConfig} /> : null}
-          {showMiniMap ? <MiniMap<NodeType> {...miniMapProps} /> : null}
+          {showMiniMap ? <MiniMap<NodeType> {...resolvedMiniMapProps} /> : null}
           {children}
         </ReactFlow>
       </ReactFlowProvider>

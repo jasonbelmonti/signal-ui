@@ -1,123 +1,286 @@
 import { Card, Flex, Space, Typography } from "antd";
 import type { Meta, StoryObj } from "@storybook/react-webpack5";
 import { Position } from "@xyflow/react";
-import type { Edge, Node } from "@xyflow/react";
 import type { CSSProperties } from "react";
 
 import { GraphCanvas } from "../components/GraphCanvas";
 import type { GraphCanvasProps } from "../components/GraphCanvas";
+import { GRAPH_CANVAS_EDGE_TYPE } from "../components/GraphCanvasEdge";
+import type { GraphCanvasEdgeDefinition } from "../components/GraphCanvasEdge";
+import { GRAPH_CANVAS_NODE_TYPE } from "../components/GraphCanvasNode";
+import type { GraphCanvasNodeDefinition } from "../components/GraphCanvasNode";
 import { marathonDosPalette } from "../theme/marathonDosTheme";
 
-type FoundationNode = Node<{ label: string }>;
-type FoundationEdge = Edge;
-type FoundationStoryArgs = GraphCanvasProps<FoundationNode, FoundationEdge>;
+type GraphCanvasStoryArgs = GraphCanvasProps<GraphCanvasNodeDefinition, GraphCanvasEdgeDefinition>;
 
-const nodeStyle: CSSProperties = {
-  background:
-    "linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 55%), rgba(14, 14, 14, 0.98)",
-  border: "1px solid rgba(245, 245, 240, 0.22)",
-  borderRadius: 2,
-  boxShadow: "0 0 0 1px rgba(192, 254, 4, 0.08)",
-  color: marathonDosPalette.text,
-  fontFamily: "var(--marathon-font-ui)",
-  fontSize: 12,
-  fontWeight: 600,
-  letterSpacing: "0.12em",
-  minWidth: 168,
-  padding: "14px 18px",
-  textTransform: "uppercase",
-};
+function withGraphCanvasNodeType(nodes: GraphCanvasNodeDefinition[]) {
+  return nodes.map((node): GraphCanvasNodeDefinition => ({ ...node, type: GRAPH_CANVAS_NODE_TYPE }));
+}
 
-const summaryNodeStyle: CSSProperties = {
-  ...nodeStyle,
-  border: "1px solid rgba(192, 254, 4, 0.4)",
-  boxShadow: "0 0 0 1px rgba(192, 254, 4, 0.18)",
-};
+function withGraphCanvasEdgeType(edges: GraphCanvasEdgeDefinition[]) {
+  return edges.map((edge): GraphCanvasEdgeDefinition => ({ ...edge, type: GRAPH_CANVAS_EDGE_TYPE }));
+}
 
-const edgeStyle: CSSProperties = {
-  stroke: "rgba(192, 254, 4, 0.6)",
-  strokeWidth: 1.4,
-};
-
-const foundationNodes: FoundationNode[] = [
+const foundationNodes = withGraphCanvasNodeType([
   {
-    data: { label: "Ingest Spec" },
+    data: {
+      badges: [{ label: "Spec" }],
+      eyebrow: "Signal Intake",
+      title: "Ingest Spec",
+    },
     id: "spec",
-    position: { x: 80, y: 80 },
+    position: { x: 80, y: 86 },
     sourcePosition: Position.Right,
-    style: nodeStyle,
     targetPosition: Position.Left,
   },
   {
-    data: { label: "Plan Execution" },
+    data: {
+      badges: [{ label: "Queued" }],
+      detail: "normalize inputs / assign lane",
+      eyebrow: "Planner",
+      title: "Plan Execution",
+    },
     id: "plan",
-    position: { x: 320, y: 60 },
+    position: { x: 340, y: 60 },
     sourcePosition: Position.Right,
-    style: nodeStyle,
     targetPosition: Position.Left,
   },
   {
-    data: { label: "Dispatch Agents" },
+    data: {
+      badges: [{ label: "3 Agents", tone: "warning" }],
+      detail: "fan out to active workers",
+      eyebrow: "Dispatch",
+      title: "Dispatch Agents",
+      tone: "warning",
+    },
     id: "dispatch",
-    position: { x: 580, y: 60 },
+    position: { x: 650, y: 58 },
     sourcePosition: Position.Right,
-    style: nodeStyle,
     targetPosition: Position.Left,
   },
   {
-    data: { label: "Collect Results" },
+    data: {
+      badges: [{ label: "Merge", tone: "violet" }],
+      detail: "partials / scoring / retries",
+      eyebrow: "Aggregator",
+      title: "Collect Results",
+      tone: "violet",
+    },
     id: "collect",
-    position: { x: 580, y: 220 },
+    position: { x: 650, y: 238 },
     sourcePosition: Position.Right,
-    style: nodeStyle,
     targetPosition: Position.Left,
   },
   {
-    data: { label: "Summarize Outcome" },
+    data: {
+      badges: [{ label: "Selected" }],
+      detail: "publish concise operator update",
+      eyebrow: "Output",
+      title: "Summarize Outcome",
+    },
     id: "summary",
-    position: { x: 840, y: 140 },
-    style: summaryNodeStyle,
+    position: { x: 1010, y: 146 },
+    selected: true,
     targetPosition: Position.Left,
   },
-];
+]);
 
-const foundationEdges: FoundationEdge[] = [
-  { id: "spec-plan", source: "spec", style: edgeStyle, target: "plan", type: "smoothstep" },
+const foundationEdges = withGraphCanvasEdgeType([
   {
+    data: { label: "parse", tone: "neutral" },
+    id: "spec-plan",
+    source: "spec",
+    target: "plan",
+  },
+  {
+    data: { label: "route", tone: "warning" },
     id: "plan-dispatch",
     source: "plan",
-    style: edgeStyle,
     target: "dispatch",
-    type: "smoothstep",
   },
   {
+    data: { label: "fan-in", tone: "violet" },
     id: "dispatch-collect",
     source: "dispatch",
-    style: edgeStyle,
     target: "collect",
-    type: "smoothstep",
   },
   {
+    data: { label: "primary", tone: "primary" },
     id: "plan-summary",
     source: "plan",
-    style: edgeStyle,
     target: "summary",
-    type: "smoothstep",
   },
   {
+    data: { label: "selected", tone: "primary" },
     id: "collect-summary",
+    selected: true,
     source: "collect",
-    style: edgeStyle,
     target: "summary",
-    type: "smoothstep",
   },
-];
+]);
+
+const denseNodes = withGraphCanvasNodeType([
+  {
+    data: { eyebrow: "Ingress", title: "Prompt Intake" },
+    id: "ingress",
+    position: { x: 40, y: 120 },
+    sourcePosition: Position.Right,
+    targetPosition: Position.Left,
+  },
+  {
+    data: {
+      badges: [{ label: "Cache", tone: "neutral" }],
+      eyebrow: "Prep",
+      title: "Context Sweep",
+      tone: "neutral",
+    },
+    id: "context",
+    position: { x: 260, y: 20 },
+    sourcePosition: Position.Right,
+    targetPosition: Position.Left,
+  },
+  {
+    data: {
+      badges: [{ label: "Risk", tone: "warning" }],
+      eyebrow: "Prep",
+      title: "Constraint Check",
+      tone: "warning",
+    },
+    id: "constraints",
+    position: { x: 260, y: 220 },
+    sourcePosition: Position.Right,
+    targetPosition: Position.Left,
+  },
+  {
+    data: {
+      badges: [{ label: "Lane A" }],
+      detail: "UI / shell pass",
+      eyebrow: "Worker",
+      title: "Style Surface",
+    },
+    id: "style",
+    position: { x: 520, y: 0 },
+    sourcePosition: Position.Right,
+    targetPosition: Position.Left,
+  },
+  {
+    data: {
+      badges: [{ label: "Lane B", tone: "violet" }],
+      detail: "renderer defaults",
+      eyebrow: "Worker",
+      title: "Wire Graph Primitives",
+      tone: "violet",
+    },
+    id: "renderers",
+    position: { x: 520, y: 120 },
+    sourcePosition: Position.Right,
+    targetPosition: Position.Left,
+  },
+  {
+    data: {
+      badges: [{ label: "Lane C", tone: "warning" }],
+      detail: "dense scenario validation",
+      eyebrow: "Worker",
+      title: "Stress Story",
+      tone: "warning",
+    },
+    id: "stress",
+    position: { x: 520, y: 240 },
+    sourcePosition: Position.Right,
+    targetPosition: Position.Left,
+  },
+  {
+    data: {
+      badges: [{ label: "Gate", tone: "error" }],
+      detail: "contrast / legibility / focus",
+      eyebrow: "Verify",
+      title: "Review States",
+      tone: "error",
+    },
+    id: "review",
+    position: { x: 820, y: 120 },
+    sourcePosition: Position.Right,
+    targetPosition: Position.Left,
+  },
+  {
+    data: {
+      badges: [{ label: "Static" }],
+      eyebrow: "Output",
+      title: "Capture Build",
+    },
+    id: "capture",
+    position: { x: 1080, y: 40 },
+    targetPosition: Position.Left,
+  },
+  {
+    data: {
+      badges: [{ label: "Selected" }],
+      detail: "ship preview artifact",
+      eyebrow: "Output",
+      title: "Open Pull Request",
+    },
+    id: "pr",
+    position: { x: 1080, y: 200 },
+    selected: true,
+    targetPosition: Position.Left,
+  },
+]);
+
+const denseEdges = withGraphCanvasEdgeType([
+  { data: { label: "seed", tone: "neutral" }, id: "ingress-context", source: "ingress", target: "context" },
+  {
+    data: { label: "guard", tone: "warning" },
+    id: "ingress-constraints",
+    source: "ingress",
+    target: "constraints",
+  },
+  { data: { label: "feed", tone: "primary" }, id: "context-style", source: "context", target: "style" },
+  { data: { label: "feed", tone: "violet" }, id: "context-renderers", source: "context", target: "renderers" },
+  {
+    data: { label: "limit", tone: "warning" },
+    id: "constraints-stress",
+    source: "constraints",
+    target: "stress",
+  },
+  {
+    data: { label: "join", tone: "primary" },
+    id: "style-review",
+    source: "style",
+    target: "review",
+  },
+  {
+    data: { label: "join", tone: "violet" },
+    id: "renderers-review",
+    source: "renderers",
+    target: "review",
+  },
+  {
+    data: { label: "join", tone: "warning" },
+    id: "stress-review",
+    source: "stress",
+    target: "review",
+  },
+  {
+    data: { label: "artifact", tone: "neutral" },
+    id: "review-capture",
+    source: "review",
+    target: "capture",
+  },
+  {
+    data: { label: "selected", tone: "primary" },
+    id: "review-pr",
+    selected: true,
+    source: "review",
+    target: "pr",
+  },
+]);
 
 const meta = {
   title: "Graphs/GraphCanvas",
   component: GraphCanvas,
   args: {
     edges: foundationEdges,
+    fitViewOptions: { padding: 0.18 },
     nodes: foundationNodes,
     showBackground: true,
     showControls: true,
@@ -128,34 +291,115 @@ const meta = {
     layout: "fullscreen",
   },
   tags: ["autodocs"],
-  render: (args) => (
-    <Flex vertical gap={24} style={{ margin: "0 auto", maxWidth: 1280 }}>
-      <Card style={heroCardStyle}>
-        <Space direction="vertical" size={10}>
-          <Typography.Text style={eyebrowStyle}>React Flow Foundation</Typography.Text>
-          <Typography.Title level={1} className="marathon-text-display" style={titleStyle}>
-            Reusable graph canvas first.
-          </Typography.Title>
-          <Typography.Paragraph style={copyStyle}>
-            The package now owns a controlled graph surface with read-only defaults: pan, zoom,
-            select, and fit-view. The workflow-specific node chrome comes later, but the base
-            canvas is already wired for controls, minimap, and background primitives.
-          </Typography.Paragraph>
-        </Space>
-      </Card>
-
-      <Card title="Foundation" extra="Read-Only Defaults" style={canvasCardStyle}>
-        <GraphCanvas<FoundationNode, FoundationEdge> {...args} />
-      </Card>
-    </Flex>
-  ),
-} satisfies Meta<FoundationStoryArgs>;
+  render: (args) => renderShowcase({
+    args,
+    cardTitle: "Foundation",
+    copy:
+      "The graph canvas now owns its own chrome: hard-edge nodes, restrained lime edge routing, themed minimap, and operator controls that no longer look like they wandered in from a different product.",
+    extra: "Read-Only Defaults",
+    eyebrow: "React Flow Styling",
+    title: "Make the graph look like it belongs here.",
+  }),
+} satisfies Meta<GraphCanvasStoryArgs>;
 
 export default meta;
 
 type Story = StoryObj<typeof meta>;
 
 export const Foundation: Story = {};
+
+export const DenseSignals: Story = {
+  args: {
+    edges: denseEdges,
+    fitViewOptions: { padding: 0.16 },
+    nodes: denseNodes,
+    style: { height: 620 },
+  },
+  render: (args) =>
+    renderShowcase({
+      args,
+      cardTitle: "Dense Flow",
+      copy:
+        "The denser pass keeps lanes distinct with tone shifts and chip punctuation while preserving legibility against the grid. If this one reads, the sparse case is easy.",
+      extra: "Density Check",
+      eyebrow: "Stress View",
+      title: "More nodes. Same visual language.",
+    }),
+};
+
+export const LoadingOverlay: Story = {
+  args: {
+    edges: foundationEdges,
+    loading: true,
+    loadingState: "Syncing Graph",
+    nodes: foundationNodes,
+  },
+  render: (args) =>
+    renderShowcase({
+      args,
+      cardTitle: "Loading Overlay",
+      copy:
+        "The graph can keep its context visible while a themed status card sits over the canvas. This covers the loading branch without falling back to generic app chrome.",
+      extra: "Verification",
+      eyebrow: "Overlay State",
+      title: "Loading should still look deliberate.",
+    }),
+};
+
+export const EmptyOverlay: Story = {
+  args: {
+    edges: [],
+    emptyState: "No Graph Data",
+    nodes: [],
+    showControls: false,
+    showMiniMap: false,
+    style: { height: 420 },
+  },
+  render: (args) =>
+    renderShowcase({
+      args,
+      cardTitle: "Empty Overlay",
+      copy:
+        "An empty graph should still feel like part of the system. This verifies the fallback canvas state instead of letting it drift untested behind the happy path stories.",
+      extra: "Verification",
+      eyebrow: "Overlay State",
+      title: "Empty should be a first-class state too.",
+    }),
+};
+
+function renderShowcase({
+  args,
+  cardTitle,
+  copy,
+  extra,
+  eyebrow,
+  title,
+}: {
+  args: GraphCanvasStoryArgs;
+  cardTitle: string;
+  copy: string;
+  extra: string;
+  eyebrow: string;
+  title: string;
+}) {
+  return (
+    <Flex vertical gap={24} style={{ margin: "0 auto", maxWidth: 1280 }}>
+      <Card style={heroCardStyle}>
+        <Space direction="vertical" size={10}>
+          <Typography.Text style={eyebrowStyle}>{eyebrow}</Typography.Text>
+          <Typography.Title level={1} className="marathon-text-display" style={titleStyle}>
+            {title}
+          </Typography.Title>
+          <Typography.Paragraph style={copyStyle}>{copy}</Typography.Paragraph>
+        </Space>
+      </Card>
+
+      <Card title={cardTitle} extra={extra} style={canvasCardStyle}>
+        <GraphCanvas<GraphCanvasNodeDefinition, GraphCanvasEdgeDefinition> {...args} />
+      </Card>
+    </Flex>
+  );
+}
 
 const eyebrowStyle: CSSProperties = {
   color: marathonDosPalette.primary,
@@ -167,13 +411,13 @@ const eyebrowStyle: CSSProperties = {
 
 const titleStyle: CSSProperties = {
   margin: 0,
-  maxWidth: 620,
+  maxWidth: 680,
 };
 
 const copyStyle: CSSProperties = {
   color: "rgba(245, 245, 240, 0.82)",
   margin: 0,
-  maxWidth: 760,
+  maxWidth: 840,
 };
 
 const heroCardStyle: CSSProperties = {
