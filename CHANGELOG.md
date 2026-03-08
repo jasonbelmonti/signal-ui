@@ -1,5 +1,15 @@
 # @jasonbelmonti/signal-ui
 
+## 0.3.0
+
+### Minor Changes
+
+- 2987ea2: Add runtime theme customization support for Signal UI.
+
+  - export `createSignalTheme`, `createSignalThemeCssVariables`, `resolveSignalPalette`, and theme preference types
+  - allow `AntdThemeProvider` and `installStaticAntdTheme` to accept runtime `theme` and `themePreferences` overrides
+  - keep document-level CSS variables in sync for themed portals and nested providers
+
 ## 0.2.1
 
 ### Patch Changes

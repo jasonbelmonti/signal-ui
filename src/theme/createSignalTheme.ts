@@ -158,6 +158,7 @@ export function createSignalThemeCssVariables(
   const palette = applyThemeTokenPaletteOverrides(resolveSignalPalette(preferences), themeConfig);
   const primaryRgb = toRgbTriplet(palette.primary) ?? "192 254 4";
   const accentRgb = toRgbTriplet(palette.accentViolet) ?? "159 77 255";
+  const errorRgb = toRgbTriplet(palette.error) ?? "242 71 35";
   const signalInk = resolveSignalInkColor(palette.text);
 
   return {
@@ -179,6 +180,7 @@ export function createSignalThemeCssVariables(
     "--signal-ui-field-violet": palette.fieldViolet,
     "--signal-ui-warning": palette.warning,
     "--signal-ui-error": palette.error,
+    "--signal-ui-error-rgb": errorRgb,
     "--signal-ui-font-ui": signalFontStacks.ui,
     "--signal-ui-font-display": signalFontStacks.display,
     "--signal-ui-font-display-secondary": signalFontStacks.displaySecondary,

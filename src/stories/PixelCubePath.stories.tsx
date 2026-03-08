@@ -93,6 +93,33 @@ const meta = {
           </Space>
         </Card>
 
+        <Card title="Tight Panel Fit" style={cardStyle}>
+          <Space direction="vertical" size={12} style={{ width: "100%" }}>
+            <Typography.Text style={eyebrowStyle}>Centered Under Constraint</Typography.Text>
+            <div style={constraintDemoStyle}>
+              <PixelCubePath size={188} />
+            </div>
+            <Typography.Paragraph style={copyStyle}>
+              The component now collapses to the parent width instead of forcing a wider minimum
+              box, so narrow panels keep the projection centered without custom wrapper layout.
+            </Typography.Paragraph>
+          </Space>
+        </Card>
+
+        <Card title="Error Trace" style={errorCardStyle}>
+          <Space direction="vertical" size={12}>
+            <Typography.Text style={{ ...eyebrowStyle, color: signalPalette.error }}>
+              Broken Path
+            </Typography.Text>
+            <PixelCubePath size={208} tone="error" />
+            <Typography.Paragraph style={copyStyle}>
+              `tone=&quot;error&quot;` swaps to the theme error channel and inserts pauses,
+              dropped segments, and sharper jitter so the sweep reads as faulted rather than
+              merely recolored.
+            </Typography.Paragraph>
+          </Space>
+        </Card>
+
         <Card title="Pinned Hero Opt-Out" style={cardStyle}>
           <Space direction="vertical" size={12}>
             <Typography.Text style={eyebrowStyle}>Always Render</Typography.Text>
@@ -199,6 +226,22 @@ const violetCardStyle: CSSProperties = {
   borderColor: "rgba(159, 77, 255, 0.42)",
 };
 
+const errorCardStyle: CSSProperties = {
+  ...cardStyle,
+  background:
+    "linear-gradient(135deg, rgba(242, 71, 35, 0.14), transparent 34%), linear-gradient(180deg, rgba(255, 255, 255, 0.035), transparent 52%), rgba(12, 12, 12, 0.96)",
+  borderColor: "rgba(242, 71, 35, 0.4)",
+};
+
+const constraintDemoStyle: CSSProperties = {
+  width: 248,
+  maxWidth: "100%",
+  padding: "10px 0",
+  border: "1px dashed rgba(245, 245, 240, 0.12)",
+  background:
+    "linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 70%), rgba(255, 255, 255, 0.015)",
+};
+
 const listViewportStyle: CSSProperties = {
   height: 760,
   overflowY: "auto",
@@ -218,12 +261,15 @@ const listItemTitleStyle: CSSProperties = {
 function createViewportBankEntries() {
   return Array.from({ length: 18 }, (_, index) => {
     const sequence = index + 1;
-    const tone = sequence % 3 === 0 ? "violet" : "primary";
+    const tone =
+      sequence % 5 === 0 ? "error" : sequence % 3 === 0 ? "violet" : "primary";
 
     return {
       detail: `Bank row ${sequence.toString().padStart(2, "0")} keeps the effect available for differentiation without asking the scroller to animate an entire parade of tiny cubes all at once.`,
       id: `PATH-${(6100 + sequence).toString()}`,
-      title: `Transit lane ${sequence.toString().padStart(2, "0")} / ${tone === "violet" ? "event channel" : "base channel"}`,
+      title: `Transit lane ${sequence.toString().padStart(2, "0")} / ${
+        tone === "error" ? "fault channel" : tone === "violet" ? "event channel" : "base channel"
+      }`,
       tone,
     } as const;
   });
