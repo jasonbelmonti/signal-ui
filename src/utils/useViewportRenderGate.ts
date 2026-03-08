@@ -12,7 +12,7 @@ export function useViewportRenderGate<ElementType extends HTMLElement>({
   threshold = 0,
 }: ViewportRenderGateOptions = {}) {
   const targetRef = useRef<ElementType | null>(null);
-  const [isInViewport, setIsInViewport] = useState(disabled);
+  const [isInViewport, setIsInViewport] = useState(true);
 
   useEffect(() => {
     if (disabled) {
