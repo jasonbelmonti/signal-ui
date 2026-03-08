@@ -1,5 +1,11 @@
 # @jasonbelmonti/signal-ui
 
+## 0.4.0
+
+### Minor Changes
+
+- 4c85ce7: Improve `PixelCubePath` centering in constrained layouts and add a broken `error` tone for failed states.
+
 ## 0.3.0
 
 ### Minor Changes
