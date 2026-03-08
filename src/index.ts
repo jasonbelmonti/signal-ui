@@ -88,3 +88,16 @@ export type {
   SignalThemeColorPreferences,
   SignalThemePreferences,
 } from "./theme/signalTheme.js";
+export {
+  materializeNoiseCue,
+  playNoiseCue,
+  primeNoiseEngine,
+} from "./audio/index.js";
+export type {
+  MaterializedCueLayer,
+  MaterializedNoiseCue,
+  MaterializedNoiseLayer,
+  MaterializedToneLayer,
+  NoiseCueName,
+  NoiseCueOptions,
+} from "./audio/index.js";
