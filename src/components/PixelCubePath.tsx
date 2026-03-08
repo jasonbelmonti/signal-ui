@@ -10,7 +10,7 @@ import {
   type PixelCubePathCubeCoordinate,
 } from "./pixelCubePath/geometry.js";
 
-export type PixelCubePathTone = "primary" | "violet";
+export type PixelCubePathTone = "primary" | "violet" | "error";
 
 type PathStyle = CSSProperties & Record<`--signal-ui-cube-path-${string}`, string | number>;
 
@@ -53,10 +53,12 @@ export function PixelCubePath({
   const cellSize = Math.max(18, Math.round(size * 0.19));
   const gapSize = Math.max(2, Math.round(cellSize * 0.08));
   const stepSize = cellSize + gapSize;
-  const sceneWidth = Math.round(size * 1.34);
-  const sceneHeight = Math.round(size * 1.18);
+  const sceneWidth = Math.round(size * 1.08);
+  const sceneHeight = Math.round(size * 0.98);
   const perspective = Math.round(size * 6.4);
+  const broken = tone === "error";
   const animationProfile = createPixelCubePathAnimationProfile({
+    broken,
     count: cubeCoordinates.length,
     cycleMs: baseCycleMs,
     seed: getPixelCubePathAnimationSeed(instanceId),
@@ -95,13 +97,17 @@ export function PixelCubePath({
           {cubeCoordinates.map((cube) => (
             <span
               className="signal-ui-pixel-cube-path__cube"
+              data-break={animationProfile.breakpoints[cube.pathIndex] ? "true" : "false"}
+              data-order={animationProfile.misfires[cube.pathIndex] ? "misfire" : "path"}
               data-surface={cube.surface ? "true" : "false"}
               key={cube.index}
-              style={getCubeStyle(cube, animationProfile.delaysMs)}
+              style={getCubeStyle(cube, animationProfile)}
             >
-              <span className="signal-ui-pixel-cube-path__face signal-ui-pixel-cube-path__face--front" />
-              <span className="signal-ui-pixel-cube-path__face signal-ui-pixel-cube-path__face--right" />
-              <span className="signal-ui-pixel-cube-path__face signal-ui-pixel-cube-path__face--top" />
+              <span className="signal-ui-pixel-cube-path__cube-shell">
+                <span className="signal-ui-pixel-cube-path__face signal-ui-pixel-cube-path__face--front" />
+                <span className="signal-ui-pixel-cube-path__face signal-ui-pixel-cube-path__face--right" />
+                <span className="signal-ui-pixel-cube-path__face signal-ui-pixel-cube-path__face--top" />
+              </span>
             </span>
           ))}
         </div>
@@ -111,21 +117,40 @@ export function PixelCubePath({
 }
 
 const toneClassName: Record<PixelCubePathTone, string | undefined> = {
+  error: "signal-ui-pixel-cube-path--error",
   primary: undefined,
   violet: "signal-ui-pixel-cube-path--violet",
 };
 
-function getCubeStyle(cube: PixelCubePathCubeCoordinate, delaysMs: number[]): CubeStyle {
+function getCubeStyle(
+  cube: PixelCubePathCubeCoordinate,
+  animationProfile: ReturnType<typeof createPixelCubePathAnimationProfile>,
+): CubeStyle {
   const center = 1;
   const x = cube.column - center;
   const y = cube.row - center;
   const z = cube.depth - center;
-  const delayMs = delaysMs[cube.pathIndex] ?? 0;
+  const pathIndex = cube.pathIndex;
+  const delayMs = animationProfile.delaysMs[pathIndex] ?? 0;
+  const glitchOffsets = animationProfile.glitchOffsetsPx[pathIndex] ?? { x: 0, y: 0, z: 0 };
+  const liftPx = animationProfile.liftsPx[pathIndex] ?? 2;
+  const signalStrength = animationProfile.signalStrengths[pathIndex] ?? 1;
+  const tremorAmplitudePx = animationProfile.tremorAmplitudesPx[pathIndex] ?? 0;
+  const tremorCycleMs = animationProfile.tremorCyclesMs[pathIndex] ?? 2000;
+  const tremorDelayMs = animationProfile.tremorDelaysMs[pathIndex] ?? 0;
 
   return {
     "--signal-ui-cube-path-cube-x": `calc(${x} * var(--signal-ui-cube-path-step))`,
     "--signal-ui-cube-path-cube-y": `calc(${y} * var(--signal-ui-cube-path-step))`,
     "--signal-ui-cube-path-cube-z": `calc(${z} * var(--signal-ui-cube-path-step))`,
     "--signal-ui-cube-path-delay": `${delayMs * -1}ms`,
+    "--signal-ui-cube-path-glitch-x": `${glitchOffsets.x}px`,
+    "--signal-ui-cube-path-glitch-y": `${glitchOffsets.y}px`,
+    "--signal-ui-cube-path-glitch-z": `${glitchOffsets.z}px`,
+    "--signal-ui-cube-path-lift": `${liftPx}px`,
+    "--signal-ui-cube-path-signal-strength": signalStrength,
+    "--signal-ui-cube-path-tremor-amplitude": `${tremorAmplitudePx}px`,
+    "--signal-ui-cube-path-tremor-cycle": `${tremorCycleMs}ms`,
+    "--signal-ui-cube-path-tremor-delay": `${tremorDelayMs * -1}ms`,
   };
 }
