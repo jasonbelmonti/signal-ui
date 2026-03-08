@@ -11,6 +11,10 @@ bun run typecheck
 bun run build
 ```
 
+Pushes to `main` also publish the static Storybook to GitHub Pages via
+`.github/workflows/storybook-pages.yml`, so the theme can be shared without a local build.
+The default URL for this repository is `https://jasonbelmonti.github.io/signal-ui/`.
+
 `bun run build` emits the consumable package contract in `dist/`:
 
 - `dist/index.js`
