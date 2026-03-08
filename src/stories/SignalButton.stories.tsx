@@ -1,10 +1,16 @@
 import { GiftOutlined, RadarChartOutlined, ThunderboltOutlined } from "@ant-design/icons";
 import { Button, Card, Flex, Space, Typography } from "antd";
 import type { Meta, StoryObj } from "@storybook/react-webpack5";
-import { startTransition, useEffect, useRef, useState } from "react";
+import { startTransition, useEffect, useState } from "react";
 import type { CSSProperties } from "react";
 
 import { SignalButton } from "../components/SignalButton.js";
+import {
+  getLootBoxEffectState,
+  type LootBoxEffectState,
+} from "./signalButton/lootBoxEffect.js";
+import { useHoldToTriggerController } from "./signalButton/useHoldToTriggerController.js";
+import { useHoldToTriggerLootBoxSound } from "./signalButton/sound/useHoldToTriggerLootBoxSound.js";
 import { signalPalette } from "../theme/signalTheme.js";
 
 const meta = {
@@ -137,7 +143,8 @@ export const HoldToTrigger: Story = {
           <Typography.Paragraph style={copyStyle}>
             Press and hold to fill the button. Releasing early drains it back down. Holding through
             the threshold triggers the pulse, fires the simulated action, and clamps the button in
-            the completed state.
+            the completed state. With sound armed, the charge climbs through a glitchy synth build
+            and drops into a cinematic hit when it fires.
           </Typography.Paragraph>
           <HoldToTriggerSignalButton />
         </Space>
@@ -243,27 +250,6 @@ function LoopingSignalButton() {
   );
 }
 
-type LootBoxEffectState = {
-  cooldownPercent: number;
-  fillPercent: number;
-  pulseBurst: number;
-  wakePercent: number;
-  label: string;
-};
-
-type HoldToTriggerPhase = "idle" | "holding" | "draining" | "resolving" | "completed";
-
-type HoldToTriggerVisualState = {
-  cooldownPercent: number;
-  fillPercent: number;
-  label: string;
-  phase: HoldToTriggerPhase;
-  pulseBurst: number;
-  status: string;
-  triggerCount: number;
-  wakePercent: number;
-};
-
 function LootBoxSignalButton() {
   const [effectState, setEffectState] = useState<LootBoxEffectState>(() => getLootBoxEffectState(0));
 
@@ -301,74 +287,13 @@ function LootBoxSignalButton() {
 }
 
 function HoldToTriggerSignalButton() {
-  const [visualState, setVisualState] = useState<HoldToTriggerVisualState>(() =>
-    buildHoldToTriggerVisualState("idle", 0, 0, 0),
-  );
-  const phaseRef = useRef<HoldToTriggerPhase>("idle");
-  const chargeRef = useRef(0);
-  const resolveRef = useRef(0);
-  const triggerCountRef = useRef(0);
-
-  useEffect(() => {
-    const intervalId = window.setInterval(() => {
-      const nextFrame = advanceHoldToTriggerFrame(
-        phaseRef.current,
-        chargeRef.current,
-        resolveRef.current,
-        triggerCountRef.current,
-      );
-
-      phaseRef.current = nextFrame.phase;
-      chargeRef.current = nextFrame.charge;
-      resolveRef.current = nextFrame.resolve;
-      triggerCountRef.current = nextFrame.triggerCount;
-
-      startTransition(() => {
-        setVisualState((currentState) => {
-          const nextState = buildHoldToTriggerVisualState(
-            nextFrame.phase,
-            nextFrame.charge,
-            nextFrame.resolve,
-            nextFrame.triggerCount,
-          );
-
-          if (isSameHoldToTriggerState(currentState, nextState)) {
-            return currentState;
-          }
-
-          return nextState;
-        });
-      });
-    }, HOLD_TICK_MS);
-
-    return () => {
-      window.clearInterval(intervalId);
-    };
-  }, []);
-
-  const startHolding = () => {
-    if (phaseRef.current === "completed" || phaseRef.current === "resolving") {
-      return;
-    }
-
-    phaseRef.current = "holding";
-  };
-
-  const stopHolding = () => {
-    if (phaseRef.current !== "holding") {
-      return;
-    }
-
-    phaseRef.current = chargeRef.current > 0 ? "draining" : "idle";
-  };
-
-  const resetDemo = () => {
-    phaseRef.current = "idle";
-    chargeRef.current = 0;
-    resolveRef.current = 0;
-    triggerCountRef.current = 0;
-    setVisualState(buildHoldToTriggerVisualState("idle", 0, 0, 0));
-  };
+  const sound = useHoldToTriggerLootBoxSound();
+  const { reset, startHolding, stopHolding, visualState } = useHoldToTriggerController({
+    onFrame: sound.handleFrame,
+    onHoldStart: sound.handleHoldStart,
+    onHoldStop: sound.handleHoldStop,
+    onReset: sound.handleReset,
+  });
 
   const releaseHold = (event?: { currentTarget: EventTarget & HTMLElement; pointerId?: number }) => {
     if (event && typeof event.pointerId === "number" && event.currentTarget.hasPointerCapture(event.pointerId)) {
@@ -432,225 +357,15 @@ function HoldToTriggerSignalButton() {
         <Typography.Text style={{ ...copyStyle, color: "rgba(84, 236, 255, 0.88)" }}>
           Triggered: {visualState.triggerCount}
         </Typography.Text>
-        <Button size="small" onClick={resetDemo}>
+        <Typography.Text style={copyStyle}>{sound.status}</Typography.Text>
+        <Button size="small" disabled={!sound.isSupported} onClick={sound.toggleEnabled}>
+          {sound.enabled ? "Mute Sound" : "Enable Sound"}
+        </Button>
+        <Button size="small" onClick={reset}>
           Reset Demo
         </Button>
       </Flex>
     </Space>
-  );
-}
-
-function getLootBoxEffectState(elapsedMs: number): LootBoxEffectState {
-  if (elapsedMs < 850) {
-    const progress = easeOutCubic(elapsedMs / 850);
-
-    return {
-      cooldownPercent: 0,
-      fillPercent: roundPercent(12 + progress * 88),
-      wakePercent: 0,
-      pulseBurst: 0,
-      label: "Prime Cache",
-    };
-  }
-
-  if (elapsedMs < 1450) {
-    const progress = easeOutCubic((elapsedMs - 850) / 600);
-
-    return {
-      cooldownPercent: 0,
-      fillPercent: 100,
-      wakePercent: roundPercent(progress * 100),
-      pulseBurst: 0,
-      label: "Wake Relic",
-    };
-  }
-
-  if (elapsedMs < 2100) {
-    const progress = clamp01((elapsedMs - 1450) / 650);
-    const stagedProgress =
-      progress < 0.78
-        ? easeOutCubic(progress / 0.78) * 0.72
-        : 0.72 + easeOutCubic((progress - 0.78) / 0.22) * 0.28;
-    const cooldownProgress = progress < 0.62 ? 0 : easeOutCubic((progress - 0.62) / 0.38);
-
-    return {
-      cooldownPercent: roundPercent(cooldownProgress * 62),
-      fillPercent: 100,
-      wakePercent: 100,
-      pulseBurst: roundPercent(stagedProgress * 100),
-      label: "Crack Loot",
-    };
-  }
-
-  const progress = easeOutCubic((elapsedMs - 2100) / 300);
-
-  return {
-    cooldownPercent: roundPercent(progress * 100),
-    fillPercent: 100,
-    wakePercent: 100,
-    pulseBurst: 0,
-    label: "Reward Dispensed",
-  };
-}
-
-function easeOutCubic(value: number) {
-  return 1 - Math.pow(1 - clamp01(value), 3);
-}
-
-function clamp01(value: number) {
-  return Math.min(Math.max(value, 0), 1);
-}
-
-function roundPercent(value: number) {
-  return Math.round(value / 2) * 2;
-}
-
-const HOLD_TICK_MS = 40;
-const HOLD_TO_TRIGGER_MS = 1380;
-const DRAIN_MS = 520;
-const RESOLVE_MS = 640;
-
-function advanceHoldToTriggerFrame(
-  phase: HoldToTriggerPhase,
-  charge: number,
-  resolve: number,
-  triggerCount: number,
-) {
-  let nextPhase = phase;
-  let nextCharge = charge;
-  let nextResolve = resolve;
-  let nextTriggerCount = triggerCount;
-
-  if (phase === "holding") {
-    nextCharge = clamp01(charge + HOLD_TICK_MS / HOLD_TO_TRIGGER_MS);
-
-    if (nextCharge >= 1) {
-      nextCharge = 1;
-      nextResolve = 0;
-      nextPhase = "resolving";
-      nextTriggerCount += 1;
-    }
-  } else if (phase === "draining") {
-    nextCharge = clamp01(charge - HOLD_TICK_MS / DRAIN_MS);
-
-    if (nextCharge <= 0) {
-      nextCharge = 0;
-      nextResolve = 0;
-      nextPhase = "idle";
-    }
-  } else if (phase === "resolving") {
-    nextResolve = clamp01(resolve + HOLD_TICK_MS / RESOLVE_MS);
-
-    if (nextResolve >= 1) {
-      nextResolve = 1;
-      nextPhase = "completed";
-    }
-  }
-
-  return {
-    charge: nextCharge,
-    phase: nextPhase,
-    resolve: nextResolve,
-    triggerCount: nextTriggerCount,
-  };
-}
-
-function buildHoldToTriggerVisualState(
-  phase: HoldToTriggerPhase,
-  charge: number,
-  resolve: number,
-  triggerCount: number,
-): HoldToTriggerVisualState {
-  const fillPercent = roundPercent(charge * 100);
-  const wakePercent = roundPercent(clamp01((charge - 0.34) / 0.66) * 100);
-  const burstProgress = phase === "resolving" ? easeOutCubic(resolve) : 0;
-  const cooldownPercent =
-    phase === "completed"
-      ? 100
-      : phase === "resolving"
-        ? roundPercent(easeOutCubic(clamp01((resolve - 0.24) / 0.76)) * 100)
-        : 0;
-
-  if (phase === "completed") {
-    return {
-      cooldownPercent: 100,
-      fillPercent: 100,
-      label: "Reward Dispensed",
-      phase,
-      pulseBurst: 0,
-      status: "Action fired. The button is clamped in its completed confirmation state.",
-      triggerCount,
-      wakePercent: 100,
-    };
-  }
-
-  if (phase === "resolving") {
-    return {
-      cooldownPercent,
-      fillPercent: 100,
-      label: "Trigger Claim",
-      phase,
-      pulseBurst: roundPercent(burstProgress * 100),
-      status: "Burst triggered. In real use, your action would fire here.",
-      triggerCount,
-      wakePercent: 100,
-    };
-  }
-
-  if (phase === "draining") {
-    return {
-      cooldownPercent: 0,
-      fillPercent,
-      label: fillPercent > 18 ? "Charge Lost" : "Hold To Claim",
-      phase,
-      pulseBurst: 0,
-      status: "Released early. The button is draining back to idle.",
-      triggerCount,
-      wakePercent,
-    };
-  }
-
-  if (phase === "holding") {
-    return {
-      cooldownPercent: 0,
-      fillPercent,
-      label: fillPercent >= 90 ? "Keep Holding" : "Hold To Prime",
-      phase,
-      pulseBurst: 0,
-      status:
-        fillPercent >= 90
-          ? "Keep holding to cross the trigger threshold."
-          : "Release before the threshold and the charge will unwind.",
-      triggerCount,
-      wakePercent,
-    };
-  }
-
-  return {
-    cooldownPercent: 0,
-    fillPercent: 0,
-    label: "Hold To Claim",
-    phase,
-    pulseBurst: 0,
-    status: "Press and hold to arm the action. Release early to cancel.",
-    triggerCount,
-    wakePercent: 0,
-  };
-}
-
-function isSameHoldToTriggerState(
-  currentState: HoldToTriggerVisualState,
-  nextState: HoldToTriggerVisualState,
-) {
-  return (
-    currentState.cooldownPercent === nextState.cooldownPercent &&
-    currentState.fillPercent === nextState.fillPercent &&
-    currentState.label === nextState.label &&
-    currentState.phase === nextState.phase &&
-    currentState.pulseBurst === nextState.pulseBurst &&
-    currentState.status === nextState.status &&
-    currentState.triggerCount === nextState.triggerCount &&
-    currentState.wakePercent === nextState.wakePercent
   );
 }
 
