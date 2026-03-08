@@ -6,11 +6,14 @@
   --signal-ui-grid: #2b2b2b;
   --signal-ui-muted: #717171;
   --signal-ui-text: #f5f5f0;
+  --signal-ui-text-rgb: 245 245 240;
   --signal-ui-primary: #c0fe04;
+  --signal-ui-primary-rgb: 192 254 4;
   --signal-ui-primary-deep: #86b400;
   --signal-ui-field-primary: #d9ff67;
   --signal-ui-field-ink: #050505;
   --signal-ui-accent-violet: #9f4dff;
+  --signal-ui-accent-violet-rgb: 159 77 255;
   --signal-ui-field-violet: #9f4dff;
   --signal-ui-warning: #ff9b2f;
   --signal-ui-error: #f24723;
@@ -19,10 +22,10 @@
   --signal-ui-font-display-secondary: "Doto", "Oxanium", "Azeret Mono", sans-serif;
   --signal-ui-font-pixel: "Micro 5", "Oxanium", "Azeret Mono", sans-serif;
   --signal-ui-fx-signal-ink: #f9ffef;
-  --signal-ui-fx-signal-accent: #d9ff67;
-  --signal-ui-fx-signal-glow: rgba(192, 254, 4, 0.42);
+  --signal-ui-fx-signal-accent: var(--signal-ui-field-primary);
+  --signal-ui-fx-signal-glow: rgb(var(--signal-ui-primary-rgb) / 0.42);
   --signal-ui-fx-signal-alt-accent: var(--signal-ui-accent-violet);
-  --signal-ui-fx-signal-alt-glow: rgba(159, 77, 255, 0.38);
+  --signal-ui-fx-signal-alt-glow: rgb(var(--signal-ui-accent-violet-rgb) / 0.38);
   --signal-ui-fx-signal-noise-opacity: 0.24;
   --signal-ui-fx-signal-scan-opacity: 0.18;
   --signal-ui-fx-signal-noise-size: 72px;
@@ -35,7 +38,7 @@
 
 html {
   background:
-    radial-gradient(circle at top, rgba(192, 254, 4, 0.12), transparent 36%),
+    radial-gradient(circle at top, rgb(var(--signal-ui-primary-rgb) / 0.12), transparent 36%),
     linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent 28%),
     var(--signal-ui-black);
 }
@@ -51,7 +54,7 @@ body {
       transparent 1px,
       transparent 4px
     ),
-    linear-gradient(90deg, rgba(192, 254, 4, 0.03), transparent 30%),
+    linear-gradient(90deg, rgb(var(--signal-ui-primary-rgb) / 0.03), transparent 30%),
     var(--signal-ui-black);
   font-family: var(--signal-ui-font-ui);
   letter-spacing: 0.01em;
@@ -104,7 +107,7 @@ select {
 }
 
 .signal-ui-signal-button.ant-btn {
-  --signal-ui-signal-button-accent-rgb: 192 254 4;
+  --signal-ui-signal-button-accent-rgb: var(--signal-ui-primary-rgb);
   --signal-ui-signal-button-burst-flash: 0;
   --signal-ui-signal-button-cooldown: 0;
   --signal-ui-signal-button-edge-width: 24px;
@@ -360,16 +363,16 @@ select {
 .ant-btn:not(:disabled):focus-visible,
 .ant-input:hover,
 .ant-input-affix-wrapper:hover {
-  box-shadow: 0 0 0 1px rgba(192, 254, 4, 0.22);
+  box-shadow: 0 0 0 1px rgb(var(--signal-ui-primary-rgb) / 0.22);
 }
 
 .ant-card:hover {
-  box-shadow: 0 0 0 1px rgba(192, 254, 4, 0.22);
+  box-shadow: 0 0 0 1px rgb(var(--signal-ui-primary-rgb) / 0.22);
 }
 
 .signal-ui-panel.ant-card:hover {
   box-shadow:
-    0 0 0 1px rgba(192, 254, 4, 0.22),
+    0 0 0 1px rgb(var(--signal-ui-primary-rgb) / 0.22),
     var(--signal-ui-panel-frame-shadow, 0 0 0 0 transparent);
 }
 
@@ -518,7 +521,7 @@ h6.ant-typography {
   inset: 0;
   pointer-events: none;
   background:
-    linear-gradient(135deg, rgba(192, 254, 4, 0.08), transparent 28%),
+    linear-gradient(135deg, rgb(var(--signal-ui-primary-rgb) / 0.08), transparent 28%),
     linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 45%);
   mix-blend-mode: screen;
   opacity: 0.65;
@@ -635,7 +638,7 @@ h6.ant-typography {
     0 0 0.08em rgba(255, 255, 255, 0.28),
     0 0 0.58em var(--signal-ui-fx-signal-glow),
     0.018em 0 0 rgba(255, 255, 255, 0.1),
-    -0.022em 0 0 rgba(192, 254, 4, 0.18);
+    -0.022em 0 0 rgb(var(--signal-ui-primary-rgb) / 0.18);
 }
 
 .signal-ui-accent-violet {
@@ -644,16 +647,16 @@ h6.ant-typography {
 
 .signal-ui-frame-violet {
   box-shadow:
-    inset 0 0 0 1px rgba(159, 77, 255, 0.42),
-    0 0 0 1px rgba(159, 77, 255, 0.18);
+    inset 0 0 0 1px rgb(var(--signal-ui-accent-violet-rgb) / 0.42),
+    0 0 0 1px rgb(var(--signal-ui-accent-violet-rgb) / 0.18);
 }
 
 .signal-ui-graph-canvas {
   --signal-ui-graph-edge-selected-stroke: var(--signal-ui-primary);
   --signal-ui-graph-node-accent: var(--signal-ui-primary);
-  --signal-ui-graph-node-accent-glow: rgba(192, 254, 4, 0.16);
-  --signal-ui-graph-node-muted: rgba(245, 245, 240, 0.58);
-  --signal-ui-graph-node-stroke: rgba(245, 245, 240, 0.14);
+  --signal-ui-graph-node-accent-glow: rgb(var(--signal-ui-primary-rgb) / 0.16);
+  --signal-ui-graph-node-muted: rgb(var(--signal-ui-text-rgb) / 0.58);
+  --signal-ui-graph-node-stroke: rgb(var(--signal-ui-text-rgb) / 0.14);
   --signal-ui-graph-panel-bg: rgba(10, 10, 10, 0.96);
   isolation: isolate;
   position: relative;
@@ -663,13 +666,13 @@ h6.ant-typography {
   overflow: hidden;
   border: 1px solid rgba(245, 245, 240, 0.08);
   background:
-    radial-gradient(circle at top, rgba(192, 254, 4, 0.08), transparent 42%),
+    radial-gradient(circle at top, rgb(var(--signal-ui-primary-rgb) / 0.08), transparent 42%),
     linear-gradient(135deg, rgba(255, 255, 255, 0.03), transparent 34%),
     linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent 55%),
     #080808;
   box-shadow:
     inset 0 0 0 1px rgba(255, 255, 255, 0.03),
-    0 0 0 1px rgba(192, 254, 4, 0.08);
+    0 0 0 1px rgb(var(--signal-ui-primary-rgb) / 0.08);
 }
 
 .signal-ui-graph-canvas__surface::before,
@@ -730,8 +733,8 @@ h6.ant-typography {
 
 .signal-ui-graph-canvas__surface .react-flow__selection,
 .signal-ui-graph-canvas__surface .react-flow__nodesselection-rect {
-  background: rgba(192, 254, 4, 0.05);
-  border: 1px solid rgba(192, 254, 4, 0.48);
+  background: rgb(var(--signal-ui-primary-rgb) / 0.05);
+  border: 1px solid rgb(var(--signal-ui-primary-rgb) / 0.48);
 }
 
 .signal-ui-graph-canvas__surface .react-flow__node {
@@ -742,7 +745,7 @@ h6.ant-typography {
 
 .signal-ui-graph-canvas__surface .react-flow__node:focus,
 .signal-ui-graph-canvas__surface .react-flow__node:focus-visible {
-  outline: 1px solid rgba(192, 254, 4, 0.74);
+  outline: 1px solid rgb(var(--signal-ui-primary-rgb) / 0.74);
   outline-offset: 4px;
 }
 
@@ -757,10 +760,10 @@ h6.ant-typography {
 
 .signal-ui-graph-node {
   --signal-ui-graph-node-accent: var(--signal-ui-primary);
-  --signal-ui-graph-node-accent-glow: rgba(192, 254, 4, 0.16);
+  --signal-ui-graph-node-accent-glow: rgb(var(--signal-ui-primary-rgb) / 0.16);
   --signal-ui-graph-node-badge-bg: var(--signal-ui-field-primary);
   --signal-ui-graph-node-badge-fg: var(--signal-ui-field-ink);
-  --signal-ui-graph-node-handle: rgba(192, 254, 4, 0.94);
+  --signal-ui-graph-node-handle: rgb(var(--signal-ui-primary-rgb) / 0.94);
   position: relative;
   min-width: 176px;
   max-width: 236px;
@@ -772,7 +775,7 @@ h6.ant-typography {
   border: 1px solid var(--signal-ui-graph-node-stroke);
   box-shadow:
     inset 0 0 0 1px rgba(255, 255, 255, 0.03),
-    0 0 0 1px rgba(192, 254, 4, 0.08);
+    0 0 0 1px rgb(var(--signal-ui-primary-rgb) / 0.08);
   color: var(--signal-ui-text);
   text-transform: uppercase;
   backdrop-filter: blur(12px);
@@ -791,7 +794,7 @@ h6.ant-typography {
 
 .signal-ui-graph-node--violet {
   --signal-ui-graph-node-accent: var(--signal-ui-field-violet);
-  --signal-ui-graph-node-accent-glow: rgba(159, 77, 255, 0.18);
+  --signal-ui-graph-node-accent-glow: rgb(var(--signal-ui-accent-violet-rgb) / 0.18);
   --signal-ui-graph-node-badge-bg: var(--signal-ui-field-violet);
 }
 
@@ -818,10 +821,10 @@ h6.ant-typography {
 .signal-ui-graph-canvas__surface .react-flow__node:focus .signal-ui-graph-node,
 .signal-ui-graph-canvas__surface .react-flow__node:focus-visible .signal-ui-graph-node,
 .signal-ui-graph-node--selected {
-  border-color: rgba(192, 254, 4, 0.54);
+  border-color: rgb(var(--signal-ui-primary-rgb) / 0.54);
   box-shadow:
-    0 0 0 1px rgba(192, 254, 4, 0.2),
-    0 0 20px rgba(192, 254, 4, 0.14),
+    0 0 0 1px rgb(var(--signal-ui-primary-rgb) / 0.2),
+    0 0 20px rgb(var(--signal-ui-primary-rgb) / 0.14),
     inset 0 0 0 1px rgba(255, 255, 255, 0.04);
 }
 
@@ -904,9 +907,9 @@ h6.ant-typography {
 }
 
 .signal-ui-graph-canvas__surface .signal-ui-graph-edge__path {
-  stroke: var(--signal-ui-graph-edge-stroke, rgba(192, 254, 4, 0.5));
+  stroke: var(--signal-ui-graph-edge-stroke, rgb(var(--signal-ui-primary-rgb) / 0.5));
   stroke-width: 1.45;
-  filter: drop-shadow(0 0 8px var(--signal-ui-graph-edge-glow, rgba(192, 254, 4, 0.14)));
+  filter: drop-shadow(0 0 8px var(--signal-ui-graph-edge-glow, rgb(var(--signal-ui-primary-rgb) / 0.14)));
   transition:
     stroke 140ms ease,
     stroke-width 140ms ease,
@@ -919,7 +922,7 @@ h6.ant-typography {
 .signal-ui-graph-canvas__surface .react-flow__edge.selectable:focus-visible .signal-ui-graph-edge__path {
   stroke: var(--signal-ui-graph-edge-selected-stroke);
   stroke-width: 1.75;
-  filter: drop-shadow(0 0 10px rgba(192, 254, 4, 0.18));
+  filter: drop-shadow(0 0 10px rgb(var(--signal-ui-primary-rgb) / 0.18));
 }
 
 .signal-ui-graph-canvas__surface .react-flow__edge-text {
@@ -936,7 +939,7 @@ h6.ant-typography {
     rgba(8, 8, 8, 0.94);
   box-shadow:
     inset 0 0 0 1px rgba(255, 255, 255, 0.03),
-    0 0 0 1px rgba(192, 254, 4, 0.08);
+    0 0 0 1px rgb(var(--signal-ui-primary-rgb) / 0.08);
   backdrop-filter: blur(12px);
 }
 
@@ -966,7 +969,7 @@ h6.ant-typography {
 
 .signal-ui-graph-canvas__surface .react-flow__controls-button:hover,
 .signal-ui-graph-canvas__surface .react-flow__controls-button:focus-visible {
-  background: rgba(192, 254, 4, 0.08);
+  background: rgb(var(--signal-ui-primary-rgb) / 0.08);
   color: var(--signal-ui-primary);
 }
 
@@ -985,13 +988,13 @@ h6.ant-typography {
     rgba(6, 6, 6, 0.94);
   box-shadow:
     inset 0 0 0 1px rgba(255, 255, 255, 0.03),
-    0 0 0 1px rgba(192, 254, 4, 0.08);
+    0 0 0 1px rgb(var(--signal-ui-primary-rgb) / 0.08);
   backdrop-filter: blur(12px);
 }
 
 .signal-ui-graph-canvas__surface .react-flow__minimap-mask {
   fill: rgba(5, 5, 5, 0.72);
-  stroke: rgba(192, 254, 4, 0.34);
+  stroke: rgb(var(--signal-ui-primary-rgb) / 0.34);
 }
 
 .signal-ui-graph-canvas__surface .react-flow__minimap-node {
@@ -1035,7 +1038,7 @@ h6.ant-typography {
   text-transform: uppercase;
   box-shadow:
     inset 0 0 0 1px rgba(255, 255, 255, 0.03),
-    0 0 0 1px rgba(192, 254, 4, 0.08);
+    0 0 0 1px rgb(var(--signal-ui-primary-rgb) / 0.08);
 }
 
 .signal-ui-pixel-cube-path {
@@ -1052,7 +1055,7 @@ h6.ant-typography {
   --signal-ui-cube-path-step-duration: calc(
     var(--signal-ui-cube-path-cycle) / var(--signal-ui-cube-path-count)
   );
-  --signal-ui-cube-path-accent-rgb: 192 254 4;
+  --signal-ui-cube-path-accent-rgb: var(--signal-ui-primary-rgb);
   --signal-ui-cube-path-front-rest:
     linear-gradient(
       180deg,
@@ -1093,7 +1096,7 @@ h6.ant-typography {
       rgb(var(--signal-ui-cube-path-accent-rgb) / 0.4) 100%
     );
   --signal-ui-cube-path-top-active:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(245, 245, 240, 0.58) 100%);
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgb(var(--signal-ui-text-rgb) / 0.58) 100%);
   display: inline-grid;
   min-width: calc(var(--signal-ui-cube-path-scene-width) + 32px);
   place-items: center;
@@ -1102,16 +1105,20 @@ h6.ant-typography {
 }
 
 .signal-ui-pixel-cube-path--violet {
-  --signal-ui-cube-path-accent-rgb: 159 77 255;
+  --signal-ui-cube-path-accent-rgb: var(--signal-ui-accent-violet-rgb);
   --signal-ui-cube-path-front-tail:
     linear-gradient(
       180deg,
       rgba(255, 255, 255, 0.18) 0%,
-      rgba(159, 77, 255, 0.62) 32%,
-      rgba(159, 77, 255, 0.34) 100%
+      rgb(var(--signal-ui-cube-path-accent-rgb) / 0.62) 32%,
+      rgb(var(--signal-ui-cube-path-accent-rgb) / 0.34) 100%
     );
   --signal-ui-cube-path-side-tail:
-    linear-gradient(180deg, rgba(159, 77, 255, 0.42) 0%, rgba(159, 77, 255, 0.18) 100%);
+    linear-gradient(
+      180deg,
+      rgb(var(--signal-ui-cube-path-accent-rgb) / 0.42) 0%,
+      rgb(var(--signal-ui-cube-path-accent-rgb) / 0.18) 100%
+    );
 }
 
 .signal-ui-pixel-cube-path__viewport {
@@ -1339,7 +1346,7 @@ h6.ant-typography {
       ),
       radial-gradient(
         circle at 52% 64%,
-        rgb(192 254 4 / calc(var(--signal-ui-fx-signal-noise-opacity) * 0.96)) 0 1.6px,
+        rgb(var(--signal-ui-primary-rgb) / calc(var(--signal-ui-fx-signal-noise-opacity) * 0.96)) 0 1.6px,
         transparent 2.35px
       ),
       repeating-linear-gradient(
@@ -1628,7 +1635,7 @@ h6.ant-typography {
       0 0 0.08em rgba(255, 255, 255, 0.28),
       0 0 0.58em var(--signal-ui-fx-signal-glow),
       0.018em 0 0 rgba(255, 255, 255, 0.1),
-      -0.022em 0 0 rgba(192, 254, 4, 0.18);
+      -0.022em 0 0 rgb(var(--signal-ui-primary-rgb) / 0.18);
   }
 
   6% {
@@ -1637,7 +1644,7 @@ h6.ant-typography {
       0 0 0.06em rgba(255, 255, 255, 0.18),
       0 0 0.42em var(--signal-ui-fx-signal-glow),
       0.012em 0 0 rgba(255, 255, 255, 0.08),
-      -0.014em 0 0 rgba(192, 254, 4, 0.15);
+      -0.014em 0 0 rgb(var(--signal-ui-primary-rgb) / 0.15);
   }
 
   12% {
@@ -1646,7 +1653,7 @@ h6.ant-typography {
       0 0 0.1em rgba(255, 255, 255, 0.34),
       0 0 0.68em var(--signal-ui-fx-signal-glow),
       0.028em 0 0 rgba(255, 255, 255, 0.15),
-      -0.032em 0 0 rgba(192, 254, 4, 0.26);
+      -0.032em 0 0 rgb(var(--signal-ui-primary-rgb) / 0.26);
   }
 
   19% {
@@ -1659,7 +1666,7 @@ h6.ant-typography {
       0 0 0.07em rgba(255, 255, 255, 0.22),
       0 0 0.48em var(--signal-ui-fx-signal-glow),
       0.025em 0 0 rgba(255, 255, 255, 0.12),
-      -0.03em 0 0 rgba(192, 254, 4, 0.22);
+      -0.03em 0 0 rgb(var(--signal-ui-primary-rgb) / 0.22);
   }
 
   44% {
@@ -1672,7 +1679,7 @@ h6.ant-typography {
       0 0 0.11em rgba(255, 255, 255, 0.36),
       0 0 0.74em var(--signal-ui-fx-signal-glow),
       0.03em 0 0 rgba(255, 255, 255, 0.16),
-      -0.036em 0 0 rgba(192, 254, 4, 0.28);
+      -0.036em 0 0 rgb(var(--signal-ui-primary-rgb) / 0.28);
   }
 
   69% {
@@ -1685,7 +1692,7 @@ h6.ant-typography {
       0 0 0.09em rgba(255, 255, 255, 0.3),
       0 0 0.62em var(--signal-ui-fx-signal-glow),
       0.024em 0 0 rgba(255, 255, 255, 0.13),
-      -0.028em 0 0 rgba(192, 254, 4, 0.24);
+      -0.028em 0 0 rgb(var(--signal-ui-primary-rgb) / 0.24);
   }
 
   91% {
@@ -1703,12 +1710,12 @@ h6.ant-typography {
   --signal-ui-loader-depth-origin: 56px;
   --signal-ui-loader-step: 56px;
   --signal-ui-loader-cycle: 2100ms;
-  --signal-ui-loader-accent-rgb: 192 254 4;
-  --signal-ui-loader-frame: rgba(192, 254, 4, 0.36);
-  --signal-ui-loader-detail: rgba(245, 245, 240, 0.72);
+  --signal-ui-loader-accent-rgb: var(--signal-ui-primary-rgb);
+  --signal-ui-loader-frame: rgb(var(--signal-ui-primary-rgb) / 0.36);
+  --signal-ui-loader-detail: rgb(var(--signal-ui-text-rgb) / 0.72);
   --signal-ui-loader-front-face: rgb(var(--signal-ui-loader-accent-rgb) / 0.96);
   --signal-ui-loader-left-face: rgb(var(--signal-ui-loader-accent-rgb) / 0.72);
-  --signal-ui-loader-top-face: rgba(245, 245, 240, 0.94);
+  --signal-ui-loader-top-face: rgb(var(--signal-ui-text-rgb) / 0.94);
   display: inline-flex;
   min-width: calc(var(--signal-ui-loader-size) + 36px);
   flex-direction: column;
@@ -1719,8 +1726,8 @@ h6.ant-typography {
 }
 
 .signal-ui-pixel-cube-loader--violet {
-  --signal-ui-loader-accent-rgb: 159 77 255;
-  --signal-ui-loader-frame: rgba(159, 77, 255, 0.4);
+  --signal-ui-loader-accent-rgb: var(--signal-ui-accent-violet-rgb);
+  --signal-ui-loader-frame: rgb(var(--signal-ui-accent-violet-rgb) / 0.4);
 }
 
 .signal-ui-pixel-cube-loader__stage {
@@ -2463,9 +2470,9 @@ h6.ant-typography {
   --signal-ui-hash-cube-scene-height: 254px;
   --signal-ui-hash-cube-perspective: 1320px;
   --signal-ui-hash-cube-scene-z: -58px;
-  --signal-ui-hash-cube-accent-rgb: 192 254 4;
-  --signal-ui-hash-cube-frame: rgba(192, 254, 4, 0.36);
-  --signal-ui-hash-cube-detail: rgba(245, 245, 240, 0.72);
+  --signal-ui-hash-cube-accent-rgb: var(--signal-ui-primary-rgb);
+  --signal-ui-hash-cube-frame: rgb(var(--signal-ui-primary-rgb) / 0.36);
+  --signal-ui-hash-cube-detail: rgb(var(--signal-ui-text-rgb) / 0.72);
   display: inline-flex;
   min-width: calc(var(--signal-ui-hash-cube-scene-width) + 36px);
   flex-direction: column;
@@ -2475,8 +2482,8 @@ h6.ant-typography {
 }
 
 .signal-ui-hash-cube--violet {
-  --signal-ui-hash-cube-accent-rgb: 159 77 255;
-  --signal-ui-hash-cube-frame: rgba(159, 77, 255, 0.4);
+  --signal-ui-hash-cube-accent-rgb: var(--signal-ui-accent-violet-rgb);
+  --signal-ui-hash-cube-frame: rgb(var(--signal-ui-accent-violet-rgb) / 0.4);
 }
 
 .signal-ui-hash-cube--mini {
@@ -2809,7 +2816,7 @@ h6.ant-typography {
 }
 
 .signal-ui-signal-wireframe {
-  --signal-ui-signal-wireframe-accent-rgb: 192 254 4;
+  --signal-ui-signal-wireframe-accent-rgb: var(--signal-ui-primary-rgb);
   position: relative;
   display: flex;
   flex-direction: column;
@@ -2830,7 +2837,7 @@ h6.ant-typography {
 }
 
 .signal-ui-signal-wireframe--violet {
-  --signal-ui-signal-wireframe-accent-rgb: 159 77 255;
+  --signal-ui-signal-wireframe-accent-rgb: var(--signal-ui-accent-violet-rgb);
 }
 
 .signal-ui-signal-wireframe::before {
@@ -2981,14 +2988,14 @@ h6.ant-typography {
 .signal-ui-markdown h1 {
   margin-top: 0.5rem;
   padding-bottom: 0.8rem;
-  border-bottom: 1px solid rgba(192, 254, 4, 0.26);
-  box-shadow: inset 0 -3px 0 rgba(192, 254, 4, 0.08);
+  border-bottom: 1px solid rgb(var(--signal-ui-primary-rgb) / 0.26);
+  box-shadow: inset 0 -3px 0 rgb(var(--signal-ui-primary-rgb) / 0.08);
   font-size: clamp(2.3rem, 4.3vw, 3.6rem);
 }
 
 .signal-ui-markdown h2 {
   padding-top: 0.65rem;
-  border-top: 1px solid rgba(192, 254, 4, 0.16);
+  border-top: 1px solid rgb(var(--signal-ui-primary-rgb) / 0.16);
   font-size: clamp(1.2rem, 2vw, 1.6rem);
 }
 
@@ -3019,7 +3026,7 @@ h6.ant-typography {
 .signal-ui-markdown a {
   color: var(--signal-ui-primary);
   text-decoration: none;
-  box-shadow: inset 0 -1px 0 rgba(192, 254, 4, 0.38);
+  box-shadow: inset 0 -1px 0 rgb(var(--signal-ui-primary-rgb) / 0.38);
   transition:
     color 140ms ease,
     background-color 140ms ease,
@@ -3029,8 +3036,8 @@ h6.ant-typography {
 .signal-ui-markdown a:hover,
 .signal-ui-markdown a:focus-visible {
   color: var(--signal-ui-field-primary);
-  background: rgba(192, 254, 4, 0.08);
-  box-shadow: inset 0 -1px 0 rgba(217, 255, 103, 0.7);
+  background: rgb(var(--signal-ui-primary-rgb) / 0.08);
+  box-shadow: inset 0 -1px 0 rgb(var(--signal-ui-primary-rgb) / 0.7);
 }
 
 .signal-ui-markdown ul,
@@ -3053,10 +3060,10 @@ h6.ant-typography {
   padding: 1rem 1.2rem 1rem 1.4rem;
   border-left: 4px solid var(--signal-ui-primary);
   background:
-    linear-gradient(135deg, rgba(192, 254, 4, 0.1), transparent 38%),
+    linear-gradient(135deg, rgb(var(--signal-ui-primary-rgb) / 0.1), transparent 38%),
     rgba(9, 9, 9, 0.9);
   box-shadow:
-    inset 0 0 0 1px rgba(192, 254, 4, 0.14),
+    inset 0 0 0 1px rgb(var(--signal-ui-primary-rgb) / 0.14),
     0 0 0 1px rgba(255, 255, 255, 0.03);
 }
 
@@ -3068,7 +3075,7 @@ h6.ant-typography {
 .signal-ui-markdown kbd {
   display: inline-block;
   padding: 0.12rem 0.42rem;
-  border: 1px solid rgba(192, 254, 4, 0.18);
+  border: 1px solid rgb(var(--signal-ui-primary-rgb) / 0.18);
   background: rgba(8, 8, 8, 0.95);
   color: var(--signal-ui-field-primary);
   font-family: var(--signal-ui-font-ui);
@@ -3082,10 +3089,10 @@ h6.ant-typography {
   margin: 1.45rem 0;
   padding: 1rem 1.15rem 1rem 1.3rem;
   overflow-x: auto;
-  border: 1px solid rgba(192, 254, 4, 0.16);
+  border: 1px solid rgb(var(--signal-ui-primary-rgb) / 0.16);
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.05), transparent 46%),
-    linear-gradient(90deg, rgba(192, 254, 4, 0.08), transparent 22%),
+    linear-gradient(90deg, rgb(var(--signal-ui-primary-rgb) / 0.08), transparent 22%),
     rgba(9, 9, 9, 0.98);
   box-shadow:
     inset 0 0 0 1px rgba(255, 255, 255, 0.03),
@@ -3161,7 +3168,7 @@ h6.ant-typography {
 
 .signal-ui-markdown pre code .hljs-addition {
   color: var(--signal-ui-field-primary);
-  background: rgba(192, 254, 4, 0.08);
+  background: rgb(var(--signal-ui-primary-rgb) / 0.08);
 }
 
 .signal-ui-markdown pre code .hljs-deletion {
@@ -3180,7 +3187,7 @@ h6.ant-typography {
 .signal-ui-markdown hr {
   height: 1px;
   border: 0;
-  background: linear-gradient(90deg, rgba(192, 254, 4, 0.64), transparent 88%);
+  background: linear-gradient(90deg, rgb(var(--signal-ui-primary-rgb) / 0.64), transparent 88%);
   opacity: 0.82;
 }
 
@@ -3194,7 +3201,7 @@ h6.ant-typography {
 }
 
 .signal-ui-markdown thead {
-  background: rgba(192, 254, 4, 0.08);
+  background: rgb(var(--signal-ui-primary-rgb) / 0.08);
 }
 
 .signal-ui-markdown tbody tr:nth-child(even) {
@@ -3204,7 +3211,7 @@ h6.ant-typography {
 .signal-ui-markdown th,
 .signal-ui-markdown td {
   padding: 0.8rem 0.95rem;
-  border: 1px solid rgba(192, 254, 4, 0.12);
+  border: 1px solid rgb(var(--signal-ui-primary-rgb) / 0.12);
   text-align: left;
   vertical-align: top;
 }
@@ -3226,7 +3233,7 @@ h6.ant-typography {
 .signal-ui-markdown img {
   display: block;
   max-width: 100%;
-  border: 1px solid rgba(192, 254, 4, 0.16);
+  border: 1px solid rgb(var(--signal-ui-primary-rgb) / 0.16);
 }
 
 .signal-ui-markdown figure {
@@ -3246,9 +3253,9 @@ h6.ant-typography {
 .signal-ui-markdown-callout,
 .signal-ui-markdown [data-callout] {
   padding: 1rem 1.05rem;
-  border: 1px solid rgba(192, 254, 4, 0.16);
+  border: 1px solid rgb(var(--signal-ui-primary-rgb) / 0.16);
   background:
-    linear-gradient(135deg, rgba(192, 254, 4, 0.06), transparent 44%),
+    linear-gradient(135deg, rgb(var(--signal-ui-primary-rgb) / 0.06), transparent 44%),
     rgba(10, 10, 10, 0.92);
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.03);
 }

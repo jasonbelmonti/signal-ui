@@ -3,14 +3,14 @@
 - Repo started as a minimal `bun init` scaffold with no React, Storybook, or Ant Design setup.
 - Repo now has a React 19 + Ant Design 6 + Storybook 10 (React/Webpack) bootstrap on branch `codex/bel-270-bootstrap-react-storybook`.
 - Preferred initial direction for `signal-ui` is Storybook-first, not a separate app shell.
-- Locked visual direction is a modernized MS-DOS / hacker aesthetic with a lime-on-charcoal signal palette (`#000000`, `#1c1c1c`, `#717171`, `#c0fe04`, `#f24723`), open-source fonts, and restrained terminal effects.
+- Locked visual direction is a modernized MS-DOS / hacker aesthetic with palette inspiration from Marathon (`#000000`, `#1c1c1c`, `#717171`, `#c0fe04`, `#f24723`), open-source fonts, and restrained terminal effects.
 - Current font direction is `Oxanium` for display headings and `Azeret Mono` for UI/body copy.
 - Theme assets that depend on global CSS or font-face imports need a first-class consumer entry, not just Storybook preview; for packaged use, an explicit `styles.css` export is safer than hiding global side effects in `src/index.ts`.
 - For a checked-in TypeScript `dist/` package that ships as Node ESM, source-level relative imports/exports should already use `.js` specifiers; otherwise `tsc` preserves extensionless paths and the published package breaks at runtime.
 - If Storybook webpack consumes TS source files that use explicit `.js` specifiers for ESM-correct package output, `.storybook/main.ts` needs `resolve.extensionAlias` so `.js` can map back to `.ts/.tsx` during local story resolution.
 - Theme motion effects should be exposed as opt-in CSS utilities plus Storybook demos, not forced into Ant Design token config.
 - User prefers motion texture with rapid but subtle "zzt zzt" energy rather than slow ambient shimmer.
-- User is interested in folding more stylized pixel/display fonts into the shared theme when they are applied as purposeful accents rather than indiscriminate body copy.
+- User is interested in folding more stylized pixel/display fonts into the Marathon theme when they are applied as purposeful accents rather than indiscriminate body copy.
 - Micro 5 was rejected after preview; preferred hierarchy is `Oxanium` for top-level headings and `Doto` only for secondary headline/display accents.
 - If a visual effect is intended to carry the aesthetic, the default treatment needs to be visibly legible without requiring users to hunt for it.
 - For textured signal text, clipped grain/raster needs to be visible at normal viewing scale; ultra-fine noise disappears even when the animation is technically present.
@@ -18,7 +18,7 @@
 - User is exploring whether vivid purple should exist as a contrast accent to the highlight lime, with a preference for preserving core semantic tokens unless the new hue earns a distinct role.
 - User is interested in optional 45 degree panel corner treatments, especially either a bold accent triangle or a clipped/notched corner to add diagonal rhythm without changing every surface by default.
 - User prefers stylized treatments to have named presets when possible so the system can stay consistent without requiring repeated hand-tuning of low-level props.
-- User likes flat areas of color as sparse, clean accents, especially around headings or section punctuation rather than as broad background treatment.
+- User likes Marathon-style flat areas of color and is considering them as sparse, clean accents, especially around headings or section punctuation rather than as broad background treatment.
 - User responds well to bold CTA treatments when the motion feels intentional and crunchy, especially fill-based effects with visible pixel creep/flicker and layered text.
 - User notices when visual compositing is only approximated; prefers text/effect treatments to be driven by the same live source rather than loosely synchronized CSS stand-ins.
 - User likes interaction effects that escalate through readable payoff phases, such as fill, saturation/wake-up, then a short burst event, rather than remaining in a single ambient loop.
@@ -35,6 +35,7 @@
 - Current loader preference is a square-framed, faster mechanical loop with a small settle jolt and a reusable legendless mini variant that can sit inline with text.
 - User notices small alignment drift quickly and prefers motion components to be geometrically centered rather than visually "close enough."
 - When building new effect work in a separate git worktree, check whether the main worktree carries uncommitted visual-system changes first; syncing those files can matter more than starting from clean `HEAD`.
+- User is evaluating runtime Ant Design theme customization and prefers a constrained set of end-user color controls over exposing the full token surface.
 - User often frames visual-system requests as terse outcome statements, so the most useful default is a reusable exported primitive plus a Storybook demo rather than only isolated CSS.
 - User prefers visual-system stories to accept real content through Storybook controls when evaluating a surface, rather than only static hand-authored demo markup.
 - User expects markdown demos to exercise realistic fenced-code behavior, including language-tagged syntax highlighting rather than flat monochrome code blocks.
@@ -45,7 +46,4 @@
 - For graph work, the user wants the React Flow chrome and styling to live in reusable package-owned primitives rather than story-local or app-local overrides.
 - User expects a self-review pass on visual changes before considering the PR ready.
 - User wants graph visualization in `signal-ui` to land as a reusable package capability rather than agent-console-specific glue, with a layered `GraphCanvas` plus `WorkflowDag` API, read-only v1 behavior, canvas-first ownership, and dagre-based auto-layout.
-- User is interested in deterministic hash-driven 3D cube visualizations that mix wireframe, solid, and color-coded voxel states instead of flat text-only identifiers.
-- User is interested in adding an opt-in Three.js layer for bold graph/hero visuals, especially wireframes traced by Tron-style beam motion rather than generic floating 3D decoration.
 - Local shell setup can expose Homebrew Node 16 in login/non-interactive sessions unless `nvm` is initialized from `~/.zprofile`; interactive `~/.zshrc` alone is not enough for toolchain commands.
-- User is evaluating runtime Ant Design theme customization and is interested in letting end users control a constrained set of brand colors rather than opening up the full token surface.

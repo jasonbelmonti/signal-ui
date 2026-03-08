@@ -1,4 +1,9 @@
-export { AntdThemeProvider, installStaticAntdTheme } from "./providers/AntdThemeProvider.js";
+export {
+  AntdThemeProvider,
+  installStaticAntdTheme,
+  type AntdThemeProviderProps,
+  type InstallStaticAntdThemeOptions,
+} from "./providers/AntdThemeProvider.js";
 export { HashCube } from "./components/HashCube.js";
 export { GraphCanvas } from "./components/GraphCanvas.js";
 export type { GraphCanvasProps, GraphCanvasReactFlowProps } from "./components/GraphCanvas.js";
@@ -69,4 +74,17 @@ export type {
   SignalWireframeProps,
   SignalWireframeTone,
 } from "./components/SignalWireframe.js";
-export { signalFontStacks, signalPalette, signalTheme } from "./theme/signalTheme.js";
+export {
+  createSignalTheme,
+  createSignalThemeCssVariables,
+  resolveSignalPalette,
+  signalFontStacks,
+  signalPalette,
+  signalTheme,
+} from "./theme/signalTheme.js";
+export type {
+  HexColor,
+  SignalPalette,
+  SignalThemeColorPreferences,
+  SignalThemePreferences,
+} from "./theme/signalTheme.js";
