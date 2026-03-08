@@ -1,7 +1,7 @@
 import type { CSSProperties, HTMLAttributes } from "react";
 
 import { signalPalette } from "../theme/signalTheme.js";
-import { useViewportRenderGate } from "./hashCube/useViewportRenderGate.js";
+import { useViewportRenderGate } from "../utils/useViewportRenderGate.js";
 
 type HashCubeMode = "core" | "ghost" | "solid" | "wire";
 type HashCubeColorChannel = "primary" | "text" | "violet" | "warning";

@@ -5,6 +5,8 @@ import type { CSSProperties } from "react";
 import { PixelCubePath } from "../components/PixelCubePath.js";
 import { signalPalette } from "../theme/signalTheme.js";
 
+const viewportBankEntries = createViewportBankEntries();
+
 const meta = {
   title: "Effects/Pixel Cube Path",
   component: PixelCubePath,
@@ -12,9 +14,16 @@ const meta = {
     layout: "fullscreen",
   },
   args: {
+    renderMode: "viewport",
     size: 220,
     tone: "primary",
     usage: "decorative",
+  },
+  argTypes: {
+    renderMode: {
+      control: "inline-radio",
+      options: ["viewport", "always"],
+    },
   },
   tags: ["autodocs"],
   render: (args) => (
@@ -30,6 +39,12 @@ const meta = {
               This recasts the reference effect as a compact 3x3x3 voxel cube, keeps the flatter
               hard-edge geometry, and swaps hover-triggered glow for a deterministic path that
               continuously sweeps across the visible faces.
+            </Typography.Paragraph>
+            <Typography.Paragraph style={copyStyle}>
+              Viewport rendering is now the default so dense banks and scrolling lists can use the
+              effect without mounting every animated scene at once. Use{" "}
+              <code>renderMode=&quot;always&quot;</code> for pinned hero moments that should paint
+              fully on first load.
             </Typography.Paragraph>
           </Space>
 
@@ -77,6 +92,17 @@ const meta = {
             </Typography.Paragraph>
           </Space>
         </Card>
+
+        <Card title="Pinned Hero Opt-Out" style={cardStyle}>
+          <Space direction="vertical" size={12}>
+            <Typography.Text style={eyebrowStyle}>Always Render</Typography.Text>
+            <PixelCubePath renderMode="always" size={196} />
+            <Typography.Paragraph style={copyStyle}>
+              Opt out when the cube path is part of the first impression and should arrive fully
+              animated without waiting for viewport observation.
+            </Typography.Paragraph>
+          </Space>
+        </Card>
       </Flex>
     </Flex>
   ),
@@ -87,6 +113,47 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const DefaultPixelCubePath: Story = {};
+
+export const ViewportGatedBank: Story = {
+  render: () => (
+    <Flex vertical gap={24} style={{ maxWidth: 1120, margin: "0 auto" }}>
+      <Card style={heroCardStyle}>
+        <Space direction="vertical" size={12}>
+          <Typography.Text style={eyebrowStyle}>Viewport Gated Bank</Typography.Text>
+          <Typography.Title level={2} style={listTitleStyle}>
+            Scroll a stack of path cubes and let them wake up as they approach.
+          </Typography.Title>
+          <Typography.Paragraph style={copyStyle}>
+            The viewport shell stays mounted to preserve layout, while the animated cube path scene
+            only mounts when an item is near the visible region.
+          </Typography.Paragraph>
+        </Space>
+      </Card>
+
+      <Card style={cardStyle}>
+        <div style={listViewportStyle}>
+          <Flex vertical gap={16}>
+            {viewportBankEntries.map((entry) => (
+              <Card key={entry.id} style={listItemCardStyle}>
+                <Flex gap={20} wrap="wrap" align="center" justify="space-between">
+                  <Space direction="vertical" size={6} style={{ flex: "1 1 420px" }}>
+                    <Typography.Text style={eyebrowStyle}>{entry.id}</Typography.Text>
+                    <Typography.Title level={4} style={listItemTitleStyle}>
+                      {entry.title}
+                    </Typography.Title>
+                    <Typography.Paragraph style={copyStyle}>{entry.detail}</Typography.Paragraph>
+                  </Space>
+
+                  <PixelCubePath size={128} tone={entry.tone} />
+                </Flex>
+              </Card>
+            ))}
+          </Flex>
+        </div>
+      </Card>
+    </Flex>
+  ),
+};
 
 const eyebrowStyle: CSSProperties = {
   display: "block",
@@ -108,6 +175,11 @@ const copyStyle: CSSProperties = {
   margin: 0,
 };
 
+const listTitleStyle: CSSProperties = {
+  margin: 0,
+  maxWidth: 620,
+};
+
 const heroCardStyle: CSSProperties = {
   background:
     "linear-gradient(135deg, rgba(192, 254, 4, 0.12), transparent 32%), linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 52%), #090909",
@@ -126,3 +198,33 @@ const violetCardStyle: CSSProperties = {
     "linear-gradient(135deg, rgba(159, 77, 255, 0.16), transparent 34%), linear-gradient(180deg, rgba(255, 255, 255, 0.035), transparent 52%), rgba(12, 12, 12, 0.96)",
   borderColor: "rgba(159, 77, 255, 0.42)",
 };
+
+const listViewportStyle: CSSProperties = {
+  height: 760,
+  overflowY: "auto",
+  paddingRight: 8,
+};
+
+const listItemCardStyle: CSSProperties = {
+  background:
+    "linear-gradient(180deg, rgba(255, 255, 255, 0.028), transparent 50%), rgba(10, 10, 10, 0.94)",
+  borderColor: "rgba(255, 255, 255, 0.08)",
+};
+
+const listItemTitleStyle: CSSProperties = {
+  margin: 0,
+};
+
+function createViewportBankEntries() {
+  return Array.from({ length: 18 }, (_, index) => {
+    const sequence = index + 1;
+    const tone = sequence % 3 === 0 ? "violet" : "primary";
+
+    return {
+      detail: `Bank row ${sequence.toString().padStart(2, "0")} keeps the effect available for differentiation without asking the scroller to animate an entire parade of tiny cubes all at once.`,
+      id: `PATH-${(6100 + sequence).toString()}`,
+      title: `Transit lane ${sequence.toString().padStart(2, "0")} / ${tone === "violet" ? "event channel" : "base channel"}`,
+      tone,
+    } as const;
+  });
+}

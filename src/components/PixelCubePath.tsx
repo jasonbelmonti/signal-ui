@@ -1,6 +1,7 @@
 import type { ComponentPropsWithoutRef, CSSProperties } from "react";
 import { useId } from "react";
 
+import { useViewportRenderGate } from "../utils/useViewportRenderGate.js";
 import {
   createPixelCubePathAnimationProfile,
   getPixelCubePathAnimationSeed,
@@ -11,6 +12,7 @@ import {
 } from "./pixelCubePath/geometry.js";
 
 export type PixelCubePathTone = "primary" | "violet";
+type PixelCubePathRenderMode = "viewport" | "always";
 
 type PathStyle = CSSProperties & Record<`--signal-ui-cube-path-${string}`, string | number>;
 
@@ -18,6 +20,7 @@ type PixelCubePathBaseProps = Omit<
   ComponentPropsWithoutRef<"div">,
   "aria-hidden" | "aria-label" | "aria-live" | "children" | "role" | "style"
 > & {
+  renderMode?: PixelCubePathRenderMode;
   size?: number;
   style?: PathStyle;
   tone?: PixelCubePathTone;
@@ -43,6 +46,7 @@ const cubeCoordinates = createPixelCubePathCubeCoordinates();
 export function PixelCubePath({
   className,
   label,
+  renderMode = "viewport",
   size = 220,
   style,
   tone = "primary",
@@ -50,21 +54,30 @@ export function PixelCubePath({
   ...props
 }: PixelCubePathProps) {
   const instanceId = useId();
+  const shouldViewportGate = renderMode === "viewport";
   const cellSize = Math.max(18, Math.round(size * 0.19));
   const gapSize = Math.max(2, Math.round(cellSize * 0.08));
   const stepSize = cellSize + gapSize;
   const sceneWidth = Math.round(size * 1.34);
   const sceneHeight = Math.round(size * 1.18);
   const perspective = Math.round(size * 6.4);
-  const animationProfile = createPixelCubePathAnimationProfile({
-    count: cubeCoordinates.length,
-    cycleMs: baseCycleMs,
-    seed: getPixelCubePathAnimationSeed(instanceId),
+  const { isInViewport, targetRef } = useViewportRenderGate<HTMLDivElement>({
+    disabled: !shouldViewportGate,
+    rootMargin: "160px 0px",
+    threshold: 0,
   });
+  const shouldRenderScene = !shouldViewportGate || isInViewport;
+  const animationProfile = shouldRenderScene
+    ? createPixelCubePathAnimationProfile({
+        count: cubeCoordinates.length,
+        cycleMs: baseCycleMs,
+        seed: getPixelCubePathAnimationSeed(instanceId),
+      })
+    : null;
   const rootStyle: PathStyle = {
     "--signal-ui-cube-path-cell-size": `${cellSize}px`,
     "--signal-ui-cube-path-count": cubeCoordinates.length,
-    "--signal-ui-cube-path-cycle": `${animationProfile.cycleMs}ms`,
+    "--signal-ui-cube-path-cycle": `${animationProfile?.cycleMs ?? baseCycleMs}ms`,
     "--signal-ui-cube-path-gap": `${gapSize}px`,
     "--signal-ui-cube-path-perspective": `${perspective}px`,
     "--signal-ui-cube-path-scene-height": `${sceneHeight}px`,
@@ -74,7 +87,12 @@ export function PixelCubePath({
     "--signal-ui-cube-path-step": `${stepSize}px`,
     ...style,
   };
-  const rootClassName = ["signal-ui-pixel-cube-path", toneClassName[tone], className]
+  const rootClassName = [
+    "signal-ui-pixel-cube-path",
+    shouldRenderScene ? undefined : "signal-ui-pixel-cube-path--idle",
+    toneClassName[tone],
+    className,
+  ]
     .filter(Boolean)
     .join(" ");
   const accessibilityProps =
@@ -90,21 +108,23 @@ export function PixelCubePath({
 
   return (
     <div className={rootClassName} style={rootStyle} {...accessibilityProps} {...props}>
-      <div aria-hidden="true" className="signal-ui-pixel-cube-path__viewport">
-        <div className="signal-ui-pixel-cube-path__scene">
-          {cubeCoordinates.map((cube) => (
-            <span
-              className="signal-ui-pixel-cube-path__cube"
-              data-surface={cube.surface ? "true" : "false"}
-              key={cube.index}
-              style={getCubeStyle(cube, animationProfile.delaysMs)}
-            >
-              <span className="signal-ui-pixel-cube-path__face signal-ui-pixel-cube-path__face--front" />
-              <span className="signal-ui-pixel-cube-path__face signal-ui-pixel-cube-path__face--right" />
-              <span className="signal-ui-pixel-cube-path__face signal-ui-pixel-cube-path__face--top" />
-            </span>
-          ))}
-        </div>
+      <div aria-hidden="true" className="signal-ui-pixel-cube-path__viewport" ref={targetRef}>
+        {shouldRenderScene && animationProfile ? (
+          <div className="signal-ui-pixel-cube-path__scene">
+            {cubeCoordinates.map((cube) => (
+              <span
+                className="signal-ui-pixel-cube-path__cube"
+                data-surface={cube.surface ? "true" : "false"}
+                key={cube.index}
+                style={getCubeStyle(cube, animationProfile.delaysMs)}
+              >
+                <span className="signal-ui-pixel-cube-path__face signal-ui-pixel-cube-path__face--front" />
+                <span className="signal-ui-pixel-cube-path__face signal-ui-pixel-cube-path__face--right" />
+                <span className="signal-ui-pixel-cube-path__face signal-ui-pixel-cube-path__face--top" />
+              </span>
+            ))}
+          </div>
+        ) : null}
       </div>
     </div>
   );

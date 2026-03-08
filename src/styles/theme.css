@@ -1121,6 +1121,14 @@ h6.ant-typography {
     );
 }
 
+.signal-ui-pixel-cube-path--idle .signal-ui-pixel-cube-path__cube,
+.signal-ui-pixel-cube-path--idle .signal-ui-pixel-cube-path__cube::before,
+.signal-ui-pixel-cube-path--idle .signal-ui-pixel-cube-path__face--front,
+.signal-ui-pixel-cube-path--idle .signal-ui-pixel-cube-path__face--right,
+.signal-ui-pixel-cube-path--idle .signal-ui-pixel-cube-path__face--top {
+  animation: none;
+}
+
 .signal-ui-pixel-cube-path__viewport {
   position: relative;
   width: var(--signal-ui-cube-path-scene-width);
