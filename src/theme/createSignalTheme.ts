@@ -7,6 +7,7 @@ import {
   lightenHexColor,
   mixHexColors,
   normalizeColor,
+  normalizeCssColor,
   normalizeHexColor,
   toRgbTriplet,
   withAlpha,
@@ -107,38 +108,46 @@ function applyThemeTokenPaletteOverrides(
     return palette;
   }
 
-  const background = normalizeColor(token.colorBgBase) ?? palette.black;
-  const panel = normalizeColor(token.colorBgContainer) ?? palette.panel;
-  const primary = normalizeColor(token.colorPrimary) ?? palette.primary;
-  const text = normalizeColor(token.colorText) ?? normalizeColor(token.colorTextBase) ?? palette.text;
+  const background = normalizeCssColor(token.colorBgBase) ?? palette.black;
+  const backgroundHex = normalizeColor(token.colorBgBase);
+  const panel = normalizeCssColor(token.colorBgContainer) ?? palette.panel;
+  const panelHex = normalizeColor(token.colorBgContainer);
+  const primary = normalizeCssColor(token.colorPrimary) ?? palette.primary;
+  const primaryHex = normalizeColor(token.colorPrimary);
+  const text = normalizeCssColor(token.colorText) ?? normalizeCssColor(token.colorTextBase) ?? palette.text;
+  const textHex = normalizeColor(token.colorText) ?? normalizeColor(token.colorTextBase);
 
   return {
     ...palette,
     black: background,
-    void: normalizeColor(token.colorBgLayout)
-      ?? (background !== palette.black ? lightenHexColor(background, 0.02) : palette.void),
+    void: normalizeCssColor(token.colorBgLayout)
+      ?? (backgroundHex && backgroundHex !== palette.black ? lightenHexColor(backgroundHex, 0.02) : palette.void),
     panel,
-    surface: normalizeColor(token.colorBgElevated)
-      ?? (panel !== palette.panel || text !== palette.text ? mixHexColors(panel, text, 0.06) : palette.surface),
+    surface: normalizeCssColor(token.colorBgElevated)
+      ?? (panelHex && textHex && (panelHex !== palette.panel || textHex !== palette.text)
+        ? mixHexColors(panelHex, textHex, 0.06)
+        : palette.surface),
     grid:
-      normalizeColor(token.colorBorderSecondary)
-      ?? normalizeColor(token.colorSplit)
-      ?? (panel !== palette.panel || text !== palette.text ? mixHexColors(panel, text, 0.12) : palette.grid),
+      normalizeCssColor(token.colorBorderSecondary)
+      ?? normalizeCssColor(token.colorSplit)
+      ?? (panelHex && textHex && (panelHex !== palette.panel || textHex !== palette.text)
+        ? mixHexColors(panelHex, textHex, 0.12)
+        : palette.grid),
     muted:
-      normalizeColor(token.colorTextTertiary)
-      ?? normalizeColor(token.colorBorder)
-      ?? (text !== palette.text || background !== palette.black
-        ? mixHexColors(text, background, 0.55)
+      normalizeCssColor(token.colorTextTertiary)
+      ?? normalizeCssColor(token.colorBorder)
+      ?? (textHex && backgroundHex && (textHex !== palette.text || backgroundHex !== palette.black)
+        ? mixHexColors(textHex, backgroundHex, 0.55)
         : palette.muted),
     text,
     primary,
-    primaryDeep: primary !== palette.primary ? darkenHexColor(primary, 0.28) : palette.primaryDeep,
-    fieldPrimary: primary !== palette.primary
-      ? lightenHexColor(primary, 0.12)
+    primaryDeep: primaryHex && primaryHex !== palette.primary ? darkenHexColor(primaryHex, 0.28) : palette.primaryDeep,
+    fieldPrimary: primaryHex && primaryHex !== palette.primary
+      ? lightenHexColor(primaryHex, 0.12)
       : palette.fieldPrimary,
     fieldInk: background !== palette.black ? background : palette.fieldInk,
-    warning: normalizeColor(token.colorWarning) ?? palette.warning,
-    error: normalizeColor(token.colorError) ?? palette.error,
+    warning: normalizeCssColor(token.colorWarning) ?? palette.warning,
+    error: normalizeCssColor(token.colorError) ?? palette.error,
   };
 }
 

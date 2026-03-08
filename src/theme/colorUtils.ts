@@ -6,6 +6,10 @@ type RgbColor = {
   red: number;
 };
 
+type ParsedColor = RgbColor & {
+  alpha: number | null;
+};
+
 let colorResolutionElement: HTMLElement | null = null;
 
 function clamp(value: number, min: number, max: number) {
@@ -102,6 +106,32 @@ function parsePercentChannel(channel: string) {
   return clamp(value, 0, 100) / 100;
 }
 
+function parseAlphaChannel(channel: string) {
+  const normalized = channel.trim();
+
+  if (!normalized) {
+    return null;
+  }
+
+  if (normalized.endsWith("%")) {
+    const value = Number.parseFloat(normalized.slice(0, -1));
+
+    if (!Number.isFinite(value)) {
+      return null;
+    }
+
+    return clamp(value, 0, 100) / 100;
+  }
+
+  const value = Number.parseFloat(normalized);
+
+  if (!Number.isFinite(value)) {
+    return null;
+  }
+
+  return clamp(value, 0, 1);
+}
+
 function parseFunctionalColorArguments(color: string) {
   const match = color.trim().match(/^[a-z]+\((.*)\)$/i);
 
@@ -119,14 +149,44 @@ function parseFunctionalColorArguments(color: string) {
     .filter(Boolean);
 }
 
-function parseRgbColor(color: string): RgbColor | null {
+function parseFunctionalColorChannels(color: string) {
+  const match = color.trim().match(/^[a-z]+\((.*)\)$/i);
+  const contents = match?.[1]?.trim();
+
+  if (!contents) {
+    return null;
+  }
+
+  let channelContents = contents;
+  let alphaChannel: string | undefined;
+
+  if (channelContents.includes("/")) {
+    const [channels, alpha] = channelContents.split("/", 2);
+    channelContents = channels?.trim() ?? "";
+    alphaChannel = alpha?.trim();
+  }
+
+  const channels = channelContents.replace(/,/g, " ").split(/\s+/).filter(Boolean);
+
+  if (!alphaChannel && channels.length === 4) {
+    alphaChannel = channels.pop();
+  }
+
+  return {
+    alpha: alphaChannel ? parseAlphaChannel(alphaChannel) : null,
+    channels,
+  };
+}
+
+function parseRgbColor(color: string): ParsedColor | null {
   const match = color.trim().match(/^rgba?\(/i);
 
   if (!match) {
     return null;
   }
 
-  const channels = parseFunctionalColorArguments(color);
+  const parsedChannels = parseFunctionalColorChannels(color);
+  const channels = parsedChannels?.channels;
 
   if (!channels || channels.length < 3) {
     return null;
@@ -146,7 +206,11 @@ function parseRgbColor(color: string): RgbColor | null {
     return null;
   }
 
-  return { red, green, blue };
+  if (parsedChannels?.alpha === undefined) {
+    return null;
+  }
+
+  return { red, green, blue, alpha: parsedChannels.alpha };
 }
 
 function hslToRgb(hue: number, saturation: number, lightness: number): RgbColor {
@@ -187,14 +251,15 @@ function hslToRgb(hue: number, saturation: number, lightness: number): RgbColor 
   };
 }
 
-function parseHslColor(color: string): RgbColor | null {
+function parseHslColor(color: string): ParsedColor | null {
   const match = color.trim().match(/^hsla?\(/i);
 
   if (!match) {
     return null;
   }
 
-  const channels = parseFunctionalColorArguments(color);
+  const parsedChannels = parseFunctionalColorChannels(color);
+  const channels = parsedChannels?.channels;
 
   if (!channels || channels.length < 3) {
     return null;
@@ -214,7 +279,11 @@ function parseHslColor(color: string): RgbColor | null {
     return null;
   }
 
-  return hslToRgb(hue, saturation, lightness);
+  if (parsedChannels?.alpha === undefined) {
+    return null;
+  }
+
+  return { ...hslToRgb(hue, saturation, lightness), alpha: parsedChannels.alpha };
 }
 
 function parseHexColor(color: string): RgbColor | null {
@@ -232,8 +301,27 @@ function parseHexColor(color: string): RgbColor | null {
   return { red, green, blue };
 }
 
-function parseCssColor(color: string): RgbColor | null {
-  return parseHexColor(color) ?? parseRgbColor(color) ?? parseHslColor(color) ?? parseBrowserColor(color);
+function parseHexColorWithAlpha(color: string): ParsedColor | null {
+  const normalized = color.trim().replace(/^#/, "");
+  const hex = expandHexColor(normalized);
+  const rgb = parseHexColor(color);
+
+  if (!hex || !rgb) {
+    return null;
+  }
+
+  if (normalized.length === 4 || normalized.length === 8) {
+    const alphaHex = hex.slice(6, 8);
+    const alpha = Number.parseInt(alphaHex, 16) / 255;
+
+    return { ...rgb, alpha };
+  }
+
+  return { ...rgb, alpha: null };
+}
+
+function parseCssColor(color: string): ParsedColor | null {
+  return parseHexColorWithAlpha(color) ?? parseRgbColor(color) ?? parseHslColor(color) ?? parseBrowserColor(color);
 }
 
 function getColorResolutionElement() {
@@ -253,7 +341,7 @@ function getColorResolutionElement() {
   return colorResolutionElement;
 }
 
-function parseBrowserColor(color: string): RgbColor | null {
+function parseBrowserColor(color: string): ParsedColor | null {
   const resolutionElement = getColorResolutionElement();
 
   if (!resolutionElement) {
@@ -276,6 +364,14 @@ function formatHexColor({ red, green, blue }: RgbColor): HexColor {
     .join("")}` as HexColor;
 }
 
+function formatCssColor({ red, green, blue, alpha }: ParsedColor) {
+  if (alpha === null || alpha >= 1) {
+    return formatHexColor({ red, green, blue });
+  }
+
+  return `rgba(${clamp(Math.round(red), 0, 255)}, ${clamp(Math.round(green), 0, 255)}, ${clamp(Math.round(blue), 0, 255)}, ${alpha})`;
+}
+
 export function normalizeColor(color: string | undefined): HexColor | null {
   if (!color) {
     return null;
@@ -283,7 +379,21 @@ export function normalizeColor(color: string | undefined): HexColor | null {
 
   const parsed = parseCssColor(color);
 
-  return parsed ? formatHexColor(parsed) : null;
+  if (!parsed || (parsed.alpha !== null && parsed.alpha < 1)) {
+    return null;
+  }
+
+  return formatHexColor(parsed);
+}
+
+export function normalizeCssColor(color: string | undefined): string | null {
+  if (!color) {
+    return null;
+  }
+
+  const parsed = parseCssColor(color);
+
+  return parsed ? formatCssColor(parsed) : null;
 }
 
 export function mixHexColors(color: string, mixWith: string, mixAmount: number) {
@@ -312,7 +422,7 @@ export function lightenHexColor(color: string, amount: number) {
 }
 
 export function withAlpha(color: string, alpha: number) {
-  const parsed = parseHexColor(color);
+  const parsed = parseCssColor(color);
 
   if (!parsed) {
     return color;
@@ -322,7 +432,7 @@ export function withAlpha(color: string, alpha: number) {
 }
 
 export function toRgbTriplet(color: string) {
-  const parsed = parseHexColor(color);
+  const parsed = parseCssColor(color);
 
   if (!parsed) {
     return null;
