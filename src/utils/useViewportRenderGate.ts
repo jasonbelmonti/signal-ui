@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type ViewportRenderGateOptions = {
   disabled?: boolean;
@@ -6,20 +6,8 @@ type ViewportRenderGateOptions = {
   threshold?: number;
 };
 
-const subscribeToViewportGateEnvironment = () => () => undefined;
-
 function canUseIntersectionObserver() {
   return typeof window !== "undefined" && typeof IntersectionObserver !== "undefined";
-}
-
-function useShouldStartClosed(disabled: boolean) {
-  const hasIntersectionObserver = useSyncExternalStore(
-    subscribeToViewportGateEnvironment,
-    canUseIntersectionObserver,
-    () => false,
-  );
-
-  return !disabled && hasIntersectionObserver;
 }
 
 export function useViewportRenderGate<ElementType extends HTMLElement>({
@@ -28,12 +16,15 @@ export function useViewportRenderGate<ElementType extends HTMLElement>({
   threshold = 0,
 }: ViewportRenderGateOptions = {}) {
   const targetRef = useRef<ElementType | null>(null);
-  const shouldStartClosed = useShouldStartClosed(disabled);
-  const [isInViewport, setIsInViewport] = useState(() => !shouldStartClosed);
+  const [hasResolvedViewport, setHasResolvedViewport] = useState(false);
+  const [isInViewport, setIsInViewport] = useState(
+    () => disabled || !canUseIntersectionObserver(),
+  );
 
   useEffect(() => {
     if (disabled) {
       setIsInViewport(true);
+      setHasResolvedViewport(true);
       return;
     }
 
@@ -45,12 +36,16 @@ export function useViewportRenderGate<ElementType extends HTMLElement>({
 
     if (typeof IntersectionObserver === "undefined") {
       setIsInViewport(true);
+      setHasResolvedViewport(true);
       return;
     }
+
+    setHasResolvedViewport(false);
 
     const observer = new IntersectionObserver(
       ([entry]) => {
         setIsInViewport(entry?.isIntersecting ?? false);
+        setHasResolvedViewport(true);
       },
       {
         root: null,
@@ -67,6 +62,7 @@ export function useViewportRenderGate<ElementType extends HTMLElement>({
   }, [disabled, rootMargin, threshold]);
 
   return {
+    hasResolvedViewport,
     isInViewport,
     targetRef,
   };

@@ -61,11 +61,12 @@ export function PixelCubePath({
   const sceneWidth = Math.round(size * 1.34);
   const sceneHeight = Math.round(size * 1.18);
   const perspective = Math.round(size * 6.4);
-  const { isInViewport, targetRef } = useViewportRenderGate<HTMLDivElement>({
+  const { hasResolvedViewport, isInViewport, targetRef } = useViewportRenderGate<HTMLDivElement>({
     disabled: !shouldViewportGate,
     rootMargin: "160px 0px",
     threshold: 0,
   });
+  const isIdle = shouldViewportGate && hasResolvedViewport && !isInViewport;
   const shouldRenderScene = !shouldViewportGate || isInViewport;
   const animationProfile = shouldRenderScene
     ? createPixelCubePathAnimationProfile({
@@ -89,7 +90,7 @@ export function PixelCubePath({
   };
   const rootClassName = [
     "signal-ui-pixel-cube-path",
-    shouldRenderScene ? undefined : "signal-ui-pixel-cube-path--idle",
+    isIdle ? "signal-ui-pixel-cube-path--idle" : undefined,
     toneClassName[tone],
     className,
   ]
@@ -108,7 +109,12 @@ export function PixelCubePath({
 
   return (
     <div className={rootClassName} style={rootStyle} {...accessibilityProps} {...props}>
-      <div aria-hidden="true" className="signal-ui-pixel-cube-path__viewport" ref={targetRef}>
+      <div
+        aria-hidden="true"
+        className="signal-ui-pixel-cube-path__viewport"
+        ref={targetRef}
+        suppressHydrationWarning={shouldViewportGate}
+      >
         {shouldRenderScene && animationProfile ? (
           <div className="signal-ui-pixel-cube-path__scene">
             {cubeCoordinates.map((cube) => (

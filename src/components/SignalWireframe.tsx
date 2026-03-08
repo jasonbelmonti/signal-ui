@@ -137,15 +137,16 @@ export function SignalWireframe({
   ...props
 }: SignalWireframeProps) {
   const shouldViewportGate = renderMode === "viewport";
-  const { isInViewport, targetRef } = useViewportRenderGate<HTMLDivElement>({
+  const { hasResolvedViewport, isInViewport, targetRef } = useViewportRenderGate<HTMLDivElement>({
     disabled: !shouldViewportGate,
     rootMargin: "160px 0px",
     threshold: 0,
   });
+  const isIdle = shouldViewportGate && hasResolvedViewport && !isInViewport;
   const shouldRenderScene = !shouldViewportGate || isInViewport;
   const rootClassName = [
     "signal-ui-signal-wireframe",
-    shouldRenderScene ? undefined : "signal-ui-signal-wireframe--idle",
+    isIdle ? "signal-ui-signal-wireframe--idle" : undefined,
     toneClassName[tone],
     className,
   ]
@@ -167,7 +168,12 @@ export function SignalWireframe({
 
   return (
     <div className={rootClassName} style={rootStyle} {...accessibilityProps} {...props}>
-      <div aria-hidden="true" className="signal-ui-signal-wireframe__viewport" ref={targetRef}>
+      <div
+        aria-hidden="true"
+        className="signal-ui-signal-wireframe__viewport"
+        ref={targetRef}
+        suppressHydrationWarning={shouldViewportGate}
+      >
         {shouldRenderScene ? (
           <Canvas
             camera={{ fov: 34, position: [0, 0.4, 10.25] }}

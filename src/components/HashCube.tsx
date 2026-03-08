@@ -144,11 +144,12 @@ export function HashCube({
   const sceneWidth = Math.round(size * 1.34);
   const sceneHeight = Math.round(size * 1.22);
   const perspective = Math.round(size * 6.4);
-  const { isInViewport, targetRef } = useViewportRenderGate<HTMLDivElement>({
+  const { hasResolvedViewport, isInViewport, targetRef } = useViewportRenderGate<HTMLDivElement>({
     disabled: !shouldViewportGate,
     rootMargin: "160px 0px",
     threshold: 0,
   });
+  const isIdle = shouldViewportGate && hasResolvedViewport && !isInViewport;
   const shouldRenderScene = !shouldViewportGate || isInViewport;
   const voxels = shouldRenderScene ? createHashCubeVoxels(sourceHash, tone) : [];
   const counts =
@@ -163,7 +164,7 @@ export function HashCube({
     : undefined;
   const rootClassName = [
     "signal-ui-hash-cube",
-    shouldRenderScene ? undefined : "signal-ui-hash-cube--idle",
+    isIdle ? "signal-ui-hash-cube--idle" : undefined,
     toneClassName[tone],
     showLegend ? undefined : "signal-ui-hash-cube--mini",
     className,
@@ -190,7 +191,11 @@ export function HashCube({
       {...props}
     >
       <div className="signal-ui-hash-cube__stage" ref={targetRef}>
-        <div aria-hidden="true" className="signal-ui-hash-cube__viewport">
+        <div
+          aria-hidden="true"
+          className="signal-ui-hash-cube__viewport"
+          suppressHydrationWarning={shouldViewportGate}
+        >
           {shouldRenderScene ? (
             <div className="signal-ui-hash-cube__scene">
               {voxels.map((voxel) => (
