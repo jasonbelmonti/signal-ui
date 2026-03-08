@@ -23,14 +23,13 @@ function expandHexColor(hex: string) {
 
   if (hex.length === 3 || hex.length === 4) {
     return hex
-      .slice(0, 3)
       .split("")
       .map((segment) => `${segment}${segment}`)
       .join("");
   }
 
   if (hex.length === 6 || hex.length === 8) {
-    return hex.slice(0, 6);
+    return hex;
   }
 
   return null;
