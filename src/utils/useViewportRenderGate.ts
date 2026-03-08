@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 
 type ViewportRenderGateOptions = {
   disabled?: boolean;
@@ -6,13 +6,30 @@ type ViewportRenderGateOptions = {
   threshold?: number;
 };
 
+const subscribeToViewportGateEnvironment = () => () => undefined;
+
+function canUseIntersectionObserver() {
+  return typeof window !== "undefined" && typeof IntersectionObserver !== "undefined";
+}
+
+function useShouldStartClosed(disabled: boolean) {
+  const hasIntersectionObserver = useSyncExternalStore(
+    subscribeToViewportGateEnvironment,
+    canUseIntersectionObserver,
+    () => false,
+  );
+
+  return !disabled && hasIntersectionObserver;
+}
+
 export function useViewportRenderGate<ElementType extends HTMLElement>({
   disabled = false,
   rootMargin = "0px",
   threshold = 0,
 }: ViewportRenderGateOptions = {}) {
   const targetRef = useRef<ElementType | null>(null);
-  const [isInViewport, setIsInViewport] = useState(true);
+  const shouldStartClosed = useShouldStartClosed(disabled);
+  const [isInViewport, setIsInViewport] = useState(() => !shouldStartClosed);
 
   useEffect(() => {
     if (disabled) {
