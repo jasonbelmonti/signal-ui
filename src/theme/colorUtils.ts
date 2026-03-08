@@ -54,6 +54,167 @@ export function resolveHexColor(color: string | undefined, fallback: HexColor): 
   return normalizeHexColor(color) ?? fallback;
 }
 
+function parseRgbChannel(channel: string) {
+  const normalized = channel.trim().replace(/%$/, "");
+  const value = Number.parseFloat(normalized);
+
+  if (!Number.isFinite(value)) {
+    return null;
+  }
+
+  return channel.trim().endsWith("%") ? (value / 100) * 255 : value;
+}
+
+function parseHue(hue: string) {
+  const normalized = hue.trim().toLowerCase();
+  const value = Number.parseFloat(normalized);
+
+  if (!Number.isFinite(value)) {
+    return null;
+  }
+
+  if (normalized.endsWith("turn")) {
+    return value * 360;
+  }
+
+  if (normalized.endsWith("rad")) {
+    return (value * 180) / Math.PI;
+  }
+
+  return value;
+}
+
+function parsePercentChannel(channel: string) {
+  const normalized = channel.trim();
+
+  if (!normalized.endsWith("%")) {
+    return null;
+  }
+
+  const value = Number.parseFloat(normalized.slice(0, -1));
+
+  if (!Number.isFinite(value)) {
+    return null;
+  }
+
+  return clamp(value, 0, 100) / 100;
+}
+
+function parseFunctionalColorArguments(color: string) {
+  const match = color.trim().match(/^[a-z]+\((.*)\)$/i);
+
+  const contents = match?.[1];
+
+  if (!contents) {
+    return null;
+  }
+
+  return contents
+    .trim()
+    .replace(/\s*\/\s*[^, ]+\s*$/, "")
+    .replace(/,/g, " ")
+    .split(/\s+/)
+    .filter(Boolean);
+}
+
+function parseRgbColor(color: string): RgbColor | null {
+  const match = color.trim().match(/^rgba?\(/i);
+
+  if (!match) {
+    return null;
+  }
+
+  const channels = parseFunctionalColorArguments(color);
+
+  if (!channels || channels.length < 3) {
+    return null;
+  }
+
+  const [redChannel, greenChannel, blueChannel] = channels;
+
+  if (!redChannel || !greenChannel || !blueChannel) {
+    return null;
+  }
+
+  const red = parseRgbChannel(redChannel);
+  const green = parseRgbChannel(greenChannel);
+  const blue = parseRgbChannel(blueChannel);
+
+  if (red === null || green === null || blue === null) {
+    return null;
+  }
+
+  return { red, green, blue };
+}
+
+function hslToRgb(hue: number, saturation: number, lightness: number): RgbColor {
+  const normalizedHue = ((hue % 360) + 360) % 360;
+  const chroma = (1 - Math.abs(2 * lightness - 1)) * saturation;
+  const segment = normalizedHue / 60;
+  const second = chroma * (1 - Math.abs((segment % 2) - 1));
+  const matchLightness = lightness - chroma / 2;
+
+  let red = 0;
+  let green = 0;
+  let blue = 0;
+
+  if (segment >= 0 && segment < 1) {
+    red = chroma;
+    green = second;
+  } else if (segment < 2) {
+    red = second;
+    green = chroma;
+  } else if (segment < 3) {
+    green = chroma;
+    blue = second;
+  } else if (segment < 4) {
+    green = second;
+    blue = chroma;
+  } else if (segment < 5) {
+    red = second;
+    blue = chroma;
+  } else {
+    red = chroma;
+    blue = second;
+  }
+
+  return {
+    red: (red + matchLightness) * 255,
+    green: (green + matchLightness) * 255,
+    blue: (blue + matchLightness) * 255,
+  };
+}
+
+function parseHslColor(color: string): RgbColor | null {
+  const match = color.trim().match(/^hsla?\(/i);
+
+  if (!match) {
+    return null;
+  }
+
+  const channels = parseFunctionalColorArguments(color);
+
+  if (!channels || channels.length < 3) {
+    return null;
+  }
+
+  const [hueChannel, saturationChannel, lightnessChannel] = channels;
+
+  if (!hueChannel || !saturationChannel || !lightnessChannel) {
+    return null;
+  }
+
+  const hue = parseHue(hueChannel);
+  const saturation = parsePercentChannel(saturationChannel);
+  const lightness = parsePercentChannel(lightnessChannel);
+
+  if (hue === null || saturation === null || lightness === null) {
+    return null;
+  }
+
+  return hslToRgb(hue, saturation, lightness);
+}
+
 function parseHexColor(color: string): RgbColor | null {
   const normalized = color.trim().replace(/^#/, "");
   const hex = expandHexColor(normalized);
@@ -69,10 +230,24 @@ function parseHexColor(color: string): RgbColor | null {
   return { red, green, blue };
 }
 
+function parseCssColor(color: string): RgbColor | null {
+  return parseHexColor(color) ?? parseRgbColor(color) ?? parseHslColor(color);
+}
+
 function formatHexColor({ red, green, blue }: RgbColor): HexColor {
   return `#${[red, green, blue]
     .map((channel) => clamp(Math.round(channel), 0, 255).toString(16).padStart(2, "0"))
     .join("")}` as HexColor;
+}
+
+export function normalizeColor(color: string | undefined): HexColor | null {
+  if (!color) {
+    return null;
+  }
+
+  const parsed = parseCssColor(color);
+
+  return parsed ? formatHexColor(parsed) : null;
 }
 
 export function mixHexColors(color: string, mixWith: string, mixAmount: number) {

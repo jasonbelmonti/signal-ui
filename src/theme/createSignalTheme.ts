@@ -6,6 +6,7 @@ import {
   darkenHexColor,
   lightenHexColor,
   mixHexColors,
+  normalizeColor,
   normalizeHexColor,
   toRgbTriplet,
   withAlpha,
@@ -106,26 +107,26 @@ function applyThemeTokenPaletteOverrides(
     return palette;
   }
 
-  const background = normalizeHexColor(token.colorBgBase) ?? palette.black;
-  const panel = normalizeHexColor(token.colorBgContainer) ?? palette.panel;
-  const primary = normalizeHexColor(token.colorPrimary) ?? palette.primary;
-  const text = normalizeHexColor(token.colorTextBase) ?? normalizeHexColor(token.colorText) ?? palette.text;
+  const background = normalizeColor(token.colorBgBase) ?? palette.black;
+  const panel = normalizeColor(token.colorBgContainer) ?? palette.panel;
+  const primary = normalizeColor(token.colorPrimary) ?? palette.primary;
+  const text = normalizeColor(token.colorTextBase) ?? normalizeColor(token.colorText) ?? palette.text;
 
   return {
     ...palette,
     black: background,
-    void: normalizeHexColor(token.colorBgLayout)
+    void: normalizeColor(token.colorBgLayout)
       ?? (background !== palette.black ? lightenHexColor(background, 0.02) : palette.void),
     panel,
-    surface: normalizeHexColor(token.colorBgElevated)
+    surface: normalizeColor(token.colorBgElevated)
       ?? (panel !== palette.panel || text !== palette.text ? mixHexColors(panel, text, 0.06) : palette.surface),
     grid:
-      normalizeHexColor(token.colorBorderSecondary)
-      ?? normalizeHexColor(token.colorSplit)
+      normalizeColor(token.colorBorderSecondary)
+      ?? normalizeColor(token.colorSplit)
       ?? (panel !== palette.panel || text !== palette.text ? mixHexColors(panel, text, 0.12) : palette.grid),
     muted:
-      normalizeHexColor(token.colorTextTertiary)
-      ?? normalizeHexColor(token.colorBorder)
+      normalizeColor(token.colorTextTertiary)
+      ?? normalizeColor(token.colorBorder)
       ?? (text !== palette.text || background !== palette.black
         ? mixHexColors(text, background, 0.55)
         : palette.muted),
@@ -136,8 +137,8 @@ function applyThemeTokenPaletteOverrides(
       ? lightenHexColor(primary, 0.12)
       : palette.fieldPrimary,
     fieldInk: background !== palette.black ? background : palette.fieldInk,
-    warning: normalizeHexColor(token.colorWarning) ?? palette.warning,
-    error: normalizeHexColor(token.colorError) ?? palette.error,
+    warning: normalizeColor(token.colorWarning) ?? palette.warning,
+    error: normalizeColor(token.colorError) ?? palette.error,
   };
 }
 
