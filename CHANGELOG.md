@@ -1,5 +1,11 @@
 # @jasonbelmonti/signal-ui
 
+## 0.5.0
+
+### Minor Changes
+
+- f7efe6d: Export procedural audio cue utilities and playback helpers so apps can share the same signal sound engine.
+
 ## 0.4.0
 
 ### Minor Changes
