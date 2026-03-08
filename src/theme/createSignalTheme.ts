@@ -15,7 +15,13 @@ import type { SignalPalette as ResolvedSignalPalette } from "./signalPalette.js"
 import type { SignalThemePreferences } from "./signalThemePreferences.js";
 
 function resolveBorderRadius(borderRadius = 2) {
-  return Math.max(Math.round(borderRadius), 0);
+  const normalizedBorderRadius = Number(borderRadius);
+
+  if (!Number.isFinite(normalizedBorderRadius)) {
+    return 2;
+  }
+
+  return Math.max(Math.round(normalizedBorderRadius), 0);
 }
 
 function resolveSignalInkColor(text: string) {
@@ -90,10 +96,56 @@ export function resolveSignalPalette(
 export type SignalThemeStyleVariables =
   CSSProperties & Record<`--signal-ui-${string}`, string | number>;
 
+function applyThemeTokenPaletteOverrides(
+  palette: ResolvedSignalPalette,
+  themeConfig: ThemeConfig | undefined,
+) {
+  const token = themeConfig?.token;
+
+  if (!token) {
+    return palette;
+  }
+
+  const background = normalizeHexColor(token.colorBgBase) ?? palette.black;
+  const panel = normalizeHexColor(token.colorBgContainer) ?? palette.panel;
+  const primary = normalizeHexColor(token.colorPrimary) ?? palette.primary;
+  const text = normalizeHexColor(token.colorTextBase) ?? normalizeHexColor(token.colorText) ?? palette.text;
+
+  return {
+    ...palette,
+    black: background,
+    void: normalizeHexColor(token.colorBgLayout)
+      ?? (background !== palette.black ? lightenHexColor(background, 0.02) : palette.void),
+    panel,
+    surface: normalizeHexColor(token.colorBgElevated)
+      ?? (panel !== palette.panel || text !== palette.text ? mixHexColors(panel, text, 0.06) : palette.surface),
+    grid:
+      normalizeHexColor(token.colorBorderSecondary)
+      ?? normalizeHexColor(token.colorSplit)
+      ?? (panel !== palette.panel || text !== palette.text ? mixHexColors(panel, text, 0.12) : palette.grid),
+    muted:
+      normalizeHexColor(token.colorTextTertiary)
+      ?? normalizeHexColor(token.colorBorder)
+      ?? (text !== palette.text || background !== palette.black
+        ? mixHexColors(text, background, 0.55)
+        : palette.muted),
+    text,
+    primary,
+    primaryDeep: primary !== palette.primary ? darkenHexColor(primary, 0.28) : palette.primaryDeep,
+    fieldPrimary: primary !== palette.primary
+      ? lightenHexColor(primary, 0.12)
+      : palette.fieldPrimary,
+    fieldInk: background !== palette.black ? background : palette.fieldInk,
+    warning: normalizeHexColor(token.colorWarning) ?? palette.warning,
+    error: normalizeHexColor(token.colorError) ?? palette.error,
+  };
+}
+
 export function createSignalThemeCssVariables(
   preferences: SignalThemePreferences = {},
+  themeConfig?: ThemeConfig,
 ): SignalThemeStyleVariables {
-  const palette = resolveSignalPalette(preferences);
+  const palette = applyThemeTokenPaletteOverrides(resolveSignalPalette(preferences), themeConfig);
   const primaryRgb = toRgbTriplet(palette.primary) ?? "192 254 4";
   const accentRgb = toRgbTriplet(palette.accentViolet) ?? "159 77 255";
   const signalInk = resolveSignalInkColor(palette.text);

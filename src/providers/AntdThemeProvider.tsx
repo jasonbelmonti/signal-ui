@@ -113,7 +113,10 @@ function removeDocumentThemeVariables(id: symbol) {
   syncDocumentThemeVariables();
 }
 
-function useDocumentThemeVariables(themePreferences: SignalThemePreferences | undefined) {
+function useDocumentThemeVariables(
+  themePreferences: SignalThemePreferences | undefined,
+  themeConfig: ThemeConfig | undefined,
+) {
   const themeEntryIdRef = useRef<symbol | null>(null);
 
   if (!themeEntryIdRef.current) {
@@ -121,11 +124,11 @@ function useDocumentThemeVariables(themePreferences: SignalThemePreferences | un
   }
 
   useInsertionEffect(() => {
-    if (!themePreferences || typeof document === "undefined") {
+    if ((!themePreferences && !themeConfig) || typeof document === "undefined") {
       return;
     }
 
-    const themeVariables = createSignalThemeCssVariables(themePreferences);
+    const themeVariables = createSignalThemeCssVariables(themePreferences, themeConfig);
     const themeEntryId = themeEntryIdRef.current;
 
     if (!themeEntryId) {
@@ -137,7 +140,7 @@ function useDocumentThemeVariables(themePreferences: SignalThemePreferences | un
     return () => {
       removeDocumentThemeVariables(themeEntryId);
     };
-  }, [themePreferences]);
+  }, [themeConfig, themePreferences]);
 }
 
 export function AntdThemeProvider({
@@ -147,7 +150,7 @@ export function AntdThemeProvider({
 }: AntdThemeProviderProps) {
   const resolvedTheme = resolveAntdTheme(theme, themePreferences);
 
-  useDocumentThemeVariables(themePreferences);
+  useDocumentThemeVariables(themePreferences, theme ? resolvedTheme : undefined);
 
   return (
     <ConfigProvider theme={resolvedTheme}>
