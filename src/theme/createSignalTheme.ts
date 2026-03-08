@@ -110,7 +110,7 @@ function applyThemeTokenPaletteOverrides(
   const background = normalizeColor(token.colorBgBase) ?? palette.black;
   const panel = normalizeColor(token.colorBgContainer) ?? palette.panel;
   const primary = normalizeColor(token.colorPrimary) ?? palette.primary;
-  const text = normalizeColor(token.colorTextBase) ?? normalizeColor(token.colorText) ?? palette.text;
+  const text = normalizeColor(token.colorText) ?? normalizeColor(token.colorTextBase) ?? palette.text;
 
   return {
     ...palette,
