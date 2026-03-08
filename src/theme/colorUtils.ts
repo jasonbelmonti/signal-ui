@@ -158,21 +158,30 @@ function parseFunctionalColorChannels(color: string) {
 
   let channelContents = contents;
   let alphaChannel: string | undefined;
+  let alphaProvided = false;
 
   if (channelContents.includes("/")) {
     const [channels, alpha] = channelContents.split("/", 2);
     channelContents = channels?.trim() ?? "";
     alphaChannel = alpha?.trim();
+    alphaProvided = true;
   }
 
   const channels = channelContents.replace(/,/g, " ").split(/\s+/).filter(Boolean);
 
   if (!alphaChannel && channels.length === 4) {
     alphaChannel = channels.pop();
+    alphaProvided = true;
+  }
+
+  const alpha = alphaChannel ? parseAlphaChannel(alphaChannel) : null;
+
+  if (alphaProvided && alpha === null) {
+    return null;
   }
 
   return {
-    alpha: alphaChannel ? parseAlphaChannel(alphaChannel) : null,
+    alpha,
     channels,
   };
 }
