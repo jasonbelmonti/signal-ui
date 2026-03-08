@@ -2854,6 +2854,10 @@ h6.ant-typography {
   --signal-ui-signal-wireframe-accent-rgb: var(--signal-ui-accent-violet-rgb);
 }
 
+.signal-ui-signal-wireframe--idle .signal-ui-signal-wireframe__cursor {
+  animation: none;
+}
+
 .signal-ui-signal-wireframe::before {
   content: "";
   position: absolute;
