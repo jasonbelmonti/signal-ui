@@ -6,6 +6,8 @@ import { Panel } from "../components/Panel.js";
 import { SignalWireframe } from "../components/SignalWireframe.js";
 import { signalPalette } from "../theme/signalTheme.js";
 
+const viewportStackEntries = createViewportStackEntries();
+
 const meta = {
   title: "Effects/Signal Wireframe",
   component: SignalWireframe,
@@ -17,10 +19,17 @@ const meta = {
     detail: "orthogonal beam lattice",
     height: 420,
     label: "Animated signal wireframe with traced beams",
+    renderMode: "viewport",
     showLegend: true,
     title: "wire trace field",
     tone: "primary",
     usage: "graphic",
+  },
+  argTypes: {
+    renderMode: {
+      control: "inline-radio",
+      options: ["viewport", "always"],
+    },
   },
   tags: ["autodocs"],
   render: (args) => (
@@ -36,6 +45,12 @@ const meta = {
               The scene stays boxed inside the shared shell, uses a hard-edged lattice instead of
               mushy particles, and traces beam segments across the geometry so it reads like a
               live system scan instead of random chrome. The computer yearns for the grid.
+            </Typography.Paragraph>
+            <Typography.Paragraph style={copyStyle}>
+              Viewport rendering is now the default, so consuming apps can stack these without
+              managing their own observer plumbing. Use{" "}
+              <code>renderMode=&quot;always&quot;</code> when the canvas is part of the first paint
+              and should mount immediately.
             </Typography.Paragraph>
           </Space>
 
@@ -88,6 +103,24 @@ const meta = {
             </Typography.Paragraph>
           </Space>
         </Card>
+
+        <Card style={cardStyle} title="Pinned Hero Opt-Out">
+          <Space direction="vertical" size={14} style={{ width: "100%" }}>
+            <Typography.Text style={eyebrowStyle}>Always Render</Typography.Text>
+            <SignalWireframe
+              animated
+              detail="hero lattice mount"
+              height={300}
+              renderMode="always"
+              showLegend={false}
+              tone="primary"
+            />
+            <Typography.Paragraph style={copyStyle}>
+              Use the opt-out when the scene is intentionally above the fold and should mount as
+              part of the opening surface rather than waiting for viewport confirmation.
+            </Typography.Paragraph>
+          </Space>
+        </Card>
       </Flex>
     </Flex>
   ),
@@ -98,6 +131,55 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const DefaultSignalWireframe: Story = {};
+
+export const ViewportGatedStack: Story = {
+  render: () => (
+    <Flex vertical gap={24} style={{ maxWidth: 1180, margin: "0 auto" }}>
+      <Card style={heroCardStyle}>
+        <Space direction="vertical" size={12}>
+          <Typography.Text style={eyebrowStyle}>Viewport Gated Stack</Typography.Text>
+          <Typography.Title level={2} style={stackTitleStyle}>
+            Scroll through a wireframe stack without mounting every Three.js canvas at once.
+          </Typography.Title>
+          <Typography.Paragraph style={copyStyle}>
+            Each row keeps its frame and supporting copy mounted, but only wireframes near the
+            viewport instantiate their canvas scene.
+          </Typography.Paragraph>
+        </Space>
+      </Card>
+
+      <Card style={cardStyle}>
+        <div style={stackViewportStyle}>
+          <Flex vertical gap={16}>
+            {viewportStackEntries.map((entry) => (
+              <Card key={entry.id} style={stackItemCardStyle}>
+                <Flex gap={20} wrap="wrap" align="stretch" justify="space-between">
+                  <Space direction="vertical" size={6} style={{ flex: "1 1 360px" }}>
+                    <Typography.Text style={eyebrowStyle}>{entry.id}</Typography.Text>
+                    <Typography.Title level={4} style={stackItemTitleStyle}>
+                      {entry.title}
+                    </Typography.Title>
+                    <Typography.Paragraph style={copyStyle}>{entry.detail}</Typography.Paragraph>
+                  </Space>
+
+                  <div style={{ flex: "1 1 360px", minWidth: 280 }}>
+                    <SignalWireframe
+                      animated
+                      detail={entry.legend}
+                      height={220}
+                      showLegend={false}
+                      tone={entry.tone}
+                    />
+                  </div>
+                </Flex>
+              </Card>
+            ))}
+          </Flex>
+        </div>
+      </Card>
+    </Flex>
+  ),
+};
 
 const eyebrowStyle: CSSProperties = {
   display: "block",
@@ -119,6 +201,11 @@ const copyStyle: CSSProperties = {
   margin: 0,
 };
 
+const stackTitleStyle: CSSProperties = {
+  margin: 0,
+  maxWidth: 680,
+};
+
 const heroCardStyle: CSSProperties = {
   background:
     "linear-gradient(135deg, rgba(192, 254, 4, 0.12), transparent 32%), linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 52%), #090909",
@@ -134,3 +221,34 @@ const cardStyle: CSSProperties = {
   ...panelStyle,
   flex: "1 1 380px",
 };
+
+const stackViewportStyle: CSSProperties = {
+  height: 780,
+  overflowY: "auto",
+  paddingRight: 8,
+};
+
+const stackItemCardStyle: CSSProperties = {
+  background:
+    "linear-gradient(180deg, rgba(255, 255, 255, 0.028), transparent 50%), rgba(10, 10, 10, 0.94)",
+  borderColor: "rgba(255, 255, 255, 0.08)",
+};
+
+const stackItemTitleStyle: CSSProperties = {
+  margin: 0,
+};
+
+function createViewportStackEntries() {
+  return Array.from({ length: 12 }, (_, index) => {
+    const sequence = index + 1;
+    const tone = sequence % 3 === 0 ? "violet" : "primary";
+
+    return {
+      detail: `Stack row ${sequence.toString().padStart(2, "0")} keeps the scene available for differentiation while avoiding the cost of keeping a whole corridor of canvases live at once.`,
+      id: `WIRE-${(7300 + sequence).toString()}`,
+      legend: tone === "violet" ? "event lattice" : "signal lattice",
+      title: `Trace corridor ${sequence.toString().padStart(2, "0")} / ${tone === "violet" ? "event band" : "primary band"}`,
+      tone,
+    } as const;
+  });
+}

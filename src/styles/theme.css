@@ -1457,6 +1457,15 @@ h6.ant-typography {
   opacity: 0.92;
 }
 
+.signal-ui-pixel-cube-path--idle .signal-ui-pixel-cube-path__cube,
+.signal-ui-pixel-cube-path--idle .signal-ui-pixel-cube-path__cube-shell,
+.signal-ui-pixel-cube-path--idle .signal-ui-pixel-cube-path__cube-shell::before,
+.signal-ui-pixel-cube-path--idle .signal-ui-pixel-cube-path__face--front,
+.signal-ui-pixel-cube-path--idle .signal-ui-pixel-cube-path__face--right,
+.signal-ui-pixel-cube-path--idle .signal-ui-pixel-cube-path__face--top {
+  animation: none;
+}
+
 .signal-ui-pixel-cube-path--error .signal-ui-pixel-cube-path__cube[data-break="true"] .signal-ui-pixel-cube-path__face::after {
   background:
     linear-gradient(
@@ -2994,6 +3003,12 @@ h6.ant-typography {
   gap: 0;
 }
 
+.signal-ui-hash-cube--idle .signal-ui-hash-cube__stage::after,
+.signal-ui-hash-cube--idle .signal-ui-hash-cube__scene,
+.signal-ui-hash-cube--idle .signal-ui-hash-cube__voxel[data-mode="core"] {
+  animation: none;
+}
+
 .signal-ui-hash-cube__stage {
   position: relative;
   display: grid;
@@ -3341,6 +3356,10 @@ h6.ant-typography {
 
 .signal-ui-signal-wireframe--violet {
   --signal-ui-signal-wireframe-accent-rgb: var(--signal-ui-accent-violet-rgb);
+}
+
+.signal-ui-signal-wireframe--idle .signal-ui-signal-wireframe__cursor {
+  animation: none;
 }
 
 .signal-ui-signal-wireframe::before {
