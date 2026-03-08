@@ -6,6 +6,8 @@ type RgbColor = {
   red: number;
 };
 
+let colorResolutionElement: HTMLElement | null = null;
+
 function clamp(value: number, min: number, max: number) {
   return Math.min(Math.max(value, min), max);
 }
@@ -231,7 +233,41 @@ function parseHexColor(color: string): RgbColor | null {
 }
 
 function parseCssColor(color: string): RgbColor | null {
-  return parseHexColor(color) ?? parseRgbColor(color) ?? parseHslColor(color);
+  return parseHexColor(color) ?? parseRgbColor(color) ?? parseHslColor(color) ?? parseBrowserColor(color);
+}
+
+function getColorResolutionElement() {
+  if (typeof document === "undefined") {
+    return null;
+  }
+
+  if (!colorResolutionElement) {
+    colorResolutionElement = document.createElement("div");
+    colorResolutionElement.setAttribute("aria-hidden", "true");
+    colorResolutionElement.style.display = "none";
+    document.documentElement.append(colorResolutionElement);
+  } else if (!colorResolutionElement.isConnected) {
+    document.documentElement.append(colorResolutionElement);
+  }
+
+  return colorResolutionElement;
+}
+
+function parseBrowserColor(color: string): RgbColor | null {
+  const resolutionElement = getColorResolutionElement();
+
+  if (!resolutionElement) {
+    return null;
+  }
+
+  resolutionElement.style.color = "";
+  resolutionElement.style.color = color;
+
+  if (!resolutionElement.style.color) {
+    return null;
+  }
+
+  return parseRgbColor(getComputedStyle(resolutionElement).color);
 }
 
 function formatHexColor({ red, green, blue }: RgbColor): HexColor {
