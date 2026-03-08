@@ -1,9 +1,11 @@
 import type { CSSProperties, HTMLAttributes } from "react";
 
 import { signalPalette } from "../theme/signalTheme.js";
+import { useViewportRenderGate } from "./hashCube/useViewportRenderGate.js";
 
 type HashCubeMode = "core" | "ghost" | "solid" | "wire";
 type HashCubeColorChannel = "primary" | "text" | "violet" | "warning";
+type HashCubeRenderMode = "viewport" | "always";
 
 type HashCubeStyle = CSSProperties & Record<`--signal-ui-hash-cube-${string}`, string | number>;
 
@@ -13,6 +15,7 @@ export type HashCubeProps = Omit<HTMLAttributes<HTMLDivElement>, "children" | "s
   detail?: string;
   hash: string;
   label?: string;
+  renderMode?: HashCubeRenderMode;
   showLegend?: boolean;
   size?: number;
   style?: HashCubeStyle;
@@ -52,6 +55,8 @@ type ChannelStyle = {
   top: string;
   wire: string;
 };
+
+type HashCubeModeCounts = Record<HashCubeMode, number>;
 
 const voxelCoordinates = createVoxelCoordinates();
 
@@ -124,6 +129,7 @@ export function HashCube({
   detail,
   hash,
   label = "hash cube",
+  renderMode = "viewport",
   showLegend = true,
   size = 208,
   style,
@@ -131,18 +137,33 @@ export function HashCube({
   ...props
 }: HashCubeProps) {
   const sourceHash = hash.trim() || "0";
+  const shouldViewportGate = renderMode === "viewport";
   const cellSize = Math.max(18, Math.round(size * 0.18));
   const gapSize = Math.max(2, Math.round(cellSize * 0.09));
   const stepSize = cellSize + gapSize;
   const sceneWidth = Math.round(size * 1.34);
   const sceneHeight = Math.round(size * 1.22);
   const perspective = Math.round(size * 6.4);
-  const voxels = createHashCubeVoxels(sourceHash, tone);
-  const counts = countVoxelModes(voxels);
-  const resolvedDetail =
-    detail ?? `${counts.solid} solid / ${counts.wire} wire / ${counts.ghost} ghost`;
+  const { isInViewport, targetRef } = useViewportRenderGate<HTMLDivElement>({
+    disabled: !shouldViewportGate,
+    rootMargin: "160px 0px",
+    threshold: 0,
+  });
+  const shouldRenderScene = !shouldViewportGate || isInViewport;
+  const voxels = shouldRenderScene ? createHashCubeVoxels(sourceHash, tone) : [];
+  const counts =
+    showLegend && detail === undefined
+      ? shouldRenderScene
+        ? countVoxelModes(voxels)
+        : createHashCubeModeCounts(sourceHash)
+      : null;
+  const resolvedDetail = showLegend
+    ? detail ??
+      `${counts?.solid ?? 0} solid / ${counts?.wire ?? 0} wire / ${counts?.ghost ?? 0} ghost`
+    : undefined;
   const rootClassName = [
     "signal-ui-hash-cube",
+    shouldRenderScene ? undefined : "signal-ui-hash-cube--idle",
     toneClassName[tone],
     showLegend ? undefined : "signal-ui-hash-cube--mini",
     className,
@@ -168,23 +189,25 @@ export function HashCube({
       style={rootStyle}
       {...props}
     >
-      <div className="signal-ui-hash-cube__stage">
+      <div className="signal-ui-hash-cube__stage" ref={targetRef}>
         <div aria-hidden="true" className="signal-ui-hash-cube__viewport">
-          <div className="signal-ui-hash-cube__scene">
-            {voxels.map((voxel) => (
-              <span
-                className="signal-ui-hash-cube__voxel"
-                data-mode={voxel.mode}
-                data-surface={voxel.surface ? "true" : "false"}
-                key={voxel.index}
-                style={getVoxelStyle(voxel)}
-              >
-                <span className="signal-ui-hash-cube__face signal-ui-hash-cube__face--front" />
-                <span className="signal-ui-hash-cube__face signal-ui-hash-cube__face--right" />
-                <span className="signal-ui-hash-cube__face signal-ui-hash-cube__face--top" />
-              </span>
-            ))}
-          </div>
+          {shouldRenderScene ? (
+            <div className="signal-ui-hash-cube__scene">
+              {voxels.map((voxel) => (
+                <span
+                  className="signal-ui-hash-cube__voxel"
+                  data-mode={voxel.mode}
+                  data-surface={voxel.surface ? "true" : "false"}
+                  key={voxel.index}
+                  style={getVoxelStyle(voxel)}
+                >
+                  <span className="signal-ui-hash-cube__face signal-ui-hash-cube__face--front" />
+                  <span className="signal-ui-hash-cube__face signal-ui-hash-cube__face--right" />
+                  <span className="signal-ui-hash-cube__face signal-ui-hash-cube__face--top" />
+                </span>
+              ))}
+            </div>
+          ) : null}
         </div>
       </div>
 
@@ -215,14 +238,7 @@ function createHashCubeVoxels(hash: string, tone: HashCubeTone): HashCubeVoxel[]
         rotl32(channelState, 11) ^
         ((baseSeed + Math.imul(coordinate.index + 1, 0x9e3779b1)) >>> 0),
     );
-    const modeBucket = modeState & 0xf;
-    const mode: HashCubeMode = coordinate.center
-      ? "core"
-      : modeBucket <= 2
-        ? "ghost"
-        : modeBucket <= 6
-          ? "wire"
-          : "solid";
+    const mode = getHashCubeMode(coordinate, modeState);
     const channel = coordinate.center
       ? getChannelValue(channelOrder, 0)
       : getChannelValue(channelOrder, (channelState >>> 30) & 0x3);
@@ -272,19 +288,53 @@ function createHashCubeVoxels(hash: string, tone: HashCubeTone): HashCubeVoxel[]
   });
 }
 
-function countVoxelModes(voxels: HashCubeVoxel[]) {
+function countVoxelModes(voxels: HashCubeVoxel[]): HashCubeModeCounts {
   return voxels.reduce(
     (counts, voxel) => {
       counts[voxel.mode] += 1;
       return counts;
     },
-    {
-      core: 0,
-      ghost: 0,
-      solid: 0,
-      wire: 0,
-    } satisfies Record<HashCubeMode, number>,
+    createEmptyModeCounts(),
   );
+}
+
+function createHashCubeModeCounts(hash: string): HashCubeModeCounts {
+  const normalizedHash = hash.trim().toLowerCase() || "0";
+  const words = createWordStream(normalizedHash, 8);
+  const baseSeed = createSeed(normalizedHash);
+
+  return voxelCoordinates.reduce((counts, coordinate) => {
+    const modeState = mixVoxelState(words, coordinate, baseSeed ^ 0x9e3779b9, 0x85ebca6b);
+    counts[getHashCubeMode(coordinate, modeState)] += 1;
+    return counts;
+  }, createEmptyModeCounts());
+}
+
+function createEmptyModeCounts(): HashCubeModeCounts {
+  return {
+    core: 0,
+    ghost: 0,
+    solid: 0,
+    wire: 0,
+  };
+}
+
+function getHashCubeMode(coordinate: VoxelCoordinate, modeState: number): HashCubeMode {
+  if (coordinate.center) {
+    return "core";
+  }
+
+  const modeBucket = modeState & 0xf;
+
+  if (modeBucket <= 2) {
+    return "ghost";
+  }
+
+  if (modeBucket <= 6) {
+    return "wire";
+  }
+
+  return "solid";
 }
 
 function formatHashSignature(hash: string) {

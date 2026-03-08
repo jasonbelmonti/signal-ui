@@ -2491,6 +2491,12 @@ h6.ant-typography {
   gap: 0;
 }
 
+.signal-ui-hash-cube--idle .signal-ui-hash-cube__stage::after,
+.signal-ui-hash-cube--idle .signal-ui-hash-cube__scene,
+.signal-ui-hash-cube--idle .signal-ui-hash-cube__voxel[data-mode="core"] {
+  animation: none;
+}
+
 .signal-ui-hash-cube__stage {
   position: relative;
   display: grid;
