@@ -47,7 +47,7 @@ export function useBackdropRenderState(animated: boolean): UseBackdropRenderStat
   }, []);
 
   useEffect(() => {
-    if (typeof window === "undefined") {
+    if (typeof window === "undefined" || typeof window.matchMedia !== "function") {
       return;
     }
 
