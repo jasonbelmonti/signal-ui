@@ -17,6 +17,7 @@ export {
   GraphCanvasNode,
 } from "./components/GraphCanvasNode.js";
 export { Panel, panelCutCornerPresets } from "./components/Panel.js";
+export { SignalChat } from "./components/SignalChat.js";
 export { SignalButton } from "./components/SignalButton.js";
 export { SignalEmptyState } from "./components/SignalEmptyState.js";
 export { SignalHeaderLockup } from "./components/SignalHeaderLockup.js";
@@ -41,6 +42,14 @@ export type {
   PanelCutCornerPreset,
   PanelProps,
 } from "./components/Panel.js";
+export type {
+  SignalChatAttachment,
+  SignalChatConversation,
+  SignalChatMessage,
+  SignalChatMessageRole,
+  SignalChatPrompt,
+  SignalChatProps,
+} from "./components/SignalChat.js";
 export type { SignalButtonProps, SignalButtonTone } from "./components/SignalButton.js";
 export type {
   SignalEmptyStateProps,

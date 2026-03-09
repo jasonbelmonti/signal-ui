@@ -8,5 +8,6 @@
 @import "@fontsource/oxanium/600.css";
 @import "@fontsource/oxanium/700.css";
 @import "@xyflow/react/dist/base.css";
+@import "./styles/chat.css";
 @import "./styles/theme.css";
 @import "./styles/primitives.css";
