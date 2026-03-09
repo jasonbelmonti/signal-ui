@@ -1,5 +1,27 @@
 # @jasonbelmonti/signal-ui
 
+## 0.5.0
+
+### Minor Changes
+
+- f7efe6d: Export procedural audio cue utilities and playback helpers so apps can share the same signal sound engine.
+
+## 0.4.0
+
+### Minor Changes
+
+- 4c85ce7: Improve `PixelCubePath` centering in constrained layouts and add a broken `error` tone for failed states.
+
+## 0.3.0
+
+### Minor Changes
+
+- 2987ea2: Add runtime theme customization support for Signal UI.
+
+  - export `createSignalTheme`, `createSignalThemeCssVariables`, `resolveSignalPalette`, and theme preference types
+  - allow `AntdThemeProvider` and `installStaticAntdTheme` to accept runtime `theme` and `themePreferences` overrides
+  - keep document-level CSS variables in sync for themed portals and nested providers
+
 ## 0.2.1
 
 ### Patch Changes

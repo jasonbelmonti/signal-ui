@@ -55,8 +55,9 @@ import "@jasonbelmonti/signal-ui/styles.css";
 import { AntdThemeProvider } from "@jasonbelmonti/signal-ui";
 ```
 
-The package exports the provider, theme tokens, and shared components including `Panel`,
-`PixelCubeLoader`, and `PixelCubePath`.
+The package exports the provider, theme tokens, shared components including `Panel`,
+`PixelCubeLoader`, and `PixelCubePath`, plus procedural audio helpers such as
+`materializeNoiseCue`, `playNoiseCue`, and `primeNoiseEngine`.
 
 ## Release
 
