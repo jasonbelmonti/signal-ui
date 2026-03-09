@@ -8,6 +8,7 @@ export { HashCube } from "./components/HashCube.js";
 export { GraphCanvas } from "./components/GraphCanvas.js";
 export type { GraphCanvasProps, GraphCanvasReactFlowProps } from "./components/GraphCanvas.js";
 export { MarkdownTheme } from "./components/MarkdownTheme.js";
+export { SignalBackdrop } from "./components/SignalBackdrop.js";
 export {
   GRAPH_CANVAS_EDGE_TYPE,
   GraphCanvasEdge,
@@ -35,6 +36,14 @@ export type {
   GraphCanvasNodeData,
   GraphCanvasNodeDefinition,
 } from "./components/GraphCanvasNode.js";
+export type {
+  SignalBackdropDensity,
+  SignalBackdropFocusPoint,
+  SignalBackdropProps,
+  SignalBackdropTelemetry,
+  SignalBackdropTone,
+  SignalBackdropVariant,
+} from "./components/SignalBackdrop.js";
 export type { GraphCanvasTone } from "./components/graphCanvasTheme.js";
 export type {
   PanelCutCorner,
