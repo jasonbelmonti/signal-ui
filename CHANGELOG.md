@@ -1,5 +1,13 @@
 # @jasonbelmonti/signal-ui
 
+## 0.6.0
+
+### Minor Changes
+
+- Add the new `SignalChat` primitive and ship the latest Signal UI chat styling/theme support.
+
+  Refresh the `SignalButton` hold-to-trigger story with procedural loot-box audio and updated demo controls.
+
 ## 0.5.0
 
 ### Minor Changes
