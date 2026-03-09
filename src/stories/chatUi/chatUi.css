@@ -1,0 +1,4 @@
+.storybook-shell:has(.signal-ui-chat) {
+  display: block;
+  padding: 0;
+}
