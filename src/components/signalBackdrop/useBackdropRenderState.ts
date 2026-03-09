@@ -21,7 +21,13 @@ export function useBackdropRenderState(animated: boolean): UseBackdropRenderStat
 
     return document.visibilityState === "visible";
   });
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(() => {
+    if (typeof window === "undefined" || typeof window.matchMedia !== "function") {
+      return false;
+    }
+
+    return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  });
 
   useEffect(() => {
     if (typeof document === "undefined") {

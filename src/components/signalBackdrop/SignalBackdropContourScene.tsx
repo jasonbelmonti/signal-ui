@@ -104,18 +104,22 @@ export function SignalBackdropContourScene({
       return;
     }
 
-    const elapsedTime = animated ? clock.getElapsedTime() : 3.2;
+    const elapsedTime = clock.getElapsedTime();
 
-    if (animated && elapsedTime - lastFrameTimeRef.current < FRAME_INTERVAL_SECONDS) {
-      return;
+    if (!animated) {
+      lastFrameTimeRef.current = Number.NEGATIVE_INFINITY;
+    } else {
+      if (elapsedTime - lastFrameTimeRef.current < FRAME_INTERVAL_SECONDS) {
+        return;
+      }
+
+      lastFrameTimeRef.current = elapsedTime;
     }
-
-    lastFrameTimeRef.current = elapsedTime;
 
     const activity = clamp01(telemetry?.activity ?? 0.34);
     const alert = clamp01(telemetry?.alert ?? 0.08);
     const focus = clamp01(telemetry?.focus ?? 0.42);
-    const drift = elapsedTime;
+    const drift = animated ? elapsedTime : 3.2;
     const motionScale = animated ? 0.5 : 0;
     const autoFocusX = 0.5 + Math.sin(drift * 0.065) * 0.14 * motionScale;
     const autoFocusY = 0.48 + Math.cos(drift * 0.058 + 0.7) * 0.11 * motionScale;
