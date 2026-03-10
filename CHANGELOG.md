@@ -1,5 +1,12 @@
 # @jasonbelmonti/signal-ui
 
+## 0.7.1
+
+### Patch Changes
+
+- 720e897: Fix the published stylesheet entrypoint so `dist/styles.css` ships all imported
+  style dependencies, including `dist/styles/chat.css`.
+
 ## 0.7.0
 
 ### Minor Changes
