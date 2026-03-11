@@ -20,6 +20,7 @@ export { Panel, panelCutCornerPresets } from "./components/Panel.js";
 export { SignalButton } from "./components/SignalButton.js";
 export { SignalEmptyState } from "./components/SignalEmptyState.js";
 export { SignalHeaderLockup } from "./components/SignalHeaderLockup.js";
+export { SignalProgressPanel } from "./components/SignalProgressPanel.js";
 export { SignalStatusTag } from "./components/SignalStatusTag.js";
 export type {
   HashCubeProps,
@@ -54,6 +55,11 @@ export type {
   SignalHeaderLockupTitleLevel,
   SignalHeaderLockupTone,
 } from "./components/SignalHeaderLockup.js";
+export type {
+  SignalProgressPanelMetric,
+  SignalProgressPanelProps,
+  SignalProgressPanelTone,
+} from "./components/SignalProgressPanel.js";
 export type {
   SignalStatusTagContext,
   SignalStatusTagProps,
