@@ -11,7 +11,7 @@ type UseSignalProgressMeterCompletionSurfaceOptions = {
   tone: SignalProgressMeterCompletionSurfaceTone;
 };
 
-const COMPLETION_SURFACE_REVEAL_MS = 200;
+const COMPLETION_SURFACE_REVEAL_MS = 1000;
 
 export function useSignalProgressMeterCompletionSurface({
   canvasRef,
