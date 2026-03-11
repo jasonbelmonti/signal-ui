@@ -1,5 +1,6 @@
 import { useLayoutEffect, useState } from "react";
 
+import { normalizeColor } from "./colorUtils.js";
 import { signalPalette } from "./signalPalette.js";
 import type { SignalPalette } from "./signalPalette.js";
 
@@ -22,6 +23,14 @@ const runtimePaletteVariableMap = {
   warning: "--signal-ui-warning",
 } satisfies Record<RuntimePaletteKey, `--signal-ui-${string}`>;
 
+function resolveRuntimePaletteColor(
+  rootStyles: CSSStyleDeclaration,
+  key: RuntimePaletteKey,
+  fallback: SignalPalette[RuntimePaletteKey],
+) {
+  return normalizeColor(rootStyles.getPropertyValue(runtimePaletteVariableMap[key]).trim()) ?? fallback;
+}
+
 function readSignalRuntimePalette(): RuntimePalette {
   if (typeof window === "undefined" || typeof document === "undefined") {
     return {
@@ -37,24 +46,12 @@ function readSignalRuntimePalette(): RuntimePalette {
   const rootStyles = window.getComputedStyle(document.documentElement);
 
   return {
-    accentViolet:
-      rootStyles.getPropertyValue(runtimePaletteVariableMap.accentViolet).trim()
-      || signalPalette.accentViolet,
-    fieldPrimary:
-      rootStyles.getPropertyValue(runtimePaletteVariableMap.fieldPrimary).trim()
-      || signalPalette.fieldPrimary,
-    primary:
-      rootStyles.getPropertyValue(runtimePaletteVariableMap.primary).trim()
-      || signalPalette.primary,
-    primaryDeep:
-      rootStyles.getPropertyValue(runtimePaletteVariableMap.primaryDeep).trim()
-      || signalPalette.primaryDeep,
-    text:
-      rootStyles.getPropertyValue(runtimePaletteVariableMap.text).trim()
-      || signalPalette.text,
-    warning:
-      rootStyles.getPropertyValue(runtimePaletteVariableMap.warning).trim()
-      || signalPalette.warning,
+    accentViolet: resolveRuntimePaletteColor(rootStyles, "accentViolet", signalPalette.accentViolet),
+    fieldPrimary: resolveRuntimePaletteColor(rootStyles, "fieldPrimary", signalPalette.fieldPrimary),
+    primary: resolveRuntimePaletteColor(rootStyles, "primary", signalPalette.primary),
+    primaryDeep: resolveRuntimePaletteColor(rootStyles, "primaryDeep", signalPalette.primaryDeep),
+    text: resolveRuntimePaletteColor(rootStyles, "text", signalPalette.text),
+    warning: resolveRuntimePaletteColor(rootStyles, "warning", signalPalette.warning),
   };
 }
 
