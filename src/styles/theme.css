@@ -1066,17 +1066,14 @@ h6.ant-typography {
     1px
     1px;
   gap: 6px;
+  z-index: 2;
 }
 
 .signal-ui-progress-meter--splash .signal-ui-progress-meter__completion-surface {
-  top: calc(var(--signal-ui-progress-meter-splash-depth) + 1px);
-  left: 1px;
-  width: calc(100% - var(--signal-ui-progress-meter-splash-depth) - 3px);
-  height: calc(100% - var(--signal-ui-progress-meter-splash-depth) - 2px);
-  z-index: 2;
-  transform: translateX(var(--signal-ui-progress-meter-splash-face-shift))
-    skewX(var(--signal-ui-progress-meter-splash-face-skew));
-  transform-origin: bottom left;
+  inset: 1px;
+  width: calc(100% - 2px);
+  height: calc(100% - 2px);
+  z-index: 0;
   image-rendering: pixelated;
   mix-blend-mode: normal;
   filter: saturate(1.12) drop-shadow(0 0 10px rgb(var(--signal-ui-progress-meter-accent-rgb) / 0.1));

@@ -103,17 +103,17 @@ export function SignalProgressMeter({
         className="signal-ui-progress-meter__track"
         role="progressbar"
       >
+        {variant === "splash" ? (
+          <canvas
+            aria-hidden="true"
+            className="signal-ui-progress-meter__completion-surface"
+            ref={completionSurfaceRef}
+          />
+        ) : null}
         <div
           className="signal-ui-progress-meter__cells"
           style={{ gridTemplateColumns: `repeat(${resolvedSegmentCount}, minmax(0, 1fr))` }}
         >
-          {variant === "splash" ? (
-            <canvas
-              aria-hidden="true"
-              className="signal-ui-progress-meter__completion-surface"
-              ref={completionSurfaceRef}
-            />
-          ) : null}
           {cells.map((cell) => (
             <span
               aria-hidden="true"
