@@ -22,6 +22,16 @@ const runtimePaletteVariableMap = {
   text: "--signal-ui-text",
   warning: "--signal-ui-warning",
 } satisfies Record<RuntimePaletteKey, `--signal-ui-${string}`>;
+const signalRuntimePaletteFallback: RuntimePalette = {
+  accentViolet: signalPalette.accentViolet,
+  fieldPrimary: signalPalette.fieldPrimary,
+  primary: signalPalette.primary,
+  primaryDeep: signalPalette.primaryDeep,
+  text: signalPalette.text,
+  warning: signalPalette.warning,
+};
+
+let cachedSignalRuntimePalette: RuntimePalette = signalRuntimePaletteFallback;
 
 function resolveRuntimePaletteColor(
   rootStyles: CSSStyleDeclaration,
@@ -37,8 +47,7 @@ function readSignalRuntimePalette(): RuntimePalette {
   }
 
   const rootStyles = window.getComputedStyle(document.documentElement);
-
-  return {
+  const nextPalette = {
     accentViolet: resolveRuntimePaletteColor(rootStyles, "accentViolet", signalPalette.accentViolet),
     fieldPrimary: resolveRuntimePaletteColor(rootStyles, "fieldPrimary", signalPalette.fieldPrimary),
     primary: resolveRuntimePaletteColor(rootStyles, "primary", signalPalette.primary),
@@ -46,17 +55,29 @@ function readSignalRuntimePalette(): RuntimePalette {
     text: resolveRuntimePaletteColor(rootStyles, "text", signalPalette.text),
     warning: resolveRuntimePaletteColor(rootStyles, "warning", signalPalette.warning),
   };
+
+  if (runtimePalettesMatch(cachedSignalRuntimePalette, nextPalette)) {
+    return cachedSignalRuntimePalette;
+  }
+
+  cachedSignalRuntimePalette = nextPalette;
+
+  return cachedSignalRuntimePalette;
 }
 
 function getSignalRuntimePaletteFallback(): RuntimePalette {
-  return {
-    accentViolet: signalPalette.accentViolet,
-    fieldPrimary: signalPalette.fieldPrimary,
-    primary: signalPalette.primary,
-    primaryDeep: signalPalette.primaryDeep,
-    text: signalPalette.text,
-    warning: signalPalette.warning,
-  };
+  return signalRuntimePaletteFallback;
+}
+
+function runtimePalettesMatch(current: RuntimePalette, next: RuntimePalette) {
+  return (
+    current.accentViolet === next.accentViolet
+    && current.fieldPrimary === next.fieldPrimary
+    && current.primary === next.primary
+    && current.primaryDeep === next.primaryDeep
+    && current.text === next.text
+    && current.warning === next.warning
+  );
 }
 
 function subscribeToSignalRuntimePalette(onStoreChange: () => void) {
