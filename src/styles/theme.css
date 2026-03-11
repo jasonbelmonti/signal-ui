@@ -1418,14 +1418,14 @@ h6.ant-typography {
 
 .signal-ui-progress-meter--splash.signal-ui-progress-meter--completed .signal-ui-progress-meter__completion-text {
   filter:
-    drop-shadow(0 1px 0 rgb(0 0 0 / 0.42));
+    drop-shadow(0 1px 0 rgb(0 0 0 / 0.72))
+    drop-shadow(0 0 0.32em rgb(255 255 255 / 0.08));
   text-shadow:
-    0 0 0.14em rgb(var(--signal-ui-progress-meter-accent-rgb) / 0.18),
-    1px 0 0 rgb(var(--signal-ui-progress-meter-accent-rgb) / 0.92),
-    -1px 0 0 rgb(var(--signal-ui-progress-meter-accent-rgb) / 0.92),
-    0 1px 0 rgb(var(--signal-ui-progress-meter-accent-rgb) / 0.92),
-    0 -1px 0 rgb(var(--signal-ui-progress-meter-accent-rgb) / 0.92),
-    0 0 10px rgb(var(--signal-ui-progress-meter-accent-rgb) / 0.18);
+    0 0 0.14em rgb(255 255 255 / 0.18),
+    1px 0 0 rgb(0 0 0 / 0.8),
+    -1px 0 0 rgb(0 0 0 / 0.8),
+    0 1px 0 rgb(0 0 0 / 0.8),
+    0 -1px 0 rgb(0 0 0 / 0.8);
 }
 
 .signal-ui-progress-panel__metrics {
