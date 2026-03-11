@@ -9,6 +9,7 @@ type SignalProgressMeterStyle = CSSProperties & {
 type CellState = "idle" | "filled" | "active";
 
 export type SignalProgressMeterTone = "primary" | "violet";
+export type SignalProgressMeterVariant = "flat" | "splash";
 
 export interface SignalProgressMeterProps
   extends Omit<ComponentPropsWithoutRef<"div">, "children" | "style"> {
@@ -18,6 +19,7 @@ export interface SignalProgressMeterProps
   showPercent?: boolean;
   style?: SignalProgressMeterStyle;
   tone?: SignalProgressMeterTone;
+  variant?: SignalProgressMeterVariant;
 }
 
 export function SignalProgressMeter({
@@ -28,6 +30,7 @@ export function SignalProgressMeter({
   showPercent = true,
   style,
   tone = "primary",
+  variant = "flat",
   ...props
 }: SignalProgressMeterProps) {
   const clampedProgress = clamp(progress, 0, 100);
@@ -59,6 +62,7 @@ export function SignalProgressMeter({
       className={joinClassNames(
         "signal-ui-progress-meter",
         tone === "violet" && "signal-ui-progress-meter--violet",
+        variant === "splash" && "signal-ui-progress-meter--splash",
         className,
       )}
       style={rootStyle}
