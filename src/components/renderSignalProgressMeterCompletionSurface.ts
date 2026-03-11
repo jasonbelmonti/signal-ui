@@ -7,67 +7,67 @@ type SignalProgressMeterCompletionSurfaceTone = "primary" | "violet";
 type RenderSignalProgressMeterCompletionSurfaceOptions = {
   cols: number;
   ctx: CanvasRenderingContext2D;
+  progress: number;
   rows: number;
-  timeMs: number;
   tone: SignalProgressMeterCompletionSurfaceTone;
 };
 
 export function renderSignalProgressMeterCompletionSurface({
   cols,
   ctx,
+  progress,
   rows,
-  timeMs,
   tone,
 }: RenderSignalProgressMeterCompletionSurfaceOptions) {
   const accent = toneAccentChannels[tone];
   const highlight = blendChannels(accent, [255, 255, 255], 0.42);
-  const frame = Math.floor(timeMs / 220);
-  const ambientBreath = 0.5 + Math.sin(timeMs / 2100) * 0.5;
-  const scanBreath = 0.5 + Math.sin(timeMs / 3100 + 0.8) * 0.5;
+  const clampedProgress = clamp(progress, 0, 1);
+  const wakeProgress = easeOutCubic(clamp(clampedProgress / 0.72, 0, 1));
+  const settleProgress = easeOutCubic(clamp((clampedProgress - 0.34) / 0.66, 0, 1));
+  const wakeRadius = wakeProgress * 1.52;
+  const baseFillAlpha = 0.06 + settleProgress * 0.28;
 
   ctx.clearRect(0, 0, cols, rows);
+  ctx.fillStyle = rgba(accent, 0.94, 0.03 + settleProgress * 0.08, baseFillAlpha);
+  ctx.fillRect(0, 0, cols, rows);
 
   for (let y = 0; y < rows; y += 1) {
     const rowEnergy = getRowEnergy(y, rows);
-    const rowWave = 0.5 + Math.sin(timeMs / 2700 + y * 0.7) * 0.5;
 
     for (let x = 0; x < cols; x += 1) {
-      const stableNoise = hash((x + 1) * 1.7, (y + 1) * 3.1, 17);
-      const flickerNoise = hash(x + frame * 0.32, y + 11, 63);
-      const weaveNoise = hash((x + 5) * 2.4, (y + 3) * 4.7, frame + 19);
-      const lattice = hash((x + 1) * 5.1, (y + 1) * 7.7, frame + 41);
-      const columnWave = 0.5 + Math.sin(timeMs / 2400 + x * 0.2 + y * 0.05) * 0.5;
-      const centerGlow = getColumnGlow(x, cols, 0.42, 0.3 + ambientBreath * 0.05);
-      const edgeGlow = getColumnGlow(x, cols, 0.78, 0.18 + scanBreath * 0.03);
-      const columnEnergy = centerGlow * 0.88 + edgeGlow * 0.6 + columnWave * 0.22;
-      const threshold = clamp(0.58 - rowEnergy * 0.06 - columnEnergy * 0.22, 0.2, 0.78);
+      const radial = getRadialDistance(x, y, cols, rows);
+      const wakeSeed = hash((x + 1) * 4.6, (y + 1) * 7.2, 17);
+      const grain = hash((x + 3) * 2.2, (y + 5) * 3.8, 61);
+      const wakeThreshold = radial + wakeSeed * 0.16 - 0.08;
+      const wakeMask = clamp((wakeRadius - wakeThreshold) / 0.22, 0, 1);
+      const edgeGlow = clamp(1 - Math.abs(wakeRadius - radial) / 0.18, 0, 1) * (1 - settleProgress);
+      const pixelEnergy = Math.max(wakeMask, settleProgress);
 
-      if (stableNoise <= threshold && lattice < 0.84) {
+      if (pixelEnergy <= 0.02) {
         continue;
       }
 
-      const shimmerLift = (flickerNoise > 0.92 ? 0.08 : 0) + rowWave * 0.04;
-      const highlightMix = clamp(columnEnergy * 0.52 + (lattice > 0.9 ? 0.28 : 0), 0, 0.86);
+      const highlightMix = clamp(edgeGlow * 0.68 + wakeMask * 0.14 * (1 - settleProgress), 0, 0.74);
       const pixelAccent = blendChannels(accent, highlight, highlightMix);
       const alpha =
-        0.16 +
-        rowEnergy * 0.1 +
-        stableNoise * 0.2 +
-        flickerNoise * 0.05 +
-        columnEnergy * 0.18;
+        0.12 +
+        rowEnergy * 0.08 +
+        wakeMask * 0.42 +
+        settleProgress * 0.32 +
+        grain * 0.06;
       const lift =
         0.03 +
-        rowEnergy * 0.05 +
-        columnEnergy * 0.14 +
-        shimmerLift +
-        (weaveNoise > 0.82 ? 0.05 : 0);
-      const saturation = 0.88 + stableNoise * 0.1 + weaveNoise * 0.12 + columnEnergy * 0.14;
+        rowEnergy * 0.04 +
+        wakeMask * 0.06 +
+        edgeGlow * 0.22 +
+        settleProgress * 0.04;
+      const saturation = 0.92 + wakeMask * 0.06 + edgeGlow * 0.12 + grain * 0.04;
 
       drawPixel(ctx, x, y, pixelAccent, saturation, lift, clamp(alpha, 0.16, 0.92));
     }
   }
 
-  drawCompletionBloom(ctx, cols, rows, accent, highlight, ambientBreath, scanBreath);
+  drawCompletionBloom(ctx, cols, rows, accent, highlight, wakeRadius, settleProgress);
 }
 
 function drawCompletionBloom(
@@ -76,31 +76,32 @@ function drawCompletionBloom(
   rows: number,
   accent: RgbChannels,
   highlight: RgbChannels,
-  ambientBreath: number,
-  scanBreath: number,
+  wakeRadius: number,
+  settleProgress: number,
 ) {
-  const bloomCenters = [
-    { center: Math.floor(cols * 0.42), energy: 0.12 + ambientBreath * 0.06, spread: 5 },
-    { center: Math.floor(cols * 0.78), energy: 0.08 + scanBreath * 0.04, spread: 3 },
-  ] as const;
+  const centerX = Math.floor(cols / 2);
+  const bloomRadius = Math.max(2, Math.round((wakeRadius / 1.52) * cols * 0.24));
+  const bloomEnergy = (1 - settleProgress) * 0.18;
 
-  for (const bloom of bloomCenters) {
-    for (let offset = -bloom.spread; offset <= bloom.spread; offset += 1) {
-      const column = bloom.center + offset;
-      const proximity = 1 - Math.abs(offset) / (bloom.spread + 1);
+  if (bloomEnergy <= 0.01) {
+    return;
+  }
 
-      if (column < 0 || column >= cols || proximity <= 0) {
-        continue;
-      }
+  for (let offset = -bloomRadius; offset <= bloomRadius; offset += 1) {
+    const column = centerX + offset;
+    const proximity = 1 - Math.abs(offset) / (bloomRadius + 1);
 
-      ctx.fillStyle = rgba(
-        blendChannels(accent, highlight, proximity * 0.42),
-        0.98,
-        0.04 + proximity * 0.08,
-        bloom.energy * proximity,
-      );
-      ctx.fillRect(column, 0, 1, rows);
+    if (column < 0 || column >= cols || proximity <= 0) {
+      continue;
     }
+
+    ctx.fillStyle = rgba(
+      blendChannels(accent, highlight, proximity * 0.56),
+      1,
+      0.06 + proximity * 0.1,
+      bloomEnergy * proximity,
+    );
+    ctx.fillRect(column, 0, 1, rows);
   }
 }
 
@@ -113,11 +114,17 @@ function getRowEnergy(row: number, rowCount: number) {
   return 1 - Math.abs(normalized * 2 - 1) * 0.44;
 }
 
-function getColumnGlow(column: number, columnCount: number, center: number, radius: number) {
-  if (columnCount <= 1) {
-    return 1;
-  }
+function easeOutCubic(value: number) {
+  return 1 - (1 - clamp(value, 0, 1)) ** 3;
+}
 
-  const normalized = column / (columnCount - 1);
-  return clamp(1 - Math.abs(normalized - center) / radius, 0, 1);
+function getRadialDistance(column: number, row: number, columnCount: number, rowCount: number) {
+  const centerX = (columnCount - 1) / 2;
+  const centerY = (rowCount - 1) / 2;
+  const halfWidth = Math.max(centerX, 1);
+  const halfHeight = Math.max(centerY, 1);
+  const dx = (column - centerX) / halfWidth;
+  const dy = (row - centerY) / halfHeight;
+
+  return Math.sqrt(dx * dx + dy * dy);
 }
