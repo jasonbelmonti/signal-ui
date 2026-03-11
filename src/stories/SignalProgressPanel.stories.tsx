@@ -110,5 +110,5 @@ export const DualOperations: Story = {
 };
 
 export const ExampleLoading: Story = {
-  render: () => <ExampleLoadingFlowDemo />,
+  render: () => <ExampleLoadingFlowDemo autoStart={false} />,
 };

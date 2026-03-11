@@ -739,17 +739,22 @@ h6.ant-typography {
 
 .signal-ui-progress-panel.ant-card > .ant-card-head .ant-card-head-title {
   width: 100%;
+  overflow: visible;
+  white-space: normal;
 }
 
 .signal-ui-progress-panel__header {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
+  flex-wrap: wrap;
   gap: 16px;
 }
 
 .signal-ui-progress-panel__header-copy {
-  display: grid;
+  display: flex;
+  flex: 1 1 240px;
+  flex-direction: column;
   gap: 6px;
   min-width: 0;
 }
@@ -769,12 +774,14 @@ h6.ant-typography {
   font-weight: 600;
   letter-spacing: 0.06em;
   line-height: 0.98;
+  overflow-wrap: anywhere;
   text-transform: uppercase;
 }
 
 .signal-ui-progress-panel__status {
   display: inline-flex;
   align-items: center;
+  flex: 0 0 auto;
   padding: 5px 9px 4px;
   border: 1px solid rgb(var(--signal-ui-progress-panel-accent-rgb) / 0.28);
   background:
@@ -987,6 +994,7 @@ h6.ant-typography {
   top: 0;
   bottom: 0;
   width: 18%;
+  left: var(--signal-ui-progress-meter-progress);
   background:
     linear-gradient(
       90deg,
@@ -996,7 +1004,7 @@ h6.ant-typography {
       rgb(var(--signal-ui-progress-meter-accent-rgb) / 0.1) 58%,
       transparent 100%
     );
-  transform: translateX(calc(var(--signal-ui-progress-meter-progress) - 100%));
+  transform: translateX(-50%);
   mix-blend-mode: screen;
   opacity: 0.72;
   pointer-events: none;

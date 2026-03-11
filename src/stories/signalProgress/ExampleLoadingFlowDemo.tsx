@@ -15,14 +15,24 @@ import {
 } from "./loadingFlowModel.js";
 import { useSignalCompletionChime } from "./useSignalCompletionChime.js";
 
-export function ExampleLoadingFlowDemo() {
+export interface ExampleLoadingFlowDemoProps {
+  autoStart?: boolean;
+}
+
+export function ExampleLoadingFlowDemo({
+  autoStart = false,
+}: ExampleLoadingFlowDemoProps) {
   const [frame, setFrame] = useState<ExampleLoadingFrame>(() => getExampleLoadingFrame(0));
-  const [runToken, setRunToken] = useState(0);
+  const [runToken, setRunToken] = useState(() => (autoStart ? 1 : 0));
   const completionPlayedRef = useRef(false);
   const wasCompleteRef = useRef(false);
   const { armAudio, audioLabel, audioReady, playCompletion } = useSignalCompletionChime();
 
   useEffect(() => {
+    if (runToken === 0) {
+      return;
+    }
+
     completionPlayedRef.current = false;
     wasCompleteRef.current = false;
     setFrame(getExampleLoadingFrame(0));
@@ -74,9 +84,9 @@ export function ExampleLoadingFlowDemo() {
     <Card title="Example Loading Flow" style={demoCardStyle}>
       <Space direction="vertical" size={18} style={{ width: "100%" }}>
         <Typography.Paragraph style={copyStyle}>
-          Resettable end-to-end sequence for the splash loader: it advances through a staged uplink
-          flow, resolves into an in-track completion state, and fires a short synth chime once the
-          browser has audio permission.
+          Stable baseline for the splash loader story. Start the sequence manually to watch the
+          staged uplink flow resolve into the in-track completion state and fire the short synth
+          chime once the browser has audio permission.
         </Typography.Paragraph>
 
         <SignalProgressPanel
@@ -94,7 +104,7 @@ export function ExampleLoadingFlowDemo() {
 
         <Flex align="center" gap={12} wrap="wrap">
           <Button icon={<ReloadOutlined />} onClick={replaySequence} size="small">
-            Replay Sequence
+            {runToken === 0 ? "Start Sequence" : "Replay Sequence"}
           </Button>
           <SignalStatusTag context="status" value={frame.isComplete ? "completed" : "running_tool"} />
           <SignalStatusTag tone={audioReady ? "info" : "neutral"}>
