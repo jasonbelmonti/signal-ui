@@ -1405,12 +1405,8 @@ h6.ant-typography {
 }
 
 .signal-ui-progress-meter--splash.signal-ui-progress-meter--completed .signal-ui-progress-meter__completion-text {
-  filter: drop-shadow(0 1px 0 rgb(0 0 0 / 0.72));
-  text-shadow:
-    1px 0 0 rgb(0 0 0 / 0.8),
-    -1px 0 0 rgb(0 0 0 / 0.8),
-    0 1px 0 rgb(0 0 0 / 0.8),
-    0 -1px 0 rgb(0 0 0 / 0.8);
+  filter: none;
+  text-shadow: 0 0 0.14em rgb(255 255 255 / 0.14);
 }
 
 .signal-ui-progress-panel__metrics {
