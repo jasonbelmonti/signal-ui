@@ -4,8 +4,7 @@ export interface ExampleLoadingMetric {
 }
 
 export interface ExampleLoadingFrame {
-  acknowledgementBody: string;
-  acknowledgementLabel: string;
+  completionLabel?: string;
   description: string;
   eyebrow: string;
   isComplete: boolean;
@@ -87,9 +86,7 @@ export const EXAMPLE_LOADING_TOTAL_MS = loadingStages.reduce(
 export function getExampleLoadingFrame(elapsedMs: number): ExampleLoadingFrame {
   if (elapsedMs >= EXAMPLE_LOADING_TOTAL_MS) {
     return {
-      acknowledgementBody:
-        "Relay sealed. The splash lane settles into a steady phosphor hold and the completion chime acknowledges the lock.",
-      acknowledgementLabel: "uplink sealed",
+      completionLabel: "seal verified",
       description:
         "The envelope is live, the relay accepted the signature, and the last segment can stop pretending it was nervous.",
       eyebrow: "Example Loading",
@@ -120,9 +117,6 @@ export function getExampleLoadingFrame(elapsedMs: number): ExampleLoadingFrame {
       const remainingMs = Math.max(0, EXAMPLE_LOADING_TOTAL_MS - elapsedMs);
 
       return {
-        acknowledgementBody:
-          "Replay the run to arm the completion chime if your browser is still holding audio hostage.",
-        acknowledgementLabel: "awaiting seal",
         description: stage.description,
         eyebrow: "Example Loading",
         isComplete: false,

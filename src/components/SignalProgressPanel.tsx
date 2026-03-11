@@ -17,6 +17,8 @@ export interface SignalProgressPanelMetric {
 export interface SignalProgressPanelProps extends Omit<PanelProps, "children" | "title"> {
   description?: ReactNode;
   eyebrow?: ReactNode;
+  meterCompleted?: boolean;
+  meterCompletionLabel?: ReactNode;
   metrics?: SignalProgressPanelMetric[];
   progress: number;
   progressLabel?: ReactNode;
@@ -33,6 +35,8 @@ export function SignalProgressPanel({
   eyebrow,
   frame,
   frameColor,
+  meterCompleted = false,
+  meterCompletionLabel,
   metrics,
   meterVariant = "flat",
   progress,
@@ -79,6 +83,8 @@ export function SignalProgressPanel({
         ) : null}
 
         <SignalProgressMeter
+          completed={meterCompleted}
+          completionLabel={meterCompletionLabel}
           label={progressLabel}
           progress={progress}
           segmentCount={segmentCount}

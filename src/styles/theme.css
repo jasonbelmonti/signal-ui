@@ -841,10 +841,68 @@ h6.ant-typography {
   isolation: isolate;
 }
 
+.signal-ui-progress-meter__completion {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 5;
+  opacity: 0;
+  transform: translateY(4px) scale(0.985);
+  transition:
+    opacity 180ms ease,
+    transform 220ms ease;
+}
+
+.signal-ui-progress-meter__completion-label {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 11px 4px;
+  border: 1px solid rgb(var(--signal-ui-progress-meter-accent-rgb) / 0.28);
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0.14), transparent 52%),
+    rgb(var(--signal-ui-progress-meter-accent-rgb) / 0.14);
+  color: rgb(255 255 255 / 0.94);
+  font-family: var(--signal-ui-font-pixel);
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  line-height: 1;
+  text-transform: uppercase;
+  box-shadow:
+    inset 0 0 0 1px rgb(255 255 255 / 0.04),
+    0 0 16px rgb(var(--signal-ui-progress-meter-accent-rgb) / 0.12);
+}
+
+.signal-ui-progress-meter--completed .signal-ui-progress-meter__completion {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
 .signal-ui-progress-meter--splash {
   --signal-ui-progress-meter-splash-depth: 5px;
   --signal-ui-progress-meter-splash-face-skew: -14deg;
   --signal-ui-progress-meter-splash-face-shift: -2px;
+}
+
+.signal-ui-progress-meter--splash .signal-ui-progress-meter__track,
+.signal-ui-progress-meter--splash .signal-ui-progress-meter__cells,
+.signal-ui-progress-meter--splash .signal-ui-progress-meter__cells::before,
+.signal-ui-progress-meter--splash .signal-ui-progress-meter__cells::after,
+.signal-ui-progress-meter--splash .signal-ui-progress-meter__cell,
+.signal-ui-progress-meter--splash .signal-ui-progress-meter__cell::before,
+.signal-ui-progress-meter--splash .signal-ui-progress-meter__cell::after,
+.signal-ui-progress-meter--splash .signal-ui-progress-meter__completion-label {
+  transition:
+    opacity 180ms ease,
+    transform 220ms ease,
+    filter 220ms ease,
+    background 220ms ease,
+    border-color 220ms ease,
+    box-shadow 220ms ease,
+    padding 220ms ease,
+    gap 220ms ease;
 }
 
 .signal-ui-progress-meter__track::before {
@@ -1086,6 +1144,11 @@ h6.ant-typography {
   transform-origin: bottom left;
 }
 
+.signal-ui-progress-meter--splash.signal-ui-progress-meter--full .signal-ui-progress-meter__cells::before {
+  animation: none;
+  opacity: 0;
+}
+
 .signal-ui-progress-meter--splash .signal-ui-progress-meter__cell {
   z-index: 1;
   height: 18px;
@@ -1193,6 +1256,76 @@ h6.ant-typography {
   border-color: rgb(var(--signal-ui-progress-meter-accent-rgb) / 0.48);
   background:
     linear-gradient(180deg, rgb(255 255 255 / 0.1), rgb(var(--signal-ui-progress-meter-accent-rgb) / 0.18));
+}
+
+.signal-ui-progress-meter--splash.signal-ui-progress-meter--completed {
+  --signal-ui-progress-meter-splash-face-skew: 0deg;
+  --signal-ui-progress-meter-splash-face-shift: 0px;
+}
+
+.signal-ui-progress-meter--splash.signal-ui-progress-meter--completed .signal-ui-progress-meter__track {
+  padding: 10px;
+  background:
+    radial-gradient(
+      circle at 50% 50%,
+      rgb(var(--signal-ui-progress-meter-accent-rgb) / 0.12),
+      transparent 58%
+    ),
+    linear-gradient(180deg, rgb(255 255 255 / 0.05), transparent 44%),
+    linear-gradient(90deg, rgb(var(--signal-ui-progress-meter-accent-rgb) / 0.12), transparent 50%),
+    rgb(8 8 8 / 0.94);
+  box-shadow:
+    inset 0 0 0 1px rgb(255 255 255 / 0.04),
+    inset 0 -10px 18px rgb(0 0 0 / 0.18),
+    0 0 0 1px rgb(0 0 0 / 0.34);
+}
+
+.signal-ui-progress-meter--splash.signal-ui-progress-meter--completed .signal-ui-progress-meter__cells {
+  padding: 1px;
+  gap: 4px;
+}
+
+.signal-ui-progress-meter--splash.signal-ui-progress-meter--completed .signal-ui-progress-meter__cells::after {
+  opacity: 0;
+}
+
+.signal-ui-progress-meter--splash.signal-ui-progress-meter--completed .signal-ui-progress-meter__cell {
+  height: 16px;
+  border-color: rgb(var(--signal-ui-progress-meter-accent-rgb) / 0.48);
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0.18), transparent 56%),
+    linear-gradient(
+      90deg,
+      rgb(var(--signal-ui-progress-meter-accent-rgb) / 0.78),
+      rgb(var(--signal-ui-progress-meter-accent-rgb) / 0.42)
+    );
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.1),
+    0 0 14px rgb(var(--signal-ui-progress-meter-accent-rgb) / 0.1);
+}
+
+.signal-ui-progress-meter--splash.signal-ui-progress-meter--completed .signal-ui-progress-meter__cell::before,
+.signal-ui-progress-meter--splash.signal-ui-progress-meter--completed .signal-ui-progress-meter__cell::after {
+  opacity: 0;
+}
+
+.signal-ui-progress-meter--splash.signal-ui-progress-meter--completed .signal-ui-progress-meter__cell--active {
+  animation: none;
+}
+
+.signal-ui-progress-meter--splash.signal-ui-progress-meter--completed .signal-ui-progress-meter__completion-label {
+  padding: 6px 13px 5px;
+  border-color: rgb(var(--signal-ui-progress-meter-accent-rgb) / 0.4);
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0.18), transparent 48%),
+    linear-gradient(
+      90deg,
+      rgb(var(--signal-ui-progress-meter-accent-rgb) / 0.24),
+      rgb(var(--signal-ui-progress-meter-accent-rgb) / 0.12)
+    );
+  box-shadow:
+    inset 0 0 0 1px rgb(255 255 255 / 0.06),
+    0 0 22px rgb(var(--signal-ui-progress-meter-accent-rgb) / 0.16);
 }
 
 .signal-ui-progress-panel__metrics {
@@ -2334,6 +2467,17 @@ h6.ant-typography {
       100% 50%;
   }
 
+  .signal-ui-progress-meter__completion,
+  .signal-ui-progress-meter__completion-label,
+  .signal-ui-progress-meter--splash .signal-ui-progress-meter__track,
+  .signal-ui-progress-meter--splash .signal-ui-progress-meter__cells,
+  .signal-ui-progress-meter--splash .signal-ui-progress-meter__cells::after,
+  .signal-ui-progress-meter--splash .signal-ui-progress-meter__cell,
+  .signal-ui-progress-meter--splash .signal-ui-progress-meter__cell::before,
+  .signal-ui-progress-meter--splash .signal-ui-progress-meter__cell::after {
+    transition: none;
+  }
+
   .signal-ui-signal-button.ant-btn {
     animation: none;
     transform: none;
@@ -2395,6 +2539,13 @@ h6.ant-typography {
     display: none;
   }
 
+  .signal-ui-progress-meter--splash .signal-ui-progress-meter__cells::before,
+  .signal-ui-progress-meter--splash .signal-ui-progress-meter__cells::after,
+  .signal-ui-progress-meter--splash .signal-ui-progress-meter__cell::before,
+  .signal-ui-progress-meter--splash .signal-ui-progress-meter__cell::after {
+    display: none;
+  }
+
   .signal-ui-progress-meter__cell {
     border-color: CanvasText;
     background: Canvas;
@@ -2403,12 +2554,19 @@ h6.ant-typography {
 
   .signal-ui-progress-meter__cell--filled,
   .signal-ui-progress-meter__cell--active,
+  .signal-ui-progress-meter__completion-label,
   .signal-ui-progress-panel__status,
   .signal-ui-progress-meter__percent,
   .signal-ui-progress-panel__eyebrow,
   .signal-ui-progress-panel__title,
   .signal-ui-progress-panel__metric-value {
     color: CanvasText;
+  }
+
+  .signal-ui-progress-meter__completion-label {
+    border-color: CanvasText;
+    background: Canvas;
+    box-shadow: none;
   }
 }
 

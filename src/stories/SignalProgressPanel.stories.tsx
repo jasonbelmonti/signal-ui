@@ -9,6 +9,8 @@ const meta = {
   component: SignalProgressPanel,
   args: {
     eyebrow: "Live Operation",
+    meterCompleted: false,
+    meterCompletionLabel: "seal verified",
     title: "Synchronizing uplink shard",
     description:
       "Compact status panel for long-running work where you want the operation summary and a legible progress read at the same time.",
@@ -39,6 +41,12 @@ const meta = {
     meterVariant: {
       control: "inline-radio",
       options: ["flat", "splash"],
+    },
+    meterCompleted: {
+      control: "boolean",
+    },
+    meterCompletionLabel: {
+      control: "text",
     },
     segmentCount: {
       control: {
