@@ -1,8 +1,12 @@
 import { Col, Row, Space, Typography } from "antd";
 import type { Meta, StoryObj } from "@storybook/react-webpack5";
+import type { CSSProperties } from "react";
 
 import { Panel } from "../components/Panel.js";
 import { signalPalette } from "../theme/signalTheme.js";
+
+type SignalReadoutStyle = CSSProperties &
+  Record<`--signal-ui-fx-signal-${string}`, string | number>;
 
 const meta = {
   title: "Components/Panel",
@@ -34,6 +38,21 @@ const meta = {
     },
     cutCornerColor: {
       control: "color",
+    },
+    frame: {
+      control: "inline-radio",
+      options: ["reticle"],
+    },
+    frameColor: {
+      control: "color",
+    },
+    frameSize: {
+      control: {
+        type: "range",
+        min: 18,
+        max: 44,
+        step: 2,
+      },
     },
   },
   tags: ["autodocs"],
@@ -109,6 +128,78 @@ export const CornerRhythm: Story = {
   ),
 };
 
+export const ReticleFrame: Story = {
+  args: {
+    title: "Target Vector",
+    frame: "reticle",
+    frameColor: signalPalette.primary,
+    frameSize: 28,
+    cutCornerPreset: "tactical",
+  },
+  render: (args) => (
+    <Row gutter={[16, 16]}>
+      <Col xs={24} lg={14}>
+        <Panel {...args}>
+          <Space direction="vertical" size={14} style={{ width: "100%" }}>
+            <div>
+              <Typography.Text style={eyebrowStyle}>Signal Lock</Typography.Text>
+              <div className="signal-ui-signal-text" style={reticleReadoutStyle}>
+                active target relay
+              </div>
+            </div>
+
+            <Typography.Paragraph style={{ margin: 0 }}>
+              The reticle frame uses the same sweep, scanline, and phosphor-noise language as
+              SignalText, but applies it to the panel surface so a key module feels actively
+              acquired instead of merely highlighted.
+            </Typography.Paragraph>
+
+            <Row gutter={[12, 12]}>
+              {reticleMetrics.map((metric) => (
+                <Col xs={24} sm={8} key={metric.label}>
+                  <div style={metricBlockStyle}>
+                    <Typography.Text style={metricLabelStyle}>{metric.label}</Typography.Text>
+                    <div className="signal-ui-signal-text" style={metricValueStyle}>
+                      {metric.value}
+                    </div>
+                  </div>
+                </Col>
+              ))}
+            </Row>
+          </Space>
+        </Panel>
+      </Col>
+
+      <Col xs={24} lg={10}>
+        <Panel
+          title="Secondary Lock"
+          frame="reticle"
+          frameColor={signalPalette.accentViolet}
+          frameSize={24}
+          cutCorner="notch"
+          cutCornerPlacement="bottom-left"
+          cutCornerColor={signalPalette.accentViolet}
+          style={{ height: "100%" }}
+        >
+          <Space direction="vertical" size={12}>
+            <Typography.Text style={{ ...eyebrowStyle, color: signalPalette.accentViolet }}>
+              Alternate Channel
+            </Typography.Text>
+            <div className="signal-ui-signal-text" style={violetReticleReadoutStyle}>
+              cross-lane sync
+            </div>
+            <Typography.Paragraph style={{ margin: 0 }}>
+              The reticle brackets still read cleanly when combined with the quieter architectural
+              notch, so the frame can carry more presence without turning every panel into a
+              warning state.
+            </Typography.Paragraph>
+          </Space>
+        </Panel>
+      </Col>
+    </Row>
+  ),
+};
+
 const eyebrowStyle = {
   display: "block",
   marginBottom: 6,
@@ -151,4 +242,46 @@ const cornerPanels = [
     cutCornerColor: signalPalette.accentViolet,
     copy: "Lets violet behave like a special-state accent instead of a default token.",
   },
+];
+
+const reticleReadoutStyle: SignalReadoutStyle = {
+  "--signal-ui-fx-signal-accent": signalPalette.primary,
+  "--signal-ui-fx-signal-glow": "rgb(var(--signal-ui-primary-rgb) / 0.4)",
+  fontSize: 24,
+  letterSpacing: "0.16em",
+  lineHeight: 0.98,
+};
+
+const violetReticleReadoutStyle: SignalReadoutStyle = {
+  ...reticleReadoutStyle,
+  "--signal-ui-fx-signal-accent": signalPalette.accentViolet,
+  "--signal-ui-fx-signal-glow": "rgba(159, 77, 255, 0.34)",
+  fontSize: 20,
+};
+
+const metricBlockStyle: CSSProperties = {
+  padding: "10px 12px",
+  border: "1px solid rgba(255, 255, 255, 0.08)",
+  background: "rgba(255, 255, 255, 0.02)",
+};
+
+const metricLabelStyle: CSSProperties = {
+  display: "block",
+  marginBottom: 6,
+  color: "rgba(245, 245, 240, 0.72)",
+  fontSize: 11,
+  letterSpacing: "0.12em",
+  textTransform: "uppercase",
+};
+
+const metricValueStyle: CSSProperties = {
+  fontSize: 18,
+  letterSpacing: "0.14em",
+  lineHeight: 1,
+};
+
+const reticleMetrics = [
+  { label: "Vector", value: "A17" },
+  { label: "Drift", value: "0.4°" },
+  { label: "Sweep", value: "SYNC" },
 ];

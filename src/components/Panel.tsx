@@ -4,6 +4,7 @@ import type { CSSProperties } from "react";
 
 export type PanelCutCorner = "accent" | "notch";
 export type PanelCutCornerPreset = "tactical" | "architectural";
+export type PanelFrame = "reticle";
 
 export type PanelCutCornerPlacement =
   | "top-left"
@@ -17,11 +18,16 @@ export interface PanelProps extends CardProps {
   cutCornerPlacement?: PanelCutCornerPlacement;
   cutCornerSize?: number | string;
   cutCornerColor?: string;
+  frame?: PanelFrame;
+  frameColor?: string;
+  frameSize?: number | string;
 }
 
 type PanelStyle = CSSProperties & {
   "--signal-ui-panel-cut-color"?: string;
   "--signal-ui-panel-cut-size"?: string;
+  "--signal-ui-panel-reticle-color"?: string;
+  "--signal-ui-panel-reticle-size"?: string;
 };
 
 type PanelCutCornerPresetDefinition = {
@@ -65,6 +71,9 @@ export function Panel({
   cutCornerPreset,
   cutCornerPlacement,
   cutCornerSize,
+  frame,
+  frameColor,
+  frameSize,
   style,
   ...cardProps
 }: PanelProps) {
@@ -81,6 +90,12 @@ export function Panel({
           "--signal-ui-panel-cut-size": toCssLength(resolvedCutCornerSize) ?? "26px",
         }
       : {}),
+    ...(frame === "reticle" || frameColor || frameSize
+      ? {
+          "--signal-ui-panel-reticle-color": frameColor ?? "var(--signal-ui-primary)",
+          "--signal-ui-panel-reticle-size": toCssLength(frameSize) ?? "28px",
+        }
+      : {}),
   };
 
   return (
@@ -88,6 +103,7 @@ export function Panel({
       {...cardProps}
       className={joinClassNames(
         "signal-ui-panel",
+        frame ? `signal-ui-panel--frame-${frame}` : undefined,
         resolvedCutCorner ? `signal-ui-panel--cut-${resolvedCutCorner}` : undefined,
         resolvedCutCorner ? `signal-ui-panel--corner-${resolvedCutCornerPlacement}` : undefined,
         className,

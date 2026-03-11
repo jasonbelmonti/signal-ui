@@ -39,6 +39,7 @@ export type {
   PanelCutCorner,
   PanelCutCornerPlacement,
   PanelCutCornerPreset,
+  PanelFrame,
   PanelProps,
 } from "./components/Panel.js";
 export type { SignalButtonProps, SignalButtonTone } from "./components/SignalButton.js";
