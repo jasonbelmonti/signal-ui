@@ -7,6 +7,8 @@ const meta = {
   title: "Components/SignalProgressMeter",
   component: SignalProgressMeter,
   args: {
+    completed: false,
+    completionLabel: "seal verified",
     label: "Transfer Progress",
     progress: 64,
     segmentCount: 24,
@@ -38,6 +40,12 @@ const meta = {
     variant: {
       control: "inline-radio",
       options: ["flat", "splash"],
+    },
+    completed: {
+      control: "boolean",
+    },
+    completionLabel: {
+      control: "text",
     },
   },
   tags: ["autodocs"],
@@ -120,4 +128,14 @@ export const SplashVariants: Story = {
       </Col>
     </Row>
   ),
+};
+
+export const CompletedSplash: Story = {
+  args: {
+    completed: true,
+    completionLabel: "seal verified",
+    progress: 100,
+    segmentCount: 24,
+    variant: "splash",
+  },
 };

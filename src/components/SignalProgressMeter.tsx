@@ -13,6 +13,8 @@ export type SignalProgressMeterVariant = "flat" | "splash";
 
 export interface SignalProgressMeterProps
   extends Omit<ComponentPropsWithoutRef<"div">, "children" | "style"> {
+  completed?: boolean;
+  completionLabel?: ReactNode;
   label?: ReactNode;
   progress: number;
   segmentCount?: number;
@@ -24,6 +26,8 @@ export interface SignalProgressMeterProps
 
 export function SignalProgressMeter({
   className,
+  completed = false,
+  completionLabel,
   label = "operation progress",
   progress,
   segmentCount = 24,
@@ -34,6 +38,8 @@ export function SignalProgressMeter({
   ...props
 }: SignalProgressMeterProps) {
   const clampedProgress = clamp(progress, 0, 100);
+  const isFull = clampedProgress >= 100;
+  const isCompleted = completed && isFull;
   const resolvedSegmentCount = Math.max(8, Math.min(40, Math.round(segmentCount)));
   const filledSegments = Math.round((clampedProgress / 100) * resolvedSegmentCount);
   const activeIndex =
@@ -62,6 +68,8 @@ export function SignalProgressMeter({
       className={joinClassNames(
         "signal-ui-progress-meter",
         tone === "violet" && "signal-ui-progress-meter--violet",
+        isFull && "signal-ui-progress-meter--full",
+        isCompleted && "signal-ui-progress-meter--completed",
         variant === "splash" && "signal-ui-progress-meter--splash",
         className,
       )}
@@ -101,6 +109,11 @@ export function SignalProgressMeter({
             />
           ))}
         </div>
+        {isCompleted && completionLabel ? (
+          <div aria-hidden="true" className="signal-ui-progress-meter__completion">
+            <span className="signal-ui-progress-meter__completion-label">{completionLabel}</span>
+          </div>
+        ) : null}
       </div>
     </div>
   );
