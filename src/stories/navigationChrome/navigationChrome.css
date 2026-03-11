@@ -1,32 +1,32 @@
 .signal-ui-navigation-chrome {
-  --signal-ui-navigation-shell-accent: rgba(192, 254, 4, 0.92);
-  --signal-ui-navigation-shell-border: rgba(192, 254, 4, 0.24);
-  --signal-ui-navigation-shell-glow: rgba(192, 254, 4, 0.12);
-  --signal-ui-navigation-shell-highlight: rgba(192, 254, 4, 0.22);
-  --signal-ui-navigation-shell-muted: rgba(245, 245, 240, 0.7);
+  --signal-ui-navigation-shell-accent: rgb(var(--signal-ui-primary-rgb) / 0.92);
+  --signal-ui-navigation-shell-border: rgb(var(--signal-ui-primary-rgb) / 0.24);
+  --signal-ui-navigation-shell-glow: rgb(var(--signal-ui-primary-rgb) / 0.12);
+  --signal-ui-navigation-shell-highlight: rgb(var(--signal-ui-primary-rgb) / 0.22);
+  --signal-ui-navigation-shell-muted: rgb(var(--signal-ui-text-rgb) / 0.7);
   max-width: 1380px;
   margin: 0 auto;
 }
 
 .signal-ui-navigation-chrome--primary {
-  --signal-ui-navigation-shell-accent: rgba(192, 254, 4, 0.92);
-  --signal-ui-navigation-shell-border: rgba(192, 254, 4, 0.24);
-  --signal-ui-navigation-shell-glow: rgba(192, 254, 4, 0.12);
-  --signal-ui-navigation-shell-highlight: rgba(192, 254, 4, 0.22);
+  --signal-ui-navigation-shell-accent: rgb(var(--signal-ui-primary-rgb) / 0.92);
+  --signal-ui-navigation-shell-border: rgb(var(--signal-ui-primary-rgb) / 0.24);
+  --signal-ui-navigation-shell-glow: rgb(var(--signal-ui-primary-rgb) / 0.12);
+  --signal-ui-navigation-shell-highlight: rgb(var(--signal-ui-primary-rgb) / 0.22);
 }
 
 .signal-ui-navigation-chrome--violet {
-  --signal-ui-navigation-shell-accent: rgba(159, 77, 255, 0.94);
-  --signal-ui-navigation-shell-border: rgba(159, 77, 255, 0.24);
-  --signal-ui-navigation-shell-glow: rgba(159, 77, 255, 0.12);
-  --signal-ui-navigation-shell-highlight: rgba(159, 77, 255, 0.22);
+  --signal-ui-navigation-shell-accent: rgb(var(--signal-ui-accent-violet-rgb) / 0.94);
+  --signal-ui-navigation-shell-border: rgb(var(--signal-ui-accent-violet-rgb) / 0.24);
+  --signal-ui-navigation-shell-glow: rgb(var(--signal-ui-accent-violet-rgb) / 0.12);
+  --signal-ui-navigation-shell-highlight: rgb(var(--signal-ui-accent-violet-rgb) / 0.22);
 }
 
 .signal-ui-navigation-chrome--warning {
-  --signal-ui-navigation-shell-accent: rgba(255, 155, 47, 0.94);
-  --signal-ui-navigation-shell-border: rgba(255, 155, 47, 0.24);
-  --signal-ui-navigation-shell-glow: rgba(255, 155, 47, 0.12);
-  --signal-ui-navigation-shell-highlight: rgba(255, 155, 47, 0.22);
+  --signal-ui-navigation-shell-accent: rgb(var(--signal-ui-warning-rgb) / 0.94);
+  --signal-ui-navigation-shell-border: rgb(var(--signal-ui-warning-rgb) / 0.24);
+  --signal-ui-navigation-shell-glow: rgb(var(--signal-ui-warning-rgb) / 0.12);
+  --signal-ui-navigation-shell-highlight: rgb(var(--signal-ui-warning-rgb) / 0.22);
 }
 
 .signal-ui-navigation-chrome__frame {
@@ -174,11 +174,11 @@
 }
 
 .signal-ui-navigation-chrome__nav-button--warning {
-  border-color: rgba(255, 155, 47, 0.24);
+  border-color: rgb(var(--signal-ui-warning-rgb) / 0.24);
 }
 
 .signal-ui-navigation-chrome__nav-button--violet {
-  border-color: rgba(159, 77, 255, 0.24);
+  border-color: rgb(var(--signal-ui-accent-violet-rgb) / 0.24);
 }
 
 .signal-ui-navigation-chrome__utilities {
@@ -214,7 +214,7 @@
 }
 
 .signal-ui-navigation-chrome__utility-stat--primary {
-  border-color: rgba(192, 254, 4, 0.22);
+  border-color: rgb(var(--signal-ui-primary-rgb) / 0.22);
 }
 
 .signal-ui-navigation-chrome__utility-stat--success {
@@ -222,15 +222,15 @@
 }
 
 .signal-ui-navigation-chrome__utility-stat--violet {
-  border-color: rgba(159, 77, 255, 0.24);
+  border-color: rgb(var(--signal-ui-accent-violet-rgb) / 0.24);
 }
 
 .signal-ui-navigation-chrome__utility-stat--warning {
-  border-color: rgba(255, 155, 47, 0.24);
+  border-color: rgb(var(--signal-ui-warning-rgb) / 0.24);
 }
 
 .signal-ui-navigation-chrome__utility-stat--danger {
-  border-color: rgba(242, 71, 35, 0.26);
+  border-color: rgb(var(--signal-ui-error-rgb) / 0.26);
 }
 
 .signal-ui-navigation-chrome__utility-value {

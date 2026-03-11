@@ -5,6 +5,7 @@
   --signal-ui-surface: #1c1c1c;
   --signal-ui-grid: #2b2b2b;
   --signal-ui-muted: #717171;
+  --signal-ui-muted-rgb: 113 113 113;
   --signal-ui-text: #f5f5f0;
   --signal-ui-text-rgb: 245 245 240;
   --signal-ui-primary: #c0fe04;
@@ -16,7 +17,9 @@
   --signal-ui-accent-violet-rgb: 159 77 255;
   --signal-ui-field-violet: #9f4dff;
   --signal-ui-warning: #ff9b2f;
+  --signal-ui-warning-rgb: 255 155 47;
   --signal-ui-error: #f24723;
+  --signal-ui-error-rgb: 242 71 35;
   --signal-ui-font-ui: "Azeret Mono", "SFMono-Regular", "Menlo", monospace;
   --signal-ui-font-display: "Oxanium", "Azeret Mono", sans-serif;
   --signal-ui-font-display-secondary: "Doto", "Oxanium", "Azeret Mono", sans-serif;
@@ -800,21 +803,21 @@ h6.ant-typography {
 
 .signal-ui-graph-node--warning {
   --signal-ui-graph-node-accent: var(--signal-ui-warning);
-  --signal-ui-graph-node-accent-glow: rgba(255, 155, 47, 0.18);
+  --signal-ui-graph-node-accent-glow: rgb(var(--signal-ui-warning-rgb) / 0.18);
   --signal-ui-graph-node-badge-bg: var(--signal-ui-warning);
 }
 
 .signal-ui-graph-node--error {
   --signal-ui-graph-node-accent: var(--signal-ui-error);
-  --signal-ui-graph-node-accent-glow: rgba(242, 71, 35, 0.18);
+  --signal-ui-graph-node-accent-glow: rgb(var(--signal-ui-error-rgb) / 0.18);
   --signal-ui-graph-node-badge-bg: var(--signal-ui-error);
 }
 
 .signal-ui-graph-node--neutral {
-  --signal-ui-graph-node-accent: #b0b0aa;
-  --signal-ui-graph-node-accent-glow: rgba(176, 176, 170, 0.14);
-  --signal-ui-graph-node-badge-bg: #b0b0aa;
-  --signal-ui-graph-node-handle: rgba(176, 176, 170, 0.9);
+  --signal-ui-graph-node-accent: var(--signal-ui-muted);
+  --signal-ui-graph-node-accent-glow: rgb(var(--signal-ui-muted-rgb) / 0.14);
+  --signal-ui-graph-node-badge-bg: var(--signal-ui-muted);
+  --signal-ui-graph-node-handle: rgb(var(--signal-ui-muted-rgb) / 0.9);
 }
 
 .signal-ui-graph-canvas__surface .react-flow__node.selected .signal-ui-graph-node,
@@ -892,7 +895,7 @@ h6.ant-typography {
 }
 
 .signal-ui-graph-node__badge--neutral {
-  background: #b0b0aa;
+  background: var(--signal-ui-muted);
 }
 
 .signal-ui-graph-node__handle {

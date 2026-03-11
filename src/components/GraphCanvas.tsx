@@ -79,8 +79,8 @@ export interface GraphCanvasProps<NodeType extends Node = Node, EdgeType extends
 }
 
 const defaultBackgroundProps: BackgroundProps = {
-  bgColor: "#090909",
-  color: "rgba(245, 245, 240, 0.15)",
+  bgColor: "var(--signal-ui-black)",
+  color: "rgb(var(--signal-ui-text-rgb) / 0.15)",
   gap: 24,
   lineWidth: 1,
   variant: BackgroundVariant.Lines,
@@ -177,10 +177,10 @@ export function GraphCanvas<NodeType extends Node = Node, EdgeType extends Edge 
     [edgeTypes],
   );
   const resolvedMiniMapProps = {
-    bgColor: "#060606",
+    bgColor: "var(--signal-ui-void)",
     className: "signal-ui-graph-canvas__minimap",
     maskColor: "rgba(5, 5, 5, 0.72)",
-    maskStrokeColor: "rgba(192, 254, 4, 0.38)",
+    maskStrokeColor: "rgb(var(--signal-ui-primary-rgb) / 0.38)",
     maskStrokeWidth: 1,
     nodeBorderRadius: 2,
     nodeColor: (node: Node) =>
@@ -189,7 +189,7 @@ export function GraphCanvas<NodeType extends Node = Node, EdgeType extends Edge 
         : graphCanvasToneAccentColor[getNodeTone(node)],
     nodeStrokeColor: (node: Node) =>
       node.selected
-        ? "rgba(249, 255, 239, 0.92)"
+        ? "rgb(var(--signal-ui-text-rgb) / 0.92)"
         : graphCanvasToneStrokeColor[getNodeTone(node)],
     nodeStrokeWidth: 1,
     ...miniMapProps,

@@ -4,7 +4,8 @@ import { useMemo, useRef } from "react";
 import { AdditiveBlending, Color, MathUtils, Quaternion, Vector3 } from "three";
 import type { Group, Mesh, MeshBasicMaterial } from "three";
 
-import { signalPalette } from "../theme/signalTheme.js";
+import { darkenHexColor, mixHexColors } from "../theme/colorUtils.js";
+import { useSignalRuntimePalette } from "../theme/useSignalRuntimePalette.js";
 
 export type SignalWireframeTone = "primary" | "violet";
 
@@ -184,23 +185,30 @@ function SignalWireframeScene({
   tone: SignalWireframeTone;
 }) {
   const sceneRef = useRef<Group | null>(null);
+  const runtimePalette = useSignalRuntimePalette();
   const toneColors = useMemo(() => {
     if (tone === "violet") {
       return {
-        accent: signalPalette.accentViolet,
-        base: "#6d2fd0",
-        node: "#d7b8ff",
-        tail: "#7d55d7",
+        accent: runtimePalette.accentViolet,
+        base: darkenHexColor(runtimePalette.accentViolet, 0.32),
+        node: mixHexColors(runtimePalette.text, runtimePalette.accentViolet, 0.18),
+        tail: darkenHexColor(runtimePalette.accentViolet, 0.18),
       };
     }
 
     return {
-      accent: signalPalette.primary,
-      base: signalPalette.primaryDeep,
-      node: "#f7ffd7",
-      tail: "#8fcb1c",
+      accent: runtimePalette.primary,
+      base: runtimePalette.primaryDeep,
+      node: mixHexColors(runtimePalette.text, runtimePalette.primary, 0.16),
+      tail: mixHexColors(runtimePalette.primary, runtimePalette.primaryDeep, 0.5),
     };
-  }, [tone]);
+  }, [
+    runtimePalette.accentViolet,
+    runtimePalette.primary,
+    runtimePalette.primaryDeep,
+    runtimePalette.text,
+    tone,
+  ]);
 
   useFrame(({ clock }) => {
     const scene = sceneRef.current;

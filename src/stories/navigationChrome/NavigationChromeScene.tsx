@@ -7,7 +7,6 @@ import { SignalButton } from "../../components/SignalButton.js";
 import { SignalHeaderLockup } from "../../components/SignalHeaderLockup.js";
 import { SignalStatusTag } from "../../components/SignalStatusTag.js";
 import type { SignalStatusTagTone } from "../../components/SignalStatusTag.js";
-import { signalPalette } from "../../theme/signalTheme.js";
 import { joinClassNames } from "../../utils/joinClassNames.js";
 import {
   navigationChromeScenes,
@@ -330,32 +329,32 @@ function heroTagKey(tag: NavigationChromeHeroTag) {
 function panelToneStyle(tone: SignalStatusTagTone): ChromePanelStyle {
   const paletteByTone: Record<SignalStatusTagTone, ChromePanelStyle> = {
     danger: {
-      "--signal-ui-navigation-panel-accent": signalPalette.error,
-      "--signal-ui-navigation-panel-glow": "rgba(242, 71, 35, 0.14)",
+      "--signal-ui-navigation-panel-accent": "var(--signal-ui-error)",
+      "--signal-ui-navigation-panel-glow": "rgb(var(--signal-ui-error-rgb) / 0.14)",
     },
     info: {
       "--signal-ui-navigation-panel-accent": "#54ecff",
       "--signal-ui-navigation-panel-glow": "rgba(84, 236, 255, 0.12)",
     },
     neutral: {
-      "--signal-ui-navigation-panel-accent": "rgba(245, 245, 240, 0.74)",
-      "--signal-ui-navigation-panel-glow": "rgba(255, 255, 255, 0.06)",
+      "--signal-ui-navigation-panel-accent": "rgb(var(--signal-ui-text-rgb) / 0.74)",
+      "--signal-ui-navigation-panel-glow": "rgb(var(--signal-ui-text-rgb) / 0.06)",
     },
     primary: {
-      "--signal-ui-navigation-panel-accent": signalPalette.primary,
-      "--signal-ui-navigation-panel-glow": "rgba(192, 254, 4, 0.14)",
+      "--signal-ui-navigation-panel-accent": "var(--signal-ui-primary)",
+      "--signal-ui-navigation-panel-glow": "rgb(var(--signal-ui-primary-rgb) / 0.14)",
     },
     success: {
       "--signal-ui-navigation-panel-accent": "#34d399",
       "--signal-ui-navigation-panel-glow": "rgba(52, 211, 153, 0.12)",
     },
     violet: {
-      "--signal-ui-navigation-panel-accent": signalPalette.accentViolet,
-      "--signal-ui-navigation-panel-glow": "rgba(159, 77, 255, 0.14)",
+      "--signal-ui-navigation-panel-accent": "var(--signal-ui-accent-violet)",
+      "--signal-ui-navigation-panel-glow": "rgb(var(--signal-ui-accent-violet-rgb) / 0.14)",
     },
     warning: {
-      "--signal-ui-navigation-panel-accent": signalPalette.warning,
-      "--signal-ui-navigation-panel-glow": "rgba(255, 155, 47, 0.14)",
+      "--signal-ui-navigation-panel-accent": "var(--signal-ui-warning)",
+      "--signal-ui-navigation-panel-glow": "rgb(var(--signal-ui-warning-rgb) / 0.14)",
     },
   };
 

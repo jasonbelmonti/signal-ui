@@ -50,9 +50,9 @@
 }
 
 .signal-ui-empty-state {
-  --signal-ui-empty-state-border: rgba(192, 254, 4, 0.24);
+  --signal-ui-empty-state-border: rgb(var(--signal-ui-primary-rgb) / 0.24);
   --signal-ui-empty-state-field: var(--signal-ui-field-primary);
-  --signal-ui-empty-state-glow: rgba(192, 254, 4, 0.12);
+  --signal-ui-empty-state-glow: rgb(var(--signal-ui-primary-rgb) / 0.12);
   display: grid;
   gap: 24px;
   align-items: center;
@@ -118,27 +118,27 @@
 }
 
 .signal-ui-empty-state--tone-primary {
-  --signal-ui-empty-state-border: rgba(192, 254, 4, 0.28);
+  --signal-ui-empty-state-border: rgb(var(--signal-ui-primary-rgb) / 0.28);
   --signal-ui-empty-state-field: var(--signal-ui-field-primary);
-  --signal-ui-empty-state-glow: rgba(192, 254, 4, 0.12);
+  --signal-ui-empty-state-glow: rgb(var(--signal-ui-primary-rgb) / 0.12);
 }
 
 .signal-ui-empty-state--tone-violet {
-  --signal-ui-empty-state-border: rgba(159, 77, 255, 0.28);
+  --signal-ui-empty-state-border: rgb(var(--signal-ui-accent-violet-rgb) / 0.28);
   --signal-ui-empty-state-field: var(--signal-ui-field-violet);
-  --signal-ui-empty-state-glow: rgba(159, 77, 255, 0.12);
+  --signal-ui-empty-state-glow: rgb(var(--signal-ui-accent-violet-rgb) / 0.12);
 }
 
 .signal-ui-empty-state--tone-warning {
-  --signal-ui-empty-state-border: rgba(255, 155, 47, 0.28);
+  --signal-ui-empty-state-border: rgb(var(--signal-ui-warning-rgb) / 0.28);
   --signal-ui-empty-state-field: var(--signal-ui-warning);
-  --signal-ui-empty-state-glow: rgba(255, 155, 47, 0.12);
+  --signal-ui-empty-state-glow: rgb(var(--signal-ui-warning-rgb) / 0.12);
 }
 
 .signal-ui-empty-state--tone-error {
-  --signal-ui-empty-state-border: rgba(242, 71, 35, 0.3);
+  --signal-ui-empty-state-border: rgb(var(--signal-ui-error-rgb) / 0.3);
   --signal-ui-empty-state-field: var(--signal-ui-error);
-  --signal-ui-empty-state-glow: rgba(242, 71, 35, 0.12);
+  --signal-ui-empty-state-glow: rgb(var(--signal-ui-error-rgb) / 0.12);
 }
 
 .signal-ui-empty-state--tone-violet .signal-ui-accent-field {
@@ -186,21 +186,21 @@
 }
 
 .signal-ui-status-tag--neutral {
-  --signal-ui-status-tag-bg: rgba(113, 113, 113, 0.12);
-  --signal-ui-status-tag-border: rgba(113, 113, 113, 0.34);
-  --signal-ui-status-tag-fg: rgba(245, 245, 240, 0.82);
+  --signal-ui-status-tag-bg: rgb(var(--signal-ui-muted-rgb) / 0.12);
+  --signal-ui-status-tag-border: rgb(var(--signal-ui-muted-rgb) / 0.34);
+  --signal-ui-status-tag-fg: rgb(var(--signal-ui-text-rgb) / 0.82);
 }
 
 .signal-ui-status-tag--primary {
-  --signal-ui-status-tag-bg: rgba(192, 254, 4, 0.12);
-  --signal-ui-status-tag-border: rgba(192, 254, 4, 0.36);
-  --signal-ui-status-tag-fg: #f7ffd7;
+  --signal-ui-status-tag-bg: rgb(var(--signal-ui-primary-rgb) / 0.12);
+  --signal-ui-status-tag-border: rgb(var(--signal-ui-primary-rgb) / 0.36);
+  --signal-ui-status-tag-fg: color-mix(in srgb, var(--signal-ui-text) 88%, var(--signal-ui-primary));
 }
 
 .signal-ui-status-tag--violet {
-  --signal-ui-status-tag-bg: rgba(159, 77, 255, 0.12);
-  --signal-ui-status-tag-border: rgba(159, 77, 255, 0.36);
-  --signal-ui-status-tag-fg: #eadbff;
+  --signal-ui-status-tag-bg: rgb(var(--signal-ui-accent-violet-rgb) / 0.12);
+  --signal-ui-status-tag-border: rgb(var(--signal-ui-accent-violet-rgb) / 0.36);
+  --signal-ui-status-tag-fg: color-mix(in srgb, var(--signal-ui-text) 86%, var(--signal-ui-accent-violet));
 }
 
 .signal-ui-status-tag--info {
@@ -216,15 +216,15 @@
 }
 
 .signal-ui-status-tag--warning {
-  --signal-ui-status-tag-bg: rgba(255, 155, 47, 0.14);
-  --signal-ui-status-tag-border: rgba(255, 155, 47, 0.34);
-  --signal-ui-status-tag-fg: #ffe7c6;
+  --signal-ui-status-tag-bg: rgb(var(--signal-ui-warning-rgb) / 0.14);
+  --signal-ui-status-tag-border: rgb(var(--signal-ui-warning-rgb) / 0.34);
+  --signal-ui-status-tag-fg: color-mix(in srgb, var(--signal-ui-text) 86%, var(--signal-ui-warning));
 }
 
 .signal-ui-status-tag--danger {
-  --signal-ui-status-tag-bg: rgba(242, 71, 35, 0.14);
-  --signal-ui-status-tag-border: rgba(242, 71, 35, 0.34);
-  --signal-ui-status-tag-fg: #ffd6cd;
+  --signal-ui-status-tag-bg: rgb(var(--signal-ui-error-rgb) / 0.14);
+  --signal-ui-status-tag-border: rgb(var(--signal-ui-error-rgb) / 0.34);
+  --signal-ui-status-tag-fg: color-mix(in srgb, var(--signal-ui-text) 84%, var(--signal-ui-error));
 }
 
 @media (max-width: 900px) {
