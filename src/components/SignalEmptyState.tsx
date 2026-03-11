@@ -4,6 +4,7 @@ import type { ComponentPropsWithoutRef, ReactNode } from "react";
 import { joinClassNames } from "../utils/joinClassNames.js";
 import { PixelCubeLoader } from "./PixelCubeLoader.js";
 import { PixelCubePath } from "./PixelCubePath.js";
+import type { PixelCubePathTone } from "./PixelCubePath.js";
 import { SignalWireframe } from "./SignalWireframe.js";
 
 export type SignalEmptyStateTone = "default" | "primary" | "violet" | "warning" | "error";
@@ -45,6 +46,7 @@ export function SignalEmptyState({
 }: SignalEmptyStateProps) {
   const visualNode = resolveSignalEmptyStateVisual({
     compact,
+    tone,
     visual,
     visualDetail,
     visualLabel,
@@ -101,12 +103,14 @@ export function SignalEmptyState({
 
 function resolveSignalEmptyStateVisual({
   compact,
+  tone,
   visual,
   visualDetail,
   visualLabel,
   visualTone,
 }: {
   compact: boolean;
+  tone: SignalEmptyStateTone;
   visual: ReactNode | SignalEmptyStateVisual;
   visualDetail?: string;
   visualLabel?: string;
@@ -130,18 +134,27 @@ function resolveSignalEmptyStateVisual({
   }
 
   if (visual === "pixel-path") {
+    const resolvedPixelPathTone: PixelCubePathTone =
+      tone === "error" ? "error" : visualTone;
+
     if (visualLabel) {
       return (
         <PixelCubePath
           label={visualLabel}
           size={compact ? 136 : 208}
-          tone={visualTone}
+          tone={resolvedPixelPathTone}
           usage="loader"
         />
       );
     }
 
-    return <PixelCubePath size={compact ? 136 : 208} tone={visualTone} usage="decorative" />;
+    return (
+      <PixelCubePath
+        size={compact ? 136 : 208}
+        tone={resolvedPixelPathTone}
+        usage="decorative"
+      />
+    );
   }
 
   if (visual === "wireframe") {

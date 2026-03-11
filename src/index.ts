@@ -8,6 +8,7 @@ export { HashCube } from "./components/HashCube.js";
 export { GraphCanvas } from "./components/GraphCanvas.js";
 export type { GraphCanvasProps, GraphCanvasReactFlowProps } from "./components/GraphCanvas.js";
 export { MarkdownTheme } from "./components/MarkdownTheme.js";
+export { SignalBackdrop } from "./components/SignalBackdrop.js";
 export {
   GRAPH_CANVAS_EDGE_TYPE,
   GraphCanvasEdge,
@@ -17,6 +18,7 @@ export {
   GraphCanvasNode,
 } from "./components/GraphCanvasNode.js";
 export { Panel, panelCutCornerPresets } from "./components/Panel.js";
+export { SignalChat } from "./components/SignalChat.js";
 export { SignalButton } from "./components/SignalButton.js";
 export { SignalEmptyState } from "./components/SignalEmptyState.js";
 export { SignalHeaderLockup } from "./components/SignalHeaderLockup.js";
@@ -34,6 +36,14 @@ export type {
   GraphCanvasNodeData,
   GraphCanvasNodeDefinition,
 } from "./components/GraphCanvasNode.js";
+export type {
+  SignalBackdropDensity,
+  SignalBackdropFocusPoint,
+  SignalBackdropProps,
+  SignalBackdropTelemetry,
+  SignalBackdropTone,
+  SignalBackdropVariant,
+} from "./components/SignalBackdrop.js";
 export type { GraphCanvasTone } from "./components/graphCanvasTheme.js";
 export type {
   PanelCutCorner,
@@ -41,6 +51,14 @@ export type {
   PanelCutCornerPreset,
   PanelProps,
 } from "./components/Panel.js";
+export type {
+  SignalChatAttachment,
+  SignalChatConversation,
+  SignalChatMessage,
+  SignalChatMessageRole,
+  SignalChatPrompt,
+  SignalChatProps,
+} from "./components/SignalChat.js";
 export type { SignalButtonProps, SignalButtonTone } from "./components/SignalButton.js";
 export type {
   SignalEmptyStateProps,
@@ -88,3 +106,16 @@ export type {
   SignalThemeColorPreferences,
   SignalThemePreferences,
 } from "./theme/signalTheme.js";
+export {
+  materializeNoiseCue,
+  playNoiseCue,
+  primeNoiseEngine,
+} from "./audio/index.js";
+export type {
+  MaterializedCueLayer,
+  MaterializedNoiseCue,
+  MaterializedNoiseLayer,
+  MaterializedToneLayer,
+  NoiseCueName,
+  NoiseCueOptions,
+} from "./audio/index.js";

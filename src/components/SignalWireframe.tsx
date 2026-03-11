@@ -6,8 +6,10 @@ import type { Group, Mesh, MeshBasicMaterial } from "three";
 
 import { darkenHexColor, mixHexColors } from "../theme/colorUtils.js";
 import { useSignalRuntimePalette } from "../theme/useSignalRuntimePalette.js";
+import { useViewportRenderGate } from "../utils/useViewportRenderGate.js";
 
 export type SignalWireframeTone = "primary" | "violet";
+type SignalWireframeRenderMode = "viewport" | "always";
 
 type SignalWireframeStyle = CSSProperties &
   Record<`--signal-ui-signal-wireframe-${string}`, string | number>;
@@ -19,6 +21,7 @@ type SignalWireframeBaseProps = Omit<
   animated?: boolean;
   detail?: string;
   height?: number;
+  renderMode?: SignalWireframeRenderMode;
   showLegend?: boolean;
   style?: SignalWireframeStyle;
   title?: string;
@@ -126,6 +129,7 @@ export function SignalWireframe({
   detail = "orthogonal beam lattice",
   height = 420,
   label,
+  renderMode = "viewport",
   showLegend = true,
   style,
   title = "wire trace field",
@@ -133,7 +137,20 @@ export function SignalWireframe({
   usage = "decorative",
   ...props
 }: SignalWireframeProps) {
-  const rootClassName = ["signal-ui-signal-wireframe", toneClassName[tone], className]
+  const shouldViewportGate = renderMode === "viewport";
+  const { hasResolvedViewport, isInViewport, targetRef } = useViewportRenderGate<HTMLDivElement>({
+    disabled: !shouldViewportGate,
+    rootMargin: "160px 0px",
+    threshold: 0,
+  });
+  const isIdle = shouldViewportGate && hasResolvedViewport && !isInViewport;
+  const shouldRenderScene = !shouldViewportGate || isInViewport;
+  const rootClassName = [
+    "signal-ui-signal-wireframe",
+    isIdle ? "signal-ui-signal-wireframe--idle" : undefined,
+    toneClassName[tone],
+    className,
+  ]
     .filter(Boolean)
     .join(" ");
   const rootStyle: SignalWireframeStyle = {
@@ -152,16 +169,23 @@ export function SignalWireframe({
 
   return (
     <div className={rootClassName} style={rootStyle} {...accessibilityProps} {...props}>
-      <div aria-hidden="true" className="signal-ui-signal-wireframe__viewport">
-        <Canvas
-          camera={{ fov: 34, position: [0, 0.4, 10.25] }}
-          dpr={[1, 2]}
-          frameloop={animated ? "always" : "demand"}
-          gl={{ alpha: true, antialias: true, powerPreference: "high-performance" }}
-          style={{ width: "100%", height: "100%" }}
-        >
-          <SignalWireframeScene animated={animated} tone={tone} />
-        </Canvas>
+      <div
+        aria-hidden="true"
+        className="signal-ui-signal-wireframe__viewport"
+        ref={targetRef}
+        suppressHydrationWarning={shouldViewportGate}
+      >
+        {shouldRenderScene ? (
+          <Canvas
+            camera={{ fov: 34, position: [0, 0.4, 10.25] }}
+            dpr={[1, 2]}
+            frameloop={animated ? "always" : "demand"}
+            gl={{ alpha: true, antialias: true, powerPreference: "high-performance" }}
+            style={{ width: "100%", height: "100%" }}
+          >
+            <SignalWireframeScene animated={animated} tone={tone} />
+          </Canvas>
+        ) : null}
       </div>
 
       {showLegend ? (
