@@ -2,6 +2,7 @@ import { useRef } from "react";
 import type { CSSProperties, ComponentPropsWithoutRef, ReactNode } from "react";
 
 import { joinClassNames } from "../utils/joinClassNames.js";
+import { useSignalProgressMeterCompletionSurface } from "./useSignalProgressMeterCompletionSurface.js";
 import { useSignalProgressMeterSweep } from "./useSignalProgressMeterSweep.js";
 
 type SignalProgressMeterStyle = CSSProperties & {
@@ -44,6 +45,7 @@ export function SignalProgressMeter({
   const isCompleted = completed && isFull;
   const resolvedSegmentCount = Math.max(8, Math.min(40, Math.round(segmentCount)));
   const filledSegments = Math.round((clampedProgress / 100) * resolvedSegmentCount);
+  const completionSurfaceRef = useRef<HTMLCanvasElement | null>(null);
   const meterRef = useRef<HTMLDivElement | null>(null);
   const activeIndex =
     clampedProgress <= 0
@@ -57,6 +59,12 @@ export function SignalProgressMeter({
     enabled: variant === "splash" && clampedProgress > 0 && !isFull,
     meterRef,
     progress: clampedProgress,
+  });
+
+  useSignalProgressMeterCompletionSurface({
+    canvasRef: completionSurfaceRef,
+    enabled: variant === "splash" && isCompleted,
+    tone,
   });
 
   const rootStyle: SignalProgressMeterStyle = {
@@ -108,6 +116,13 @@ export function SignalProgressMeter({
           className="signal-ui-progress-meter__cells"
           style={{ gridTemplateColumns: `repeat(${resolvedSegmentCount}, minmax(0, 1fr))` }}
         >
+          {variant === "splash" ? (
+            <canvas
+              aria-hidden="true"
+              className="signal-ui-progress-meter__completion-surface"
+              ref={completionSurfaceRef}
+            />
+          ) : null}
           {cells.map((cell) => (
             <span
               aria-hidden="true"
