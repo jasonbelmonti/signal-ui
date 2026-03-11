@@ -2,6 +2,7 @@ import { Col, Row } from "antd";
 import type { Meta, StoryObj } from "@storybook/react-webpack5";
 
 import { SignalProgressPanel } from "../components/SignalProgressPanel.js";
+import { ExampleLoadingFlowDemo } from "./signalProgress/ExampleLoadingFlowDemo.js";
 
 const meta = {
   title: "Components/SignalProgressPanel",
@@ -98,4 +99,8 @@ export const DualOperations: Story = {
       </Col>
     </Row>
   ),
+};
+
+export const ExampleLoading: Story = {
+  render: () => <ExampleLoadingFlowDemo />,
 };
