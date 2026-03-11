@@ -1,4 +1,4 @@
-import { useLayoutEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 
 import { normalizeColor } from "./colorUtils.js";
 import { signalPalette } from "./signalPalette.js";
@@ -33,14 +33,7 @@ function resolveRuntimePaletteColor(
 
 function readSignalRuntimePalette(): RuntimePalette {
   if (typeof window === "undefined" || typeof document === "undefined") {
-    return {
-      accentViolet: signalPalette.accentViolet,
-      fieldPrimary: signalPalette.fieldPrimary,
-      primary: signalPalette.primary,
-      primaryDeep: signalPalette.primaryDeep,
-      text: signalPalette.text,
-      warning: signalPalette.warning,
-    };
+    return getSignalRuntimePaletteFallback();
   }
 
   const rootStyles = window.getComputedStyle(document.documentElement);
@@ -55,25 +48,49 @@ function readSignalRuntimePalette(): RuntimePalette {
   };
 }
 
-function palettesMatch(current: RuntimePalette, next: RuntimePalette) {
-  return (
-    current.accentViolet === next.accentViolet
-    && current.fieldPrimary === next.fieldPrimary
-    && current.primary === next.primary
-    && current.primaryDeep === next.primaryDeep
-    && current.text === next.text
-    && current.warning === next.warning
-  );
+function getSignalRuntimePaletteFallback(): RuntimePalette {
+  return {
+    accentViolet: signalPalette.accentViolet,
+    fieldPrimary: signalPalette.fieldPrimary,
+    primary: signalPalette.primary,
+    primaryDeep: signalPalette.primaryDeep,
+    text: signalPalette.text,
+    warning: signalPalette.warning,
+  };
+}
+
+function subscribeToSignalRuntimePalette(onStoreChange: () => void) {
+  if (typeof document === "undefined" || typeof MutationObserver === "undefined") {
+    return () => {};
+  }
+
+  const rootElement = document.documentElement;
+  const observer = new MutationObserver((mutationList) => {
+    if (
+      mutationList.some(
+        (mutation) =>
+          mutation.type === "attributes"
+          && (mutation.attributeName === "style" || mutation.attributeName === "class"),
+      )
+    ) {
+      onStoreChange();
+    }
+  });
+
+  observer.observe(rootElement, {
+    attributeFilter: ["class", "style"],
+    attributes: true,
+  });
+
+  return () => {
+    observer.disconnect();
+  };
 }
 
 export function useSignalRuntimePalette() {
-  const [palette, setPalette] = useState<RuntimePalette>(() => readSignalRuntimePalette());
-
-  useLayoutEffect(() => {
-    const nextPalette = readSignalRuntimePalette();
-    setPalette((currentPalette) =>
-      palettesMatch(currentPalette, nextPalette) ? currentPalette : nextPalette);
-  });
-
-  return palette;
+  return useSyncExternalStore(
+    subscribeToSignalRuntimePalette,
+    readSignalRuntimePalette,
+    getSignalRuntimePaletteFallback,
+  );
 }
