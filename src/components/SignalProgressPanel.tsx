@@ -6,6 +6,7 @@ import { Panel, type PanelProps } from "./Panel.js";
 import {
   SignalProgressMeter,
   type SignalProgressMeterTone,
+  type SignalProgressMeterVariant,
 } from "./SignalProgressMeter.js";
 
 export interface SignalProgressPanelMetric {
@@ -23,6 +24,7 @@ export interface SignalProgressPanelProps extends Omit<PanelProps, "children" | 
   status?: ReactNode;
   title: ReactNode;
   tone?: SignalProgressMeterTone;
+  meterVariant?: SignalProgressMeterVariant;
 }
 
 export function SignalProgressPanel({
@@ -32,6 +34,7 @@ export function SignalProgressPanel({
   frame,
   frameColor,
   metrics,
+  meterVariant = "flat",
   progress,
   progressLabel = "operation progress",
   segmentCount = 24,
@@ -80,6 +83,7 @@ export function SignalProgressPanel({
           progress={progress}
           segmentCount={segmentCount}
           tone={tone}
+          variant={meterVariant}
         />
 
         {metrics?.length ? (
@@ -101,4 +105,7 @@ const toneFrameColor: Record<SignalProgressMeterTone, string> = {
   primary: "var(--signal-ui-primary)",
   violet: "var(--signal-ui-accent-violet)",
 };
-export type { SignalProgressMeterTone as SignalProgressPanelTone };
+export type {
+  SignalProgressMeterTone as SignalProgressPanelTone,
+  SignalProgressMeterVariant as SignalProgressPanelMeterVariant,
+};

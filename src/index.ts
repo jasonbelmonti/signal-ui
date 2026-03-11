@@ -77,9 +77,11 @@ export type {
 export type {
   SignalProgressMeterProps,
   SignalProgressMeterTone,
+  SignalProgressMeterVariant,
 } from "./components/SignalProgressMeter.js";
 export type {
   SignalProgressPanelMetric,
+  SignalProgressPanelMeterVariant,
   SignalProgressPanelProps,
   SignalProgressPanelTone,
 } from "./components/SignalProgressPanel.js";

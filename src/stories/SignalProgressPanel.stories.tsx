@@ -15,6 +15,7 @@ const meta = {
     progressLabel: "transfer progress",
     status: "streaming",
     tone: "primary",
+    meterVariant: "flat",
     metrics: [
       { label: "Stage", value: "04/07" },
       { label: "Rate", value: "18 MB/S" },
@@ -33,6 +34,10 @@ const meta = {
     tone: {
       control: "inline-radio",
       options: ["primary", "violet"],
+    },
+    meterVariant: {
+      control: "inline-radio",
+      options: ["flat", "splash"],
     },
     segmentCount: {
       control: {
@@ -59,6 +64,7 @@ export const DualOperations: Story = {
         <SignalProgressPanel
           description="Reticle-framed progress surface for active ingest or deployment work where a plain percentage readout feels too generic."
           eyebrow="Active Relay"
+          meterVariant="splash"
           metrics={[
             { label: "Stage", value: "04/07" },
             { label: "Rate", value: "18 MB/S" },
