@@ -9,27 +9,27 @@ export const graphCanvasTones = [
 export type GraphCanvasTone = (typeof graphCanvasTones)[number];
 
 export const graphCanvasToneAccentColor: Record<GraphCanvasTone, string> = {
-  error: "#f24723",
-  neutral: "#b0b0aa",
-  primary: "#c0fe04",
-  violet: "#9f4dff",
-  warning: "#ff9b2f",
+  error: "var(--signal-ui-error)",
+  neutral: "var(--signal-ui-muted)",
+  primary: "var(--signal-ui-primary)",
+  violet: "var(--signal-ui-accent-violet)",
+  warning: "var(--signal-ui-warning)",
 };
 
 export const graphCanvasToneStrokeColor: Record<GraphCanvasTone, string> = {
-  error: "rgba(242, 71, 35, 0.58)",
-  neutral: "rgba(176, 176, 170, 0.34)",
-  primary: "rgba(192, 254, 4, 0.56)",
-  violet: "rgba(159, 77, 255, 0.52)",
-  warning: "rgba(255, 155, 47, 0.56)",
+  error: "rgb(var(--signal-ui-error-rgb) / 0.58)",
+  neutral: "rgb(var(--signal-ui-muted-rgb) / 0.34)",
+  primary: "rgb(var(--signal-ui-primary-rgb) / 0.56)",
+  violet: "rgb(var(--signal-ui-accent-violet-rgb) / 0.52)",
+  warning: "rgb(var(--signal-ui-warning-rgb) / 0.56)",
 };
 
 export const graphCanvasToneGlowColor: Record<GraphCanvasTone, string> = {
-  error: "rgba(242, 71, 35, 0.18)",
-  neutral: "rgba(176, 176, 170, 0.12)",
-  primary: "rgba(192, 254, 4, 0.18)",
-  violet: "rgba(159, 77, 255, 0.2)",
-  warning: "rgba(255, 155, 47, 0.18)",
+  error: "rgb(var(--signal-ui-error-rgb) / 0.18)",
+  neutral: "rgb(var(--signal-ui-muted-rgb) / 0.12)",
+  primary: "rgb(var(--signal-ui-primary-rgb) / 0.18)",
+  violet: "rgb(var(--signal-ui-accent-violet-rgb) / 0.2)",
+  warning: "rgb(var(--signal-ui-warning-rgb) / 0.18)",
 };
 
 export function resolveGraphCanvasTone(value: unknown): GraphCanvasTone {

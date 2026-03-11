@@ -89,12 +89,12 @@ export function GraphCanvasEdge({
         labelBgPadding={[10, 5]}
         labelBgStyle={{
           fill: "rgba(8, 8, 8, 0.96)",
-          stroke: selected ? "rgba(192, 254, 4, 0.5)" : "rgba(245, 245, 240, 0.12)",
+          stroke: selected ? "rgb(var(--signal-ui-primary-rgb) / 0.5)" : "rgb(var(--signal-ui-text-rgb) / 0.12)",
           strokeWidth: 1,
         }}
         labelShowBg={Boolean(edgeLabel)}
         labelStyle={{
-          fill: selected ? "#f9ffef" : "rgba(245, 245, 240, 0.74)",
+          fill: selected ? "var(--signal-ui-fx-signal-ink)" : "rgb(var(--signal-ui-text-rgb) / 0.74)",
           fontFamily: "var(--signal-ui-font-ui)",
           fontSize: 10,
           fontWeight: 700,
