@@ -4,6 +4,7 @@ import { joinClassNames } from "../utils/joinClassNames.js";
 
 type SignalProgressMeterStyle = CSSProperties & {
   "--signal-ui-progress-meter-progress"?: string;
+  "--signal-ui-progress-meter-sweep-duration"?: string;
 };
 
 type CellState = "idle" | "filled" | "active";
@@ -42,6 +43,7 @@ export function SignalProgressMeter({
   const isCompleted = completed && isFull;
   const resolvedSegmentCount = Math.max(8, Math.min(40, Math.round(segmentCount)));
   const filledSegments = Math.round((clampedProgress / 100) * resolvedSegmentCount);
+  const sweepDurationMs = Math.max(280, Math.round((filledSegments || 1) * 46));
   const activeIndex =
     clampedProgress <= 0
       ? 0
@@ -52,6 +54,7 @@ export function SignalProgressMeter({
   const rootStyle: SignalProgressMeterStyle = {
     ...style,
     "--signal-ui-progress-meter-progress": `${clampedProgress}%`,
+    "--signal-ui-progress-meter-sweep-duration": `${sweepDurationMs}ms`,
   };
   const cells = Array.from({ length: resolvedSegmentCount }, (_, index) => ({
     index,

@@ -1108,7 +1108,9 @@ h6.ant-typography {
   transform: translateX(var(--signal-ui-progress-meter-splash-face-shift))
     skewX(var(--signal-ui-progress-meter-splash-face-skew));
   transform-origin: bottom left;
-  animation: signal-ui-progress-meter-splash-scan 980ms cubic-bezier(0.2, 0.86, 0.26, 1) infinite;
+  animation:
+    signal-ui-progress-meter-splash-scan var(--signal-ui-progress-meter-sweep-duration, 980ms)
+      cubic-bezier(0.2, 0.86, 0.26, 1) infinite;
 }
 
 .signal-ui-progress-meter--splash .signal-ui-progress-meter__cells::after {
