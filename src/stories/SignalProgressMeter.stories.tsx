@@ -1,0 +1,80 @@
+import { Card, Col, Row, Space, Typography } from "antd";
+import type { Meta, StoryObj } from "@storybook/react-webpack5";
+
+import { SignalProgressMeter } from "../components/SignalProgressMeter.js";
+
+const meta = {
+  title: "Components/SignalProgressMeter",
+  component: SignalProgressMeter,
+  args: {
+    label: "Transfer Progress",
+    progress: 64,
+    segmentCount: 24,
+    showPercent: true,
+    tone: "primary",
+  },
+  argTypes: {
+    progress: {
+      control: {
+        type: "range",
+        min: 0,
+        max: 100,
+        step: 1,
+      },
+    },
+    segmentCount: {
+      control: {
+        type: "range",
+        min: 8,
+        max: 32,
+        step: 2,
+      },
+    },
+    tone: {
+      control: "inline-radio",
+      options: ["primary", "violet"],
+    },
+  },
+  tags: ["autodocs"],
+  render: (args) => (
+    <div style={{ maxWidth: 560 }}>
+      <SignalProgressMeter {...args} />
+    </div>
+  ),
+} satisfies Meta<typeof SignalProgressMeter>;
+
+export default meta;
+
+type Story = StoryObj<typeof meta>;
+
+export const Playground: Story = {};
+
+export const EmbeddedStates: Story = {
+  render: () => (
+    <Row gutter={[16, 16]}>
+      <Col xs={24} md={12}>
+        <Card title="Compact Row">
+          <Space direction="vertical" size={12} style={{ width: "100%" }}>
+            <Typography.Text>Cache shard rebuild is streaming in the background.</Typography.Text>
+            <SignalProgressMeter label="Shard 4 / 7" progress={42} segmentCount={18} />
+          </Space>
+        </Card>
+      </Col>
+      <Col xs={24} md={12}>
+        <Card title="Quiet Secondary Lane">
+          <Space direction="vertical" size={12} style={{ width: "100%" }}>
+            <Typography.Text>
+              Same meter, less panel ceremony. Small enough to live beside status copy.
+            </Typography.Text>
+            <SignalProgressMeter
+              label="Envelope routing"
+              progress={81}
+              segmentCount={16}
+              tone="violet"
+            />
+          </Space>
+        </Card>
+      </Col>
+    </Row>
+  ),
+};
