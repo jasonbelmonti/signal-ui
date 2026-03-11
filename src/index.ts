@@ -49,6 +49,7 @@ export type {
   PanelCutCorner,
   PanelCutCornerPlacement,
   PanelCutCornerPreset,
+  PanelFrame,
   PanelProps,
 } from "./components/Panel.js";
 export type {
