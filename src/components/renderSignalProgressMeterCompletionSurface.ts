@@ -21,49 +21,49 @@ export function renderSignalProgressMeterCompletionSurface({
 }: RenderSignalProgressMeterCompletionSurfaceOptions) {
   const accent = toneAccentChannels[tone];
   const highlight = blendChannels(accent, [255, 255, 255], 0.42);
-  const frame = Math.floor(timeMs / 160);
-  const ambientBreath = 0.5 + Math.sin(timeMs / 1700) * 0.5;
-  const scanBreath = 0.5 + Math.sin(timeMs / 2400 + 0.8) * 0.5;
+  const frame = Math.floor(timeMs / 220);
+  const ambientBreath = 0.5 + Math.sin(timeMs / 2100) * 0.5;
+  const scanBreath = 0.5 + Math.sin(timeMs / 3100 + 0.8) * 0.5;
 
   ctx.clearRect(0, 0, cols, rows);
 
   for (let y = 0; y < rows; y += 1) {
     const rowEnergy = getRowEnergy(y, rows);
-    const rowWave = 0.5 + Math.sin(timeMs / 2100 + y * 0.7) * 0.5;
+    const rowWave = 0.5 + Math.sin(timeMs / 2700 + y * 0.7) * 0.5;
 
     for (let x = 0; x < cols; x += 1) {
       const stableNoise = hash((x + 1) * 1.7, (y + 1) * 3.1, 17);
-      const flickerNoise = hash(x + frame * 0.55, y + 11, 63);
+      const flickerNoise = hash(x + frame * 0.32, y + 11, 63);
       const weaveNoise = hash((x + 5) * 2.4, (y + 3) * 4.7, frame + 19);
       const lattice = hash((x + 1) * 5.1, (y + 1) * 7.7, frame + 41);
-      const columnWave = 0.5 + Math.sin(timeMs / 1850 + x * 0.24 + y * 0.05) * 0.5;
-      const centerGlow = getColumnGlow(x, cols, 0.42, 0.28 + ambientBreath * 0.04);
-      const edgeGlow = getColumnGlow(x, cols, 0.78, 0.16 + scanBreath * 0.03);
-      const columnEnergy = centerGlow * 0.8 + edgeGlow * 0.52 + columnWave * 0.18;
-      const threshold = clamp(0.7 - rowEnergy * 0.08 - columnEnergy * 0.2, 0.34, 0.84);
+      const columnWave = 0.5 + Math.sin(timeMs / 2400 + x * 0.2 + y * 0.05) * 0.5;
+      const centerGlow = getColumnGlow(x, cols, 0.42, 0.3 + ambientBreath * 0.05);
+      const edgeGlow = getColumnGlow(x, cols, 0.78, 0.18 + scanBreath * 0.03);
+      const columnEnergy = centerGlow * 0.88 + edgeGlow * 0.6 + columnWave * 0.22;
+      const threshold = clamp(0.58 - rowEnergy * 0.06 - columnEnergy * 0.22, 0.2, 0.78);
 
-      if (stableNoise <= threshold && lattice < 0.9) {
+      if (stableNoise <= threshold && lattice < 0.84) {
         continue;
       }
 
       const shimmerLift = (flickerNoise > 0.92 ? 0.08 : 0) + rowWave * 0.04;
-      const highlightMix = clamp(columnEnergy * 0.44 + (lattice > 0.94 ? 0.22 : 0), 0, 0.78);
+      const highlightMix = clamp(columnEnergy * 0.52 + (lattice > 0.9 ? 0.28 : 0), 0, 0.86);
       const pixelAccent = blendChannels(accent, highlight, highlightMix);
       const alpha =
-        0.1 +
-        rowEnergy * 0.08 +
-        stableNoise * 0.16 +
+        0.16 +
+        rowEnergy * 0.1 +
+        stableNoise * 0.2 +
         flickerNoise * 0.05 +
-        columnEnergy * 0.16;
+        columnEnergy * 0.18;
       const lift =
-        0.02 +
-        rowEnergy * 0.04 +
-        columnEnergy * 0.12 +
+        0.03 +
+        rowEnergy * 0.05 +
+        columnEnergy * 0.14 +
         shimmerLift +
-        (weaveNoise > 0.86 ? 0.04 : 0);
-      const saturation = 0.82 + stableNoise * 0.08 + weaveNoise * 0.1 + columnEnergy * 0.12;
+        (weaveNoise > 0.82 ? 0.05 : 0);
+      const saturation = 0.88 + stableNoise * 0.1 + weaveNoise * 0.12 + columnEnergy * 0.14;
 
-      drawPixel(ctx, x, y, pixelAccent, saturation, lift, clamp(alpha, 0.08, 0.84));
+      drawPixel(ctx, x, y, pixelAccent, saturation, lift, clamp(alpha, 0.16, 0.92));
     }
   }
 
@@ -80,8 +80,8 @@ function drawCompletionBloom(
   scanBreath: number,
 ) {
   const bloomCenters = [
-    { center: Math.floor(cols * 0.42), energy: 0.08 + ambientBreath * 0.05, spread: 5 },
-    { center: Math.floor(cols * 0.78), energy: 0.04 + scanBreath * 0.04, spread: 3 },
+    { center: Math.floor(cols * 0.42), energy: 0.12 + ambientBreath * 0.06, spread: 5 },
+    { center: Math.floor(cols * 0.78), energy: 0.08 + scanBreath * 0.04, spread: 3 },
   ] as const;
 
   for (const bloom of bloomCenters) {

@@ -29,7 +29,7 @@ export function useSignalProgressMeterCompletionSurface({
       return;
     }
 
-    const pixelSize = clamp(Math.round(rect.height / 4.25), 3, 6);
+    const pixelSize = clamp(Math.round(rect.height / 3.1), 4, 8);
     const cols = Math.max(1, Math.ceil(rect.width / pixelSize));
     const rows = Math.max(1, Math.ceil(rect.height / pixelSize));
     const ctx = getCanvasContext(canvas, cols, rows);
