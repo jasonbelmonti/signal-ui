@@ -792,6 +792,8 @@ h6.ant-typography {
   --signal-ui-progress-meter-accent: var(--signal-ui-primary);
   --signal-ui-progress-meter-accent-rgb: var(--signal-ui-primary-rgb);
   --signal-ui-progress-meter-progress: 0%;
+  --signal-ui-progress-meter-sweep-opacity: 0;
+  --signal-ui-progress-meter-sweep-phase: 0;
   display: grid;
   gap: 10px;
 }
@@ -1082,11 +1084,11 @@ h6.ant-typography {
   background-repeat: no-repeat;
   background-size: 14% 100%, 28% 100%;
   background-position:
-    -18% 50%,
-    -32% 50%;
+    calc(-18% + (var(--signal-ui-progress-meter-sweep-phase) * 126%)) 50%,
+    calc(-32% + (var(--signal-ui-progress-meter-sweep-phase) * 156%)) 50%;
   mix-blend-mode: screen;
   filter: saturate(1.2);
-  opacity: 0.92;
+  opacity: var(--signal-ui-progress-meter-sweep-opacity);
   -webkit-mask-image: linear-gradient(
     90deg,
     transparent 0,
@@ -1108,9 +1110,6 @@ h6.ant-typography {
   transform: translateX(var(--signal-ui-progress-meter-splash-face-shift))
     skewX(var(--signal-ui-progress-meter-splash-face-skew));
   transform-origin: bottom left;
-  animation:
-    signal-ui-progress-meter-splash-scan var(--signal-ui-progress-meter-sweep-duration, 980ms)
-      cubic-bezier(0.2, 0.86, 0.26, 1) infinite;
 }
 
 .signal-ui-progress-meter--splash .signal-ui-progress-meter__cells::after {
