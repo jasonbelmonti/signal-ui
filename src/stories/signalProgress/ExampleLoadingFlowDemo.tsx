@@ -19,10 +19,12 @@ export function ExampleLoadingFlowDemo() {
   const [frame, setFrame] = useState<ExampleLoadingFrame>(() => getExampleLoadingFrame(0));
   const [runToken, setRunToken] = useState(0);
   const completionPlayedRef = useRef(false);
+  const wasCompleteRef = useRef(false);
   const { armAudio, audioLabel, audioReady, playCompletion } = useSignalCompletionChime();
 
   useEffect(() => {
     completionPlayedRef.current = false;
+    wasCompleteRef.current = false;
     setFrame(getExampleLoadingFrame(0));
 
     const startedAt = performance.now();
@@ -49,7 +51,10 @@ export function ExampleLoadingFlowDemo() {
   }, [runToken]);
 
   useEffect(() => {
-    if (!frame.isComplete || completionPlayedRef.current) {
+    const justCompleted = frame.isComplete && !wasCompleteRef.current;
+    wasCompleteRef.current = frame.isComplete;
+
+    if (!justCompleted || completionPlayedRef.current) {
       return;
     }
 
@@ -58,6 +63,9 @@ export function ExampleLoadingFlowDemo() {
   }, [frame.isComplete, playCompletion]);
 
   const replaySequence = () => {
+    completionPlayedRef.current = false;
+    wasCompleteRef.current = false;
+    setFrame(getExampleLoadingFrame(0));
     void armAudio();
     setRunToken((currentToken) => currentToken + 1);
   };
