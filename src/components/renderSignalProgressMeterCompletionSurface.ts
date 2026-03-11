@@ -25,10 +25,10 @@ export function renderSignalProgressMeterCompletionSurface({
   const wakeProgress = easeOutCubic(clamp(clampedProgress / 0.72, 0, 1));
   const settleProgress = easeOutCubic(clamp((clampedProgress - 0.34) / 0.66, 0, 1));
   const wakeRadius = wakeProgress * 1.52;
-  const baseFillAlpha = 0.06 + settleProgress * 0.28;
+  const baseFillAlpha = 0.04 + settleProgress * 0.54;
 
   ctx.clearRect(0, 0, cols, rows);
-  ctx.fillStyle = rgba(accent, 0.94, 0.03 + settleProgress * 0.08, baseFillAlpha);
+  ctx.fillStyle = rgba(accent, 0.98, 0.04 + settleProgress * 0.1, baseFillAlpha);
   ctx.fillRect(0, 0, cols, rows);
 
   for (let y = 0; y < rows; y += 1) {
@@ -39,31 +39,31 @@ export function renderSignalProgressMeterCompletionSurface({
       const wakeSeed = hash((x + 1) * 4.6, (y + 1) * 7.2, 17);
       const grain = hash((x + 3) * 2.2, (y + 5) * 3.8, 61);
       const wakeThreshold = radial + wakeSeed * 0.16 - 0.08;
-      const wakeMask = clamp((wakeRadius - wakeThreshold) / 0.22, 0, 1);
-      const edgeGlow = clamp(1 - Math.abs(wakeRadius - radial) / 0.18, 0, 1) * (1 - settleProgress);
+      const wakeMask = clamp((wakeRadius - wakeThreshold) / 0.26, 0, 1);
+      const edgeGlow = clamp(1 - Math.abs(wakeRadius - radial) / 0.22, 0, 1) * (1 - settleProgress);
       const pixelEnergy = Math.max(wakeMask, settleProgress);
 
       if (pixelEnergy <= 0.02) {
         continue;
       }
 
-      const highlightMix = clamp(edgeGlow * 0.68 + wakeMask * 0.14 * (1 - settleProgress), 0, 0.74);
+      const highlightMix = clamp(edgeGlow * 0.78 + wakeMask * 0.18 * (1 - settleProgress), 0, 0.82);
       const pixelAccent = blendChannels(accent, highlight, highlightMix);
       const alpha =
-        0.12 +
-        rowEnergy * 0.08 +
-        wakeMask * 0.42 +
-        settleProgress * 0.32 +
-        grain * 0.06;
+        0.16 +
+        rowEnergy * 0.09 +
+        wakeMask * 0.5 +
+        settleProgress * 0.42 +
+        grain * 0.08;
       const lift =
-        0.03 +
+        0.04 +
         rowEnergy * 0.04 +
-        wakeMask * 0.06 +
-        edgeGlow * 0.22 +
-        settleProgress * 0.04;
-      const saturation = 0.92 + wakeMask * 0.06 + edgeGlow * 0.12 + grain * 0.04;
+        wakeMask * 0.08 +
+        edgeGlow * 0.28 +
+        settleProgress * 0.06;
+      const saturation = 0.96 + wakeMask * 0.08 + edgeGlow * 0.16 + grain * 0.04;
 
-      drawPixel(ctx, x, y, pixelAccent, saturation, lift, clamp(alpha, 0.16, 0.92));
+      drawPixel(ctx, x, y, pixelAccent, saturation, lift, clamp(alpha, 0.22, 1));
     }
   }
 
@@ -81,7 +81,7 @@ function drawCompletionBloom(
 ) {
   const centerX = Math.floor(cols / 2);
   const bloomRadius = Math.max(2, Math.round((wakeRadius / 1.52) * cols * 0.24));
-  const bloomEnergy = (1 - settleProgress) * 0.18;
+  const bloomEnergy = (1 - settleProgress) * 0.24;
 
   if (bloomEnergy <= 0.01) {
     return;
