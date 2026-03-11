@@ -1,4 +1,4 @@
-import { useEffect, useEffectEvent } from "react";
+import { useEffect, useEffectEvent, useRef } from "react";
 import type { RefObject } from "react";
 
 import { renderSignalProgressMeterCompletionSurface } from "./renderSignalProgressMeterCompletionSurface.js";
@@ -11,12 +11,16 @@ type UseSignalProgressMeterCompletionSurfaceOptions = {
   tone: SignalProgressMeterCompletionSurfaceTone;
 };
 
+const COMPLETION_SURFACE_REVEAL_MS = 200;
+
 export function useSignalProgressMeterCompletionSurface({
   canvasRef,
   enabled,
   tone,
 }: UseSignalProgressMeterCompletionSurfaceOptions) {
-  const drawFrame = useEffectEvent((timeMs: number) => {
+  const completionProgressRef = useRef(0);
+
+  const drawFrame = useEffectEvent((progress: number) => {
     const canvas = canvasRef.current;
 
     if (!canvas) {
@@ -43,8 +47,8 @@ export function useSignalProgressMeterCompletionSurface({
     renderSignalProgressMeterCompletionSurface({
       cols,
       ctx,
+      progress,
       rows,
-      timeMs,
       tone,
     });
   });
@@ -72,37 +76,41 @@ export function useSignalProgressMeterCompletionSurface({
       }
     };
 
-    const renderOnce = () => {
-      drawFrame(performance.now());
-    };
+    const renderLoop = (startedAt: number) => (timeMs: number) => {
+      const nextProgress = clamp((timeMs - startedAt) / COMPLETION_SURFACE_REVEAL_MS, 0, 1);
 
-    const renderLoop = (timeMs: number) => {
-      drawFrame(timeMs);
+      completionProgressRef.current = nextProgress;
+      drawFrame(nextProgress);
 
-      if (!motionQuery.matches) {
-        animationFrameId = window.requestAnimationFrame(renderLoop);
+      if (nextProgress < 1) {
+        animationFrameId = window.requestAnimationFrame(renderLoop(startedAt));
       }
     };
 
     const restart = () => {
       clearCanvas();
+      completionProgressRef.current = 0;
 
       if (!enabled) {
         return;
       }
 
-      renderOnce();
-
-      if (!motionQuery.matches) {
-        animationFrameId = window.requestAnimationFrame(renderLoop);
+      if (motionQuery.matches) {
+        completionProgressRef.current = 1;
+        drawFrame(1);
+        return;
       }
+
+      drawFrame(0);
+      const startedAt = performance.now();
+      animationFrameId = window.requestAnimationFrame(renderLoop(startedAt));
     };
 
     restart();
 
     if (typeof ResizeObserver !== "undefined") {
       resizeObserver = new ResizeObserver(() => {
-        restart();
+        drawFrame(enabled ? completionProgressRef.current : 0);
       });
       resizeObserver.observe(canvas);
     }
