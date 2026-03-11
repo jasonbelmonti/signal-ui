@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useId, useRef } from "react";
 import type { CSSProperties, ComponentPropsWithoutRef, ReactNode } from "react";
 
 import { joinClassNames } from "../utils/joinClassNames.js";
@@ -43,7 +43,12 @@ export function SignalProgressMeter({
   const isFull = clampedProgress >= 100;
   const isCompleted = completed && isFull;
   const resolvedSegmentCount = Math.max(8, Math.min(40, Math.round(segmentCount)));
-  const filledSegments = Math.round((clampedProgress / 100) * resolvedSegmentCount);
+  const displayPercentValue = toDisplayPercentValue(clampedProgress);
+  const labelId = useId();
+  const completionMessageId = useId();
+  const filledSegments = isFull
+    ? resolvedSegmentCount
+    : Math.floor((clampedProgress / 100) * resolvedSegmentCount);
   const completionSurfaceRef = useRef<HTMLCanvasElement | null>(null);
   const activeIndex =
     clampedProgress <= 0
@@ -88,18 +93,26 @@ export function SignalProgressMeter({
     >
       {(label || showPercent) && (
         <div className="signal-ui-progress-meter__header">
-          {label ? <span className="signal-ui-progress-meter__label">{label}</span> : <span />}
+          {label ? (
+            <span className="signal-ui-progress-meter__label" id={labelId}>
+              {label}
+            </span>
+          ) : (
+            <span aria-hidden="true" />
+          )}
           {showPercent ? (
-            <span className="signal-ui-progress-meter__percent">{formatPercent(clampedProgress)}</span>
+            <span className="signal-ui-progress-meter__percent">{formatPercent(displayPercentValue)}</span>
           ) : null}
         </div>
       )}
 
       <div
-        aria-label={`${formatPercent(clampedProgress)} complete`}
+        aria-describedby={isCompleted && completionLabel ? completionMessageId : undefined}
+        aria-label={label ? undefined : "progress"}
+        aria-labelledby={label ? labelId : undefined}
         aria-valuemax={100}
         aria-valuemin={0}
-        aria-valuenow={Math.round(clampedProgress)}
+        aria-valuenow={displayPercentValue}
         className="signal-ui-progress-meter__track"
         role="progressbar"
       >
@@ -134,6 +147,17 @@ export function SignalProgressMeter({
           </div>
         ) : null}
       </div>
+
+      {completionLabel ? (
+        <span
+          aria-atomic="true"
+          aria-live="polite"
+          id={completionMessageId}
+          style={screenReaderOnlyStyle}
+        >
+          {isCompleted ? completionLabel : null}
+        </span>
+      ) : null}
     </div>
   );
 }
@@ -143,5 +167,21 @@ function clamp(value: number, min: number, max: number) {
 }
 
 function formatPercent(value: number) {
-  return `${Math.round(value).toString().padStart(3, "0")}%`;
+  return `${value.toString().padStart(3, "0")}%`;
 }
+
+function toDisplayPercentValue(value: number) {
+  return value >= 100 ? 100 : Math.floor(value);
+}
+
+const screenReaderOnlyStyle: CSSProperties = {
+  position: "absolute",
+  width: "1px",
+  height: "1px",
+  padding: 0,
+  margin: "-1px",
+  overflow: "hidden",
+  clip: "rect(0, 0, 0, 0)",
+  whiteSpace: "nowrap",
+  border: 0,
+};

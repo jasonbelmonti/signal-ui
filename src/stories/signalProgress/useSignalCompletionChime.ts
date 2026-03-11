@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import type { SignalProgressPanelTone } from "../../components/SignalProgressPanel.js";
 
@@ -11,6 +11,18 @@ export function useSignalCompletionChime() {
   const [audioReady, setAudioReady] = useState(false);
   const [audioSupported, setAudioSupported] = useState(true);
 
+  useEffect(() => {
+    return () => {
+      const context = contextRef.current;
+
+      contextRef.current = null;
+
+      if (context && context.state !== "closed") {
+        void context.close();
+      }
+    };
+  }, []);
+
   const armAudio = async () => {
     const context = await getAudioContext(contextRef, setAudioReady, setAudioSupported);
 
@@ -18,7 +30,7 @@ export function useSignalCompletionChime() {
   };
 
   const playCompletion = async (tone: SignalProgressPanelTone = "primary") => {
-    const context = await getAudioContext(contextRef, setAudioReady, setAudioSupported);
+    const context = await getArmedAudioContext(contextRef, setAudioReady);
 
     if (!context || context.state !== "running") {
       return false;
@@ -74,6 +86,31 @@ async function getAudioContext(
   setAudioReady(contextRef.current.state === "running");
 
   return contextRef.current;
+}
+
+async function getArmedAudioContext(
+  contextRef: { current: AudioContext | null },
+  setAudioReady: (value: boolean) => void,
+) {
+  const context = contextRef.current;
+
+  if (!context) {
+    setAudioReady(false);
+    return null;
+  }
+
+  if (context.state !== "running") {
+    try {
+      await context.resume();
+    } catch {
+      setAudioReady(false);
+      return context;
+    }
+  }
+
+  setAudioReady(context.state === "running");
+
+  return context;
 }
 
 function resolveAudioContextConstructor(target: Window): AudioContextConstructor | null {
