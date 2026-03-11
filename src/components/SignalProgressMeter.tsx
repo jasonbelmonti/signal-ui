@@ -126,7 +126,7 @@ export function SignalProgressMeter({
             />
           ))}
         </div>
-        {isCompleted && completionLabel ? (
+        {completionLabel ? (
           <div aria-hidden="true" className="signal-ui-progress-meter__completion">
             <span className="signal-ui-progress-meter__completion-label">{completionLabel}</span>
           </div>

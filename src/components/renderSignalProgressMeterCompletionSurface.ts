@@ -25,7 +25,7 @@ export function renderSignalProgressMeterCompletionSurface({
   const wakeProgress = easeOutCubic(clamp(clampedProgress / 0.72, 0, 1));
   const settleProgress = easeOutCubic(clamp((clampedProgress - 0.34) / 0.66, 0, 1));
   const wakeRadius = wakeProgress * 1.52;
-  const baseFillAlpha = 0.04 + settleProgress * 0.54;
+  const baseFillAlpha = settleProgress * 0.62;
 
   ctx.clearRect(0, 0, cols, rows);
   ctx.fillStyle = rgba(accent, 0.98, 0.04 + settleProgress * 0.1, baseFillAlpha);
