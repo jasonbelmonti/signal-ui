@@ -21,46 +21,53 @@ export function renderSignalProgressMeterCompletionSurface({
 }: RenderSignalProgressMeterCompletionSurfaceOptions) {
   const accent = toneAccentChannels[tone];
   const highlight = blendChannels(accent, [255, 255, 255], 0.42);
-  const frame = Math.floor(timeMs / 82);
-  const shimmerFront = ((timeMs * 0.021) % (cols + 12)) - 6;
+  const frame = Math.floor(timeMs / 160);
+  const ambientBreath = 0.5 + Math.sin(timeMs / 1700) * 0.5;
+  const scanBreath = 0.5 + Math.sin(timeMs / 2400 + 0.8) * 0.5;
 
   ctx.clearRect(0, 0, cols, rows);
 
   for (let y = 0; y < rows; y += 1) {
     const rowEnergy = getRowEnergy(y, rows);
+    const rowWave = 0.5 + Math.sin(timeMs / 2100 + y * 0.7) * 0.5;
 
     for (let x = 0; x < cols; x += 1) {
       const stableNoise = hash((x + 1) * 1.7, (y + 1) * 3.1, 17);
-      const flickerNoise = hash(x + frame * 0.9, y + 11, 63);
+      const flickerNoise = hash(x + frame * 0.55, y + 11, 63);
       const weaveNoise = hash((x + 5) * 2.4, (y + 3) * 4.7, frame + 19);
-      const sweepGlow = clamp(1 - Math.abs(x - shimmerFront) / 7, 0, 1);
       const lattice = hash((x + 1) * 5.1, (y + 1) * 7.7, frame + 41);
-      const threshold = clamp(0.66 - rowEnergy * 0.12 - sweepGlow * 0.24, 0.28, 0.82);
+      const columnWave = 0.5 + Math.sin(timeMs / 1850 + x * 0.24 + y * 0.05) * 0.5;
+      const centerGlow = getColumnGlow(x, cols, 0.42, 0.28 + ambientBreath * 0.04);
+      const edgeGlow = getColumnGlow(x, cols, 0.78, 0.16 + scanBreath * 0.03);
+      const columnEnergy = centerGlow * 0.8 + edgeGlow * 0.52 + columnWave * 0.18;
+      const threshold = clamp(0.7 - rowEnergy * 0.08 - columnEnergy * 0.2, 0.34, 0.84);
 
-      if (stableNoise <= threshold && sweepGlow < 0.28 && lattice < 0.84) {
+      if (stableNoise <= threshold && lattice < 0.9) {
         continue;
       }
 
-      const highlightMix = clamp(sweepGlow * 0.72 + (lattice > 0.9 ? 0.24 : 0), 0, 1);
+      const shimmerLift = (flickerNoise > 0.92 ? 0.08 : 0) + rowWave * 0.04;
+      const highlightMix = clamp(columnEnergy * 0.44 + (lattice > 0.94 ? 0.22 : 0), 0, 0.78);
       const pixelAccent = blendChannels(accent, highlight, highlightMix);
       const alpha =
         0.1 +
         rowEnergy * 0.08 +
         stableNoise * 0.16 +
-        flickerNoise * 0.08 +
-        sweepGlow * 0.22;
+        flickerNoise * 0.05 +
+        columnEnergy * 0.16;
       const lift =
         0.02 +
         rowEnergy * 0.04 +
-        sweepGlow * 0.18 +
-        (weaveNoise > 0.82 ? 0.05 : 0);
-      const saturation = 0.82 + stableNoise * 0.1 + weaveNoise * 0.12 + sweepGlow * 0.18;
+        columnEnergy * 0.12 +
+        shimmerLift +
+        (weaveNoise > 0.86 ? 0.04 : 0);
+      const saturation = 0.82 + stableNoise * 0.08 + weaveNoise * 0.1 + columnEnergy * 0.12;
 
       drawPixel(ctx, x, y, pixelAccent, saturation, lift, clamp(alpha, 0.08, 0.84));
     }
   }
 
-  drawCompletionBloom(ctx, cols, rows, accent, highlight, shimmerFront);
+  drawCompletionBloom(ctx, cols, rows, accent, highlight, ambientBreath, scanBreath);
 }
 
 function drawCompletionBloom(
@@ -69,25 +76,31 @@ function drawCompletionBloom(
   rows: number,
   accent: RgbChannels,
   highlight: RgbChannels,
-  shimmerFront: number,
+  ambientBreath: number,
+  scanBreath: number,
 ) {
-  const bloomCell = Math.floor(clamp(shimmerFront, -2, cols + 2));
+  const bloomCenters = [
+    { center: Math.floor(cols * 0.42), energy: 0.08 + ambientBreath * 0.05, spread: 5 },
+    { center: Math.floor(cols * 0.78), energy: 0.04 + scanBreath * 0.04, spread: 3 },
+  ] as const;
 
-  for (let offset = -3; offset <= 2; offset += 1) {
-    const column = bloomCell + offset;
-    const proximity = 1 - Math.abs(offset) / 4;
+  for (const bloom of bloomCenters) {
+    for (let offset = -bloom.spread; offset <= bloom.spread; offset += 1) {
+      const column = bloom.center + offset;
+      const proximity = 1 - Math.abs(offset) / (bloom.spread + 1);
 
-    if (column < 0 || column >= cols || proximity <= 0) {
-      continue;
+      if (column < 0 || column >= cols || proximity <= 0) {
+        continue;
+      }
+
+      ctx.fillStyle = rgba(
+        blendChannels(accent, highlight, proximity * 0.42),
+        0.98,
+        0.04 + proximity * 0.08,
+        bloom.energy * proximity,
+      );
+      ctx.fillRect(column, 0, 1, rows);
     }
-
-    ctx.fillStyle = rgba(
-      blendChannels(accent, highlight, proximity * 0.6),
-      1,
-      0.08 + proximity * 0.18,
-      0.05 + proximity * 0.09,
-    );
-    ctx.fillRect(column, 0, 1, rows);
   }
 }
 
@@ -98,4 +111,13 @@ function getRowEnergy(row: number, rowCount: number) {
 
   const normalized = row / (rowCount - 1);
   return 1 - Math.abs(normalized * 2 - 1) * 0.44;
+}
+
+function getColumnGlow(column: number, columnCount: number, center: number, radius: number) {
+  if (columnCount <= 1) {
+    return 1;
+  }
+
+  const normalized = column / (columnCount - 1);
+  return clamp(1 - Math.abs(normalized - center) / radius, 0, 1);
 }
