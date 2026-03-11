@@ -1002,7 +1002,7 @@ h6.ant-typography {
   bottom: 1px;
   left: 1px;
   right: calc(
-    100% - var(--signal-ui-progress-meter-progress) + var(--signal-ui-progress-meter-splash-depth) + 2px
+    100% - var(--signal-ui-progress-meter-progress) + var(--signal-ui-progress-meter-splash-depth)
   );
   background:
     linear-gradient(
@@ -2647,8 +2647,8 @@ h6.ant-typography {
 
   100% {
     background-position:
-      104% 50%,
-      118% 50%;
+      108% 50%,
+      124% 50%;
     opacity: 0;
   }
 }
