@@ -1,14 +1,12 @@
 import { Typography } from "antd";
-import type { CSSProperties, ReactNode } from "react";
+import type { ReactNode } from "react";
 
 import { joinClassNames } from "../utils/joinClassNames.js";
 import { Panel, type PanelProps } from "./Panel.js";
-
-type SignalProgressPanelStyle = CSSProperties & {
-  "--signal-ui-progress-panel-progress"?: string;
-};
-
-export type SignalProgressPanelTone = "primary" | "violet";
+import {
+  SignalProgressMeter,
+  type SignalProgressMeterTone,
+} from "./SignalProgressMeter.js";
 
 export interface SignalProgressPanelMetric {
   label: ReactNode;
@@ -24,10 +22,8 @@ export interface SignalProgressPanelProps extends Omit<PanelProps, "children" | 
   segmentCount?: number;
   status?: ReactNode;
   title: ReactNode;
-  tone?: SignalProgressPanelTone;
+  tone?: SignalProgressMeterTone;
 }
-
-type CellState = "idle" | "filled" | "active";
 
 export function SignalProgressPanel({
   className,
@@ -45,29 +41,6 @@ export function SignalProgressPanel({
   tone = "primary",
   ...panelProps
 }: SignalProgressPanelProps) {
-  const clampedProgress = clamp(progress, 0, 100);
-  const resolvedSegmentCount = Math.max(8, Math.min(40, Math.round(segmentCount)));
-  const filledSegments = Math.round((clampedProgress / 100) * resolvedSegmentCount);
-  const activeIndex =
-    clampedProgress <= 0
-      ? 0
-      : Math.min(
-          resolvedSegmentCount - 1,
-          clampedProgress >= 100 ? resolvedSegmentCount - 1 : filledSegments,
-        );
-  const panelStyle: SignalProgressPanelStyle = {
-    ...style,
-    "--signal-ui-progress-panel-progress": `${clampedProgress}%`,
-  };
-  const cells = Array.from({ length: resolvedSegmentCount }, (_, index) => ({
-    index,
-    state:
-      index < filledSegments
-        ? "filled"
-        : index === activeIndex && clampedProgress > 0 && clampedProgress < 100
-          ? "active"
-          : "idle",
-  }));
   const header = (
     <div className="signal-ui-progress-panel__header">
       <div className="signal-ui-progress-panel__header-copy">
@@ -92,7 +65,7 @@ export function SignalProgressPanel({
       )}
       frame={frame ?? "reticle"}
       frameColor={frameColor ?? toneFrameColor[tone]}
-      style={panelStyle}
+      style={style}
       title={header}
     >
       <div className="signal-ui-progress-panel__body">
@@ -102,40 +75,12 @@ export function SignalProgressPanel({
           </Typography.Paragraph>
         ) : null}
 
-        <div className="signal-ui-progress-panel__meter-block">
-          <div className="signal-ui-progress-panel__meter-header">
-            <span className="signal-ui-progress-panel__progress-label">{progressLabel}</span>
-            <span className="signal-ui-progress-panel__percent">
-              {formatPercent(clampedProgress)}
-            </span>
-          </div>
-
-          <div
-            aria-label={`${formatPercent(clampedProgress)} complete`}
-            aria-valuemax={100}
-            aria-valuemin={0}
-            aria-valuenow={Math.round(clampedProgress)}
-            className="signal-ui-progress-panel__meter"
-            role="progressbar"
-          >
-            <div
-              className="signal-ui-progress-panel__cells"
-              style={{ gridTemplateColumns: `repeat(${resolvedSegmentCount}, minmax(0, 1fr))` }}
-            >
-              {cells.map((cell) => (
-                <span
-                  aria-hidden="true"
-                  className={joinClassNames(
-                    "signal-ui-progress-panel__cell",
-                    cell.state === "filled" && "signal-ui-progress-panel__cell--filled",
-                    cell.state === "active" && "signal-ui-progress-panel__cell--active",
-                  )}
-                  key={cell.index}
-                />
-              ))}
-            </div>
-          </div>
-        </div>
+        <SignalProgressMeter
+          label={progressLabel}
+          progress={progress}
+          segmentCount={segmentCount}
+          tone={tone}
+        />
 
         {metrics?.length ? (
           <div className="signal-ui-progress-panel__metrics">
@@ -152,15 +97,8 @@ export function SignalProgressPanel({
   );
 }
 
-const toneFrameColor: Record<SignalProgressPanelTone, string> = {
+const toneFrameColor: Record<SignalProgressMeterTone, string> = {
   primary: "var(--signal-ui-primary)",
   violet: "var(--signal-ui-accent-violet)",
 };
-
-function clamp(value: number, min: number, max: number) {
-  return Math.min(Math.max(value, min), max);
-}
-
-function formatPercent(value: number) {
-  return `${Math.round(value).toString().padStart(3, "0")}%`;
-}
+export type { SignalProgressMeterTone as SignalProgressPanelTone };

@@ -788,40 +788,48 @@ h6.ant-typography {
   color: rgb(var(--signal-ui-text-rgb) / 0.82);
 }
 
-.signal-ui-progress-panel__meter-block {
+.signal-ui-progress-meter {
+  --signal-ui-progress-meter-accent: var(--signal-ui-primary);
+  --signal-ui-progress-meter-accent-rgb: var(--signal-ui-primary-rgb);
+  --signal-ui-progress-meter-progress: 0%;
   display: grid;
   gap: 10px;
 }
 
-.signal-ui-progress-panel__meter-header {
+.signal-ui-progress-meter--violet {
+  --signal-ui-progress-meter-accent: var(--signal-ui-accent-violet);
+  --signal-ui-progress-meter-accent-rgb: var(--signal-ui-accent-violet-rgb);
+}
+
+.signal-ui-progress-meter__header {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
   gap: 12px;
 }
 
-.signal-ui-progress-panel__progress-label {
+.signal-ui-progress-meter__label {
   color: rgb(var(--signal-ui-text-rgb) / 0.74);
   font-size: 11px;
   letter-spacing: 0.16em;
   text-transform: uppercase;
 }
 
-.signal-ui-progress-panel__percent {
-  color: rgb(var(--signal-ui-progress-panel-accent-rgb) / 0.96);
+.signal-ui-progress-meter__percent {
+  color: rgb(var(--signal-ui-progress-meter-accent-rgb) / 0.96);
   font-family: var(--signal-ui-font-pixel);
   font-size: 22px;
   letter-spacing: 0.12em;
   line-height: 0.9;
 }
 
-.signal-ui-progress-panel__meter {
+.signal-ui-progress-meter__track {
   position: relative;
   overflow: hidden;
   padding: 10px;
-  border: 1px solid rgb(var(--signal-ui-progress-panel-accent-rgb) / 0.24);
+  border: 1px solid rgb(var(--signal-ui-progress-meter-accent-rgb) / 0.24);
   background:
-    linear-gradient(135deg, rgb(var(--signal-ui-progress-panel-accent-rgb) / 0.12), transparent 34%),
+    linear-gradient(135deg, rgb(var(--signal-ui-progress-meter-accent-rgb) / 0.12), transparent 34%),
     linear-gradient(180deg, rgb(255 255 255 / 0.04), transparent 44%),
     rgb(7 7 7 / 0.92);
   box-shadow:
@@ -830,7 +838,7 @@ h6.ant-typography {
   isolation: isolate;
 }
 
-.signal-ui-progress-panel__meter::before {
+.signal-ui-progress-meter__track::before {
   content: "";
   position: absolute;
   inset: 0;
@@ -840,7 +848,7 @@ h6.ant-typography {
       90deg,
       transparent 0,
       transparent 22px,
-      rgb(var(--signal-ui-progress-panel-accent-rgb) / 0.08) 22px,
+      rgb(var(--signal-ui-progress-meter-accent-rgb) / 0.08) 22px,
       transparent 24px,
       transparent 48px
     ),
@@ -854,7 +862,7 @@ h6.ant-typography {
   opacity: 0.5;
 }
 
-.signal-ui-progress-panel__meter::after {
+.signal-ui-progress-meter__track::after {
   content: "";
   position: absolute;
   top: 0;
@@ -864,25 +872,25 @@ h6.ant-typography {
     linear-gradient(
       90deg,
       transparent 0,
-      rgb(var(--signal-ui-progress-panel-accent-rgb) / 0.14) 42%,
+      rgb(var(--signal-ui-progress-meter-accent-rgb) / 0.14) 42%,
       rgb(255 255 255 / 0.18) 50%,
-      rgb(var(--signal-ui-progress-panel-accent-rgb) / 0.1) 58%,
+      rgb(var(--signal-ui-progress-meter-accent-rgb) / 0.1) 58%,
       transparent 100%
     );
-  transform: translateX(calc(var(--signal-ui-progress-panel-progress) - 100%));
+  transform: translateX(calc(var(--signal-ui-progress-meter-progress) - 100%));
   mix-blend-mode: screen;
   opacity: 0.72;
   pointer-events: none;
 }
 
-.signal-ui-progress-panel__cells {
+.signal-ui-progress-meter__cells {
   position: relative;
   display: grid;
   gap: 4px;
   z-index: 1;
 }
 
-.signal-ui-progress-panel__cell {
+.signal-ui-progress-meter__cell {
   height: 16px;
   border: 1px solid rgb(255 255 255 / 0.05);
   background:
@@ -891,33 +899,33 @@ h6.ant-typography {
   box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.03);
 }
 
-.signal-ui-progress-panel__cell--filled {
-  border-color: rgb(var(--signal-ui-progress-panel-accent-rgb) / 0.32);
+.signal-ui-progress-meter__cell--filled {
+  border-color: rgb(var(--signal-ui-progress-meter-accent-rgb) / 0.32);
   background:
     linear-gradient(180deg, rgb(255 255 255 / 0.16), transparent 62%),
     linear-gradient(
       135deg,
-      rgb(var(--signal-ui-progress-panel-accent-rgb) / 0.98),
-      rgb(var(--signal-ui-progress-panel-accent-rgb) / 0.58)
+      rgb(var(--signal-ui-progress-meter-accent-rgb) / 0.98),
+      rgb(var(--signal-ui-progress-meter-accent-rgb) / 0.58)
     );
   box-shadow:
     inset 0 1px 0 rgb(255 255 255 / 0.1),
-    0 0 12px rgb(var(--signal-ui-progress-panel-accent-rgb) / 0.08);
+    0 0 12px rgb(var(--signal-ui-progress-meter-accent-rgb) / 0.08);
 }
 
-.signal-ui-progress-panel__cell--active {
-  border-color: rgb(var(--signal-ui-progress-panel-accent-rgb) / 0.52);
+.signal-ui-progress-meter__cell--active {
+  border-color: rgb(var(--signal-ui-progress-meter-accent-rgb) / 0.52);
   background:
     linear-gradient(180deg, rgb(255 255 255 / 0.38), transparent 54%),
     linear-gradient(
       135deg,
       rgb(255 255 255 / 0.94),
-      rgb(var(--signal-ui-progress-panel-accent-rgb) / 0.8)
+      rgb(var(--signal-ui-progress-meter-accent-rgb) / 0.8)
     );
   box-shadow:
     inset 0 1px 0 rgb(255 255 255 / 0.18),
-    0 0 16px rgb(var(--signal-ui-progress-panel-accent-rgb) / 0.26);
-  animation: signal-ui-progress-panel-front-pulse 640ms steps(1, end) infinite;
+    0 0 16px rgb(var(--signal-ui-progress-meter-accent-rgb) / 0.26);
+  animation: signal-ui-progress-meter-front-pulse 640ms steps(1, end) infinite;
 }
 
 .signal-ui-progress-panel__metrics {
@@ -1838,7 +1846,7 @@ h6.ant-typography {
     animation: none;
   }
 
-  .signal-ui-progress-panel__cell--active {
+  .signal-ui-progress-meter__cell--active {
     animation: none;
   }
 
@@ -1890,7 +1898,7 @@ h6.ant-typography {
     opacity: 1;
   }
 
-  .signal-ui-progress-panel__meter,
+  .signal-ui-progress-meter__track,
   .signal-ui-progress-panel__metric,
   .signal-ui-progress-panel__status {
     border-color: CanvasText;
@@ -1898,21 +1906,21 @@ h6.ant-typography {
     box-shadow: none;
   }
 
-  .signal-ui-progress-panel__meter::before,
-  .signal-ui-progress-panel__meter::after {
+  .signal-ui-progress-meter__track::before,
+  .signal-ui-progress-meter__track::after {
     display: none;
   }
 
-  .signal-ui-progress-panel__cell {
+  .signal-ui-progress-meter__cell {
     border-color: CanvasText;
     background: Canvas;
     box-shadow: none;
   }
 
-  .signal-ui-progress-panel__cell--filled,
-  .signal-ui-progress-panel__cell--active,
+  .signal-ui-progress-meter__cell--filled,
+  .signal-ui-progress-meter__cell--active,
   .signal-ui-progress-panel__status,
-  .signal-ui-progress-panel__percent,
+  .signal-ui-progress-meter__percent,
   .signal-ui-progress-panel__eyebrow,
   .signal-ui-progress-panel__title,
   .signal-ui-progress-panel__metric-value {
@@ -2352,20 +2360,20 @@ h6.ant-typography {
   }
 }
 
-@keyframes signal-ui-progress-panel-front-pulse {
+@keyframes signal-ui-progress-meter-front-pulse {
   0%,
   100% {
     opacity: 1;
     box-shadow:
       inset 0 1px 0 rgb(255 255 255 / 0.18),
-      0 0 16px rgb(var(--signal-ui-progress-panel-accent-rgb) / 0.26);
+      0 0 16px rgb(var(--signal-ui-progress-meter-accent-rgb) / 0.26);
   }
 
   50% {
     opacity: 0.72;
     box-shadow:
       inset 0 1px 0 rgb(255 255 255 / 0.24),
-      0 0 24px rgb(var(--signal-ui-progress-panel-accent-rgb) / 0.42);
+      0 0 24px rgb(var(--signal-ui-progress-meter-accent-rgb) / 0.42);
   }
 }
 
