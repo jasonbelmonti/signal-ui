@@ -39,10 +39,10 @@ export function SignalProgressMeter({
   variant = "flat",
   ...props
 }: SignalProgressMeterProps) {
-  const clampedProgress = clamp(progress, 0, 100);
+  const clampedProgress = normalizeProgress(progress);
   const isFull = clampedProgress >= 100;
-  const isCompleted = completed && isFull;
-  const resolvedSegmentCount = Math.max(8, Math.min(40, Math.round(segmentCount)));
+  const isCompleted = completed || isFull;
+  const resolvedSegmentCount = normalizeSegmentCount(segmentCount);
   const displayPercentValue = toDisplayPercentValue(clampedProgress);
   const labelId = useId();
   const completionMessageId = useId();
@@ -164,6 +164,18 @@ export function SignalProgressMeter({
 
 function clamp(value: number, min: number, max: number) {
   return Math.min(Math.max(value, min), max);
+}
+
+function normalizeProgress(value: number) {
+  return clamp(replaceNaN(value, 0), 0, 100);
+}
+
+function normalizeSegmentCount(value: number) {
+  return Math.max(8, Math.min(40, Math.round(replaceNaN(value, 24))));
+}
+
+function replaceNaN(value: number, fallback: number) {
+  return Number.isNaN(value) ? fallback : value;
 }
 
 function formatPercent(value: number) {
