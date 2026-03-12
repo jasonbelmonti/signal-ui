@@ -57,21 +57,6 @@ const meta = {
         step: 2,
       },
     },
-    surface: {
-      control: "inline-radio",
-      options: ["glass"],
-    },
-    surfaceColor: {
-      control: "color",
-    },
-    surfaceBlur: {
-      control: {
-        type: "range",
-        min: 8,
-        max: 32,
-        step: 2,
-      },
-    },
     reveal: {
       control: "inline-radio",
       options: ["holographic"],
@@ -354,8 +339,6 @@ function HolographicRevealDemo() {
             revealOutro="point"
             revealState={revealState}
             style={holographicPanelStyle}
-            surface="glass"
-            surfaceBlur={22}
             title="Docking Aperture"
           >
             <Space direction="vertical" size={16} style={{ width: "100%" }}>
@@ -457,8 +440,6 @@ function HolographicModalDemo() {
                 frame={panel.frame}
                 frameColor={panel.frameColor}
                 style={modalBackgroundPanelStyle}
-                surface="glass"
-                surfaceBlur={14}
                 title={panel.title}
               >
                 <Space direction="vertical" size={10} style={{ width: "100%" }}>
@@ -496,8 +477,6 @@ function HolographicModalDemo() {
             revealOutro="point"
             revealState={revealState}
             style={modalPanelStyle}
-            surface="glass"
-            surfaceBlur={22}
             title="Transmit Authorization"
           >
             <Space direction="vertical" size={18} style={{ width: "100%" }}>
@@ -692,6 +671,9 @@ const holographicPanelWrapStyle: CSSProperties = {
 
 const holographicPanelStyle: CSSProperties = {
   minHeight: 320,
+  background:
+    "linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 44%), rgba(7, 7, 7, 0.9)",
+  backdropFilter: "blur(12px)",
 };
 
 const holographicGhostPanelStyle: CSSProperties = {
@@ -766,6 +748,10 @@ const modalPageTitleStyle: CSSProperties = {
 
 const modalBackgroundPanelStyle: CSSProperties = {
   minHeight: 220,
+  background:
+    "linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 54%), rgba(8, 8, 8, 0.7)",
+  borderColor: "rgba(192, 254, 4, 0.16)",
+  backdropFilter: "blur(10px)",
 };
 
 const modalOverlayShellStyle: CSSProperties = {
@@ -786,6 +772,9 @@ const modalPanelWrapStyle: CSSProperties = {
 
 const modalPanelStyle: CSSProperties = {
   minHeight: 360,
+  background:
+    "linear-gradient(180deg, rgba(255, 255, 255, 0.05), transparent 44%), rgba(7, 7, 7, 0.92)",
+  backdropFilter: "blur(16px)",
 };
 
 const reticleMetrics = [

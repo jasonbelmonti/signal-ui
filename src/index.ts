@@ -55,7 +55,6 @@ export type {
   PanelProps,
   PanelReveal,
   PanelRevealState,
-  PanelSurface,
 } from "./components/Panel.js";
 export type {
   SignalChatAttachment,

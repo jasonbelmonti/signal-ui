@@ -6,7 +6,6 @@ import type { CSSProperties } from "react";
 export type PanelCutCorner = "accent" | "notch";
 export type PanelCutCornerPreset = "tactical" | "architectural";
 export type PanelFrame = "reticle";
-export type PanelSurface = "glass";
 export type PanelReveal = "holographic";
 export type PanelRevealIntro = "point";
 export type PanelRevealOutro = "point";
@@ -33,9 +32,6 @@ export interface PanelProps extends CardProps {
   frame?: PanelFrame;
   frameColor?: string;
   frameSize?: number | string;
-  surface?: PanelSurface;
-  surfaceColor?: string;
-  surfaceBlur?: number | string;
   reveal?: PanelReveal;
   revealColor?: string;
   revealIntro?: PanelRevealIntro;
@@ -48,8 +44,6 @@ type PanelStyle = CSSProperties & {
   "--signal-ui-panel-cut-size"?: string;
   "--signal-ui-panel-reticle-color"?: string;
   "--signal-ui-panel-reticle-size"?: string;
-  "--signal-ui-panel-surface-color"?: string;
-  "--signal-ui-panel-surface-blur"?: string;
   "--signal-ui-panel-reveal-color"?: string;
 };
 
@@ -207,9 +201,6 @@ export function Panel({
   frame,
   frameColor,
   frameSize,
-  surface,
-  surfaceColor,
-  surfaceBlur,
   reveal,
   revealColor,
   revealIntro,
@@ -223,8 +214,7 @@ export function Panel({
   const resolvedCutCornerColor = cutCornerColor ?? preset?.cutCornerColor ?? "var(--signal-ui-primary)";
   const resolvedCutCornerPlacement = cutCornerPlacement ?? preset?.cutCornerPlacement ?? "top-right";
   const resolvedCutCornerSize = cutCornerSize ?? preset?.cutCornerSize ?? 26;
-  const resolvedSurfaceColor = surfaceColor ?? frameColor ?? resolvedCutCornerColor;
-  const resolvedRevealColor = revealColor ?? resolvedSurfaceColor;
+  const resolvedRevealColor = revealColor ?? frameColor ?? resolvedCutCornerColor;
   const { revealPhase, renderedRevealState } = usePanelRevealState({
     reveal,
     revealIntro,
@@ -246,12 +236,6 @@ export function Panel({
           "--signal-ui-panel-reticle-size": toCssLength(frameSize) ?? "28px",
         }
       : {}),
-    ...(surface === "glass"
-      ? {
-          "--signal-ui-panel-surface-color": resolvedSurfaceColor,
-          "--signal-ui-panel-surface-blur": toCssLength(surfaceBlur) ?? "18px",
-        }
-      : {}),
     ...(reveal === "holographic"
       ? {
           "--signal-ui-panel-reveal-color": resolvedRevealColor,
@@ -264,7 +248,6 @@ export function Panel({
       className={joinClassNames(
         "signal-ui-panel",
         frame ? `signal-ui-panel--frame-${frame}` : undefined,
-        surface ? `signal-ui-panel--surface-${surface}` : undefined,
         resolvedCutCorner ? `signal-ui-panel--cut-${resolvedCutCorner}` : undefined,
         resolvedCutCorner ? `signal-ui-panel--corner-${resolvedCutCornerPlacement}` : undefined,
         reveal ? `signal-ui-panel--reveal-${reveal}` : undefined,
