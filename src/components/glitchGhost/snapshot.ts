@@ -1,3 +1,5 @@
+import { rewriteGhostReferenceValue } from "./rewriteGhostReferenceValue.js";
+
 const focusableElementSelector = [
   "a[href]",
   "area[href]",
@@ -14,8 +16,60 @@ const focusableElementSelector = [
   "[contenteditable='true']",
 ].join(", ");
 
+let ghostCloneIdCounter = 0;
+
+function remapGhostIds(rootNode: Node) {
+  const elements: Element[] = [];
+  const queue: Node[] = [rootNode];
+  const idMap = new Map<string, string>();
+
+  while (queue.length > 0) {
+    const node = queue.shift();
+
+    if (!node) {
+      continue;
+    }
+
+    if (node instanceof Element) {
+      elements.push(node);
+
+      const currentId = node.getAttribute("id");
+
+      if (currentId) {
+        ghostCloneIdCounter += 1;
+        idMap.set(currentId, `signal-ui-glitch-ghost-${ghostCloneIdCounter}-${currentId}`);
+      }
+    }
+
+    queue.push(...node.childNodes);
+  }
+
+  if (idMap.size === 0) {
+    return;
+  }
+
+  for (const element of elements) {
+    const currentId = element.getAttribute("id");
+
+    if (currentId) {
+      element.setAttribute("id", idMap.get(currentId) ?? currentId);
+    }
+
+    for (const attribute of Array.from(element.attributes)) {
+      if (attribute.name === "id") {
+        continue;
+      }
+
+      const nextValue = rewriteGhostReferenceValue(attribute.name, attribute.value, idMap);
+
+      if (nextValue !== attribute.value) {
+        element.setAttribute(attribute.name, nextValue);
+      }
+    }
+  }
+}
+
 function sanitizeGhostElement(element: Element) {
-  element.removeAttribute("id");
   element.removeAttribute("autofocus");
   element.setAttribute("aria-hidden", "true");
   element.setAttribute("inert", "");
@@ -102,6 +156,7 @@ function cloneGhostNode(sourceNode: Node) {
   const cloneNode = sourceNode.cloneNode(true);
 
   copyCanvasContents(sourceNode, cloneNode);
+  remapGhostIds(cloneNode);
   sanitizeGhostTree(cloneNode);
 
   return cloneNode;

@@ -2,6 +2,7 @@ import { useEffect, useEffectEvent, useRef } from "react";
 import type { ComponentPropsWithoutRef, CSSProperties, ReactNode } from "react";
 
 import { hasCanvasSnapshotSource } from "./glitchGhost/hasCanvasSnapshotSource.js";
+import { hasCustomGhostContent } from "./glitchGhost/hasCustomGhostContent.js";
 import { syncGhostSnapshotLayers } from "./glitchGhost/snapshot.js";
 import { joinClassNames } from "../utils/joinClassNames.js";
 
@@ -86,6 +87,7 @@ export function GlitchGhost({
 }: GlitchGhostProps) {
   const mainRef = useRef<HTMLDivElement>(null);
   const ghostCopyRefs = useRef<Array<HTMLDivElement | null>>([]);
+  const hasCustomGhost = hasCustomGhostContent(ghost);
   const ghostStyle: GlitchGhostStyle = {
     ...style,
     "--signal-ui-glitch-ghost-blend-mode": blendMode,
@@ -100,7 +102,7 @@ export function GlitchGhost({
     "--signal-ui-glitch-ghost-tilt-y": toCssAngle(tiltY, "-8deg"),
   };
   const syncGhostSnapshots = useEffectEvent(() => {
-    if (ghost !== undefined) {
+    if (hasCustomGhost) {
       return;
     }
 
@@ -119,7 +121,7 @@ export function GlitchGhost({
   useEffect(() => {
     ghostCopyRefs.current.length = ghostCount;
 
-    if (ghost !== undefined || typeof window === "undefined") {
+    if (hasCustomGhost || typeof window === "undefined") {
       return undefined;
     }
 
@@ -195,7 +197,7 @@ export function GlitchGhost({
         ghostCopyElement?.replaceChildren();
       }
     };
-  }, [ghost, ghostCount, syncGhostSnapshots]);
+  }, [ghostCount, hasCustomGhost, syncGhostSnapshots]);
 
   return (
     <div
@@ -221,7 +223,7 @@ export function GlitchGhost({
               }}
               className="signal-ui-glitch-ghost__copy"
             >
-              {ghost}
+              {hasCustomGhost ? ghost : null}
             </div>
           </div>
         ))}
