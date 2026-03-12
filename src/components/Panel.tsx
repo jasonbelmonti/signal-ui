@@ -4,6 +4,7 @@ import type { CSSProperties } from "react";
 
 import { joinClassNames } from "../utils/joinClassNames.js";
 import { PanelRevealCanvas } from "./panel/PanelRevealCanvas.js";
+import { usePanelCursorTilt } from "./panel/usePanelCursorTilt.js";
 import { usePanelRevealState as usePanelPixelRevealState } from "./panel/usePanelRevealState.js";
 import { usePanelShellRevealState } from "./panel/usePanelShellRevealState.js";
 
@@ -39,6 +40,7 @@ export interface PanelProps extends CardProps {
   revealIntro?: PanelRevealIntro;
   revealOutro?: PanelRevealOutro;
   revealState?: PanelRevealState;
+  cursorTilt?: boolean;
 }
 
 type PanelStyle = CSSProperties & {
@@ -79,6 +81,7 @@ export const panelCutCornerPresets = {
 
 export function Panel({
   className,
+  cursorTilt,
   cutCorner,
   cutCornerColor,
   cutCornerPreset,
@@ -96,6 +99,9 @@ export function Panel({
   revealOutro,
   revealState = "open",
   style,
+  onPointerCancel,
+  onPointerLeave,
+  onPointerMove,
   ...cardProps
 }: PanelProps) {
   const preset = cutCornerPreset ? panelCutCornerPresets[cutCornerPreset] : undefined;
@@ -119,6 +125,10 @@ export function Panel({
       revealOutro,
       revealState,
     });
+  const { surfacePointerHandlers, surfaceRef } = usePanelCursorTilt({
+    enabled: cursorTilt,
+  });
+
   const panelStyle: PanelStyle = {
     ...style,
     ...(resolvedCutCorner
@@ -148,8 +158,30 @@ export function Panel({
   const panelCard = (
     <Card
       {...cardProps}
+      onPointerCancel={
+        reveal === "holographic"
+          ? onPointerCancel
+          : cursorTilt
+            ? composeEventHandlers(onPointerCancel, surfacePointerHandlers.onPointerCancel)
+            : onPointerCancel
+      }
+      onPointerLeave={
+        reveal === "holographic"
+          ? onPointerLeave
+          : cursorTilt
+            ? composeEventHandlers(onPointerLeave, surfacePointerHandlers.onPointerLeave)
+            : onPointerLeave
+      }
+      onPointerMove={
+        reveal === "holographic"
+          ? onPointerMove
+          : cursorTilt
+            ? composeEventHandlers(onPointerMove, surfacePointerHandlers.onPointerMove)
+            : onPointerMove
+      }
       className={joinClassNames(
         "signal-ui-panel",
+        cursorTilt && reveal !== "holographic" ? "signal-ui-panel--cursor-tilt" : undefined,
         frame && `signal-ui-panel--frame-${frame}`,
         surface && `signal-ui-panel--surface-${surface}`,
         resolvedCutCorner && `signal-ui-panel--cut-${resolvedCutCorner}`,
@@ -157,6 +189,7 @@ export function Panel({
         reveal && `signal-ui-panel--reveal-${reveal}`,
         className,
       )}
+      ref={cursorTilt && reveal !== "holographic" ? surfaceRef : undefined}
       style={panelStyle}
     />
   );
@@ -171,10 +204,15 @@ export function Panel({
 
   return (
     <div
+      onPointerCancel={cursorTilt ? surfacePointerHandlers.onPointerCancel : undefined}
+      onPointerLeave={cursorTilt ? surfacePointerHandlers.onPointerLeave : undefined}
+      onPointerMove={cursorTilt ? surfacePointerHandlers.onPointerMove : undefined}
+      ref={cursorTilt ? surfaceRef : undefined}
       className={joinClassNames(
         "signal-ui-panel-shell",
         "signal-ui-panel-shell--reveal-holographic",
         shouldRenderPixelReveal && "signal-ui-panel-shell--pixel-reveal",
+        cursorTilt ? "signal-ui-panel-shell--cursor-tilt" : undefined,
       )}
       data-signal-ui-panel-reveal-phase={revealPhase}
       data-signal-ui-panel-reveal-state={renderedRevealState}
@@ -197,6 +235,16 @@ export function Panel({
       </div>
     </div>
   );
+}
+
+function composeEventHandlers<Event>(
+  ...handlers: Array<((event: Event) => void) | undefined>
+) {
+  return (event: Event) => {
+    handlers.forEach((handler) => {
+      handler?.(event);
+    });
+  };
 }
 
 function toCssLength(value: number | string | undefined) {

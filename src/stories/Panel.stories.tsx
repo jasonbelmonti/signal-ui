@@ -92,6 +92,9 @@ const meta = {
       control: "inline-radio",
       options: ["open", "closed", "hidden"],
     },
+    cursorTilt: {
+      control: "boolean",
+    },
   },
   tags: ["autodocs"],
   render: (args) => (
@@ -180,6 +183,54 @@ export const CyberGlassPrototype: Story = {
     layout: "fullscreen",
   },
   render: () => <CyberGlassPrototypeDemo />,
+};
+
+export const CursorTilt: Story = {
+  render: () => (
+    <Row gutter={[16, 16]}>
+      <Col xs={24} lg={12}>
+        <Panel
+          title="Live Telemetry"
+          cursorTilt
+          cutCornerPreset="tactical"
+          frame="reticle"
+          frameColor={signalPalette.primary}
+        >
+          <Space direction="vertical" size={12}>
+            <Typography.Text style={eyebrowStyle}>Opt-in Pointer Response</Typography.Text>
+            <Typography.Paragraph style={{ margin: 0 }}>
+              The panel tilts a few degrees toward the cursor, just enough to give the surface
+              some depth without making it feel like a haunted trading card.
+            </Typography.Paragraph>
+          </Space>
+        </Panel>
+      </Col>
+
+      <Col xs={24} lg={12}>
+        <Panel
+          title="Relay Envelope"
+          cursorTilt
+          cutCornerPreset="architectural"
+          cutCornerColor={signalPalette.accentViolet}
+          frame="reticle"
+          frameColor={signalPalette.accentViolet}
+          reveal="holographic"
+          revealIntro="point"
+          revealState="open"
+        >
+          <Space direction="vertical" size={12}>
+            <Typography.Text style={{ ...eyebrowStyle, color: signalPalette.accentViolet }}>
+              Compatible With Holographic Reveal
+            </Typography.Text>
+            <Typography.Paragraph style={{ margin: 0 }}>
+              The tilt plane wraps the reveal shell, so the beam and edge traces move with the
+              panel instead of peeling off like cheap sci-fi wallpaper.
+            </Typography.Paragraph>
+          </Space>
+        </Panel>
+      </Col>
+    </Row>
+  ),
 };
 
 export const ReticleFrame: Story = {
