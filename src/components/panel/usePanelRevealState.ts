@@ -6,11 +6,15 @@ import type {
   PanelRevealOutro,
   PanelRevealState,
 } from "../Panel.js";
+import {
+  PANEL_HOLOGRAPHIC_REVEAL_DURATION_MS,
+  PANEL_POINT_REVEAL_BEAM_DURATION_MS,
+} from "./usePanelShellRevealState.js";
 
 export const PANEL_REVEAL_INTRO_DURATION_MS = 620;
 export const PANEL_REVEAL_SETTLE_DURATION_MS = 1120;
 export const PANEL_REVEAL_DECAY_DURATION_MS = 560;
-export const PANEL_REVEAL_OUTRO_DURATION_MS = 420;
+export const PANEL_REVEAL_OUTRO_DURATION_MS = PANEL_HOLOGRAPHIC_REVEAL_DURATION_MS;
 
 export type PanelRevealPhase = "intro" | "settle" | "decay" | "outro";
 
@@ -33,9 +37,7 @@ export function usePanelRevealState({
   const [renderedRevealState, setRenderedRevealState] = useState<PanelRevealState>(
     shouldAnimateIntro ? "hidden" : revealState,
   );
-  const [revealPhase, setRevealPhase] = useState<PanelRevealPhase | undefined>(
-    shouldAnimateIntro ? "intro" : undefined,
-  );
+  const [revealPhase, setRevealPhase] = useState<PanelRevealPhase | undefined>(undefined);
   const renderedRevealStateRef = useRef<PanelRevealState>(renderedRevealState);
 
   useEffect(() => {
@@ -72,31 +74,38 @@ export function usePanelRevealState({
     }
 
     if (revealState === "open" && revealIntro === "point" && currentRenderedRevealState === "hidden") {
-      setRevealPhase("intro");
-      scheduleFrame(() => {
-        setResolvedRevealState("open");
-      });
       schedule(() => {
-        setRevealPhase("settle");
-      }, PANEL_REVEAL_INTRO_DURATION_MS);
-      schedule(() => {
-        setRevealPhase("decay");
-      }, PANEL_REVEAL_INTRO_DURATION_MS + PANEL_REVEAL_SETTLE_DURATION_MS);
-      schedule(() => {
-        setRevealPhase(undefined);
-      }, PANEL_REVEAL_INTRO_DURATION_MS + PANEL_REVEAL_SETTLE_DURATION_MS + PANEL_REVEAL_DECAY_DURATION_MS);
+        scheduleFrame(() => {
+          setRevealPhase("intro");
+          setResolvedRevealState("open");
+        });
+        schedule(() => {
+          setRevealPhase("settle");
+        }, PANEL_REVEAL_INTRO_DURATION_MS);
+        schedule(() => {
+          setRevealPhase("decay");
+        }, PANEL_REVEAL_INTRO_DURATION_MS + PANEL_REVEAL_SETTLE_DURATION_MS);
+        schedule(() => {
+          setRevealPhase(undefined);
+        }, PANEL_REVEAL_INTRO_DURATION_MS + PANEL_REVEAL_SETTLE_DURATION_MS + PANEL_REVEAL_DECAY_DURATION_MS);
+      }, PANEL_POINT_REVEAL_BEAM_DURATION_MS);
     } else if (
       revealState === "hidden" &&
       revealOutro === "point" &&
       currentRenderedRevealState !== "hidden"
     ) {
-      setRevealPhase("outro");
-      setResolvedRevealState("closed");
+      if (currentRenderedRevealState === "open") {
+        setRevealPhase("outro");
+        setResolvedRevealState("closed");
 
-      schedule(() => {
-        setResolvedRevealState("hidden");
+        schedule(() => {
+          setResolvedRevealState("hidden");
+          setRevealPhase(undefined);
+        }, PANEL_HOLOGRAPHIC_REVEAL_DURATION_MS);
+      } else {
         setRevealPhase(undefined);
-      }, PANEL_REVEAL_OUTRO_DURATION_MS);
+        setResolvedRevealState("hidden");
+      }
     } else {
       setRevealPhase(undefined);
       setResolvedRevealState(revealState);

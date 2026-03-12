@@ -231,7 +231,7 @@ export function Panel({
         className="signal-ui-panel-shell__stage"
         inert={renderedRevealState !== "open" ? true : undefined}
       >
-        {shouldRenderPixelReveal ? (
+        {shouldRenderPixelReveal && renderedRevealState !== "hidden" ? (
           <div aria-hidden="true" className="signal-ui-panel-shell__pixel-layer">
             <PanelRevealCanvas revealPhase={pixelRevealPhase} revealState={renderedPixelRevealState} />
           </div>

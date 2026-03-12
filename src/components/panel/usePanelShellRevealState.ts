@@ -7,8 +7,8 @@ import type {
   PanelRevealState,
 } from "../Panel.js";
 
-const PANEL_HOLOGRAPHIC_REVEAL_DURATION_MS = 520;
-const PANEL_POINT_REVEAL_BEAM_DURATION_MS = 220;
+export const PANEL_HOLOGRAPHIC_REVEAL_DURATION_MS = 520;
+export const PANEL_POINT_REVEAL_BEAM_DURATION_MS = 220;
 
 type ResolvedPanelRevealState = PanelRevealState;
 
