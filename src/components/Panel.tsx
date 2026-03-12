@@ -1,23 +1,21 @@
 import { Card } from "antd";
 import type { CardProps } from "antd";
-import { useEffect, useRef, useState } from "react";
 import type { CSSProperties } from "react";
 
+import { joinClassNames } from "../utils/joinClassNames.js";
+import { PanelRevealCanvas } from "./panel/PanelRevealCanvas.js";
 import { usePanelCursorTilt } from "./panel/usePanelCursorTilt.js";
+import { usePanelRevealState as usePanelPixelRevealState } from "./panel/usePanelRevealState.js";
+import { usePanelShellRevealState } from "./panel/usePanelShellRevealState.js";
 
 export type PanelCutCorner = "accent" | "notch";
 export type PanelCutCornerPreset = "tactical" | "architectural";
 export type PanelFrame = "reticle";
+export type PanelSurface = "glass";
 export type PanelReveal = "holographic";
 export type PanelRevealIntro = "point";
 export type PanelRevealOutro = "point";
 export type PanelRevealState = "open" | "closed" | "hidden";
-
-const PANEL_HOLOGRAPHIC_REVEAL_DURATION_MS = 520;
-const PANEL_POINT_REVEAL_BEAM_DURATION_MS = 220;
-
-type ResolvedPanelRevealState = PanelRevealState;
-type PanelRevealPhase = "intro-point" | "outro-point";
 
 export type PanelCutCornerPlacement =
   | "top-left"
@@ -34,6 +32,9 @@ export interface PanelProps extends CardProps {
   frame?: PanelFrame;
   frameColor?: string;
   frameSize?: number | string;
+  surface?: PanelSurface;
+  surfaceColor?: string;
+  surfaceBlur?: number | string;
   reveal?: PanelReveal;
   revealColor?: string;
   revealIntro?: PanelRevealIntro;
@@ -48,10 +49,14 @@ type PanelStyle = CSSProperties & {
   "--signal-ui-panel-reticle-color"?: string;
   "--signal-ui-panel-reticle-size"?: string;
   "--signal-ui-panel-reveal-color"?: string;
+  "--signal-ui-panel-surface-blur"?: string;
+  "--signal-ui-panel-surface-color"?: string;
 };
 
 type PanelShellStyle = CSSProperties & {
   "--signal-ui-panel-reveal-color"?: string;
+  "--signal-ui-panel-surface-blur"?: string;
+  "--signal-ui-panel-surface-color"?: string;
 };
 
 type PanelCutCornerPresetDefinition = {
@@ -76,134 +81,6 @@ export const panelCutCornerPresets = {
   },
 } satisfies Record<PanelCutCornerPreset, PanelCutCornerPresetDefinition>;
 
-function toCssLength(value: PanelProps["cutCornerSize"]) {
-  if (value === undefined) {
-    return undefined;
-  }
-
-  return typeof value === "number" ? `${value}px` : value;
-}
-
-function joinClassNames(...classNames: Array<string | undefined>) {
-  return classNames.filter(Boolean).join(" ");
-}
-
-function composeEventHandlers<Event>(
-  ...handlers: Array<((event: Event) => void) | undefined>
-) {
-  return (event: Event) => {
-    handlers.forEach((handler) => {
-      handler?.(event);
-    });
-  };
-}
-
-function prefersReducedMotion() {
-  return typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-}
-
-// The public API stays simple while the shell runs a small hidden/line/open state machine.
-function usePanelRevealState({
-  reveal,
-  revealIntro,
-  revealOutro,
-  revealState,
-}: {
-  reveal?: PanelReveal;
-  revealIntro?: PanelRevealIntro;
-  revealOutro?: PanelRevealOutro;
-  revealState: PanelRevealState;
-}) {
-  const reducedMotion = prefersReducedMotion();
-  const shouldRenderPointRevealOnOpen =
-    reveal === "holographic" && revealIntro === "point" && revealState === "open" && !reducedMotion;
-  const [renderedRevealState, setRenderedRevealState] = useState<ResolvedPanelRevealState>(
-    shouldRenderPointRevealOnOpen ? "hidden" : revealState,
-  );
-  const [revealPhase, setRevealPhase] = useState<PanelRevealPhase | undefined>(
-    shouldRenderPointRevealOnOpen ? "intro-point" : undefined,
-  );
-  const renderedRevealStateRef = useRef<ResolvedPanelRevealState>(renderedRevealState);
-
-  useEffect(() => {
-    renderedRevealStateRef.current = renderedRevealState;
-  }, [renderedRevealState]);
-
-  useEffect(() => {
-    if (reveal !== "holographic") {
-      return undefined;
-    }
-
-    const setResolvedRevealState = (nextState: ResolvedPanelRevealState) => {
-      renderedRevealStateRef.current = nextState;
-      setRenderedRevealState(nextState);
-    };
-    const timeoutIds: number[] = [];
-    const animationFrameIds: number[] = [];
-    const schedule = (callback: () => void, delayMs: number) => {
-      timeoutIds.push(window.setTimeout(callback, delayMs));
-    };
-    const scheduleFrame = (callback: () => void) => {
-      animationFrameIds.push(window.requestAnimationFrame(callback));
-    };
-    const currentRenderedRevealState = renderedRevealStateRef.current;
-
-    if (reducedMotion) {
-      setRevealPhase(undefined);
-      setResolvedRevealState(revealState);
-      return () => {
-        timeoutIds.forEach((timeoutId) => window.clearTimeout(timeoutId));
-        animationFrameIds.forEach((animationFrameId) => window.cancelAnimationFrame(animationFrameId));
-      };
-    }
-
-    if (revealState === "open" && revealIntro === "point" && currentRenderedRevealState === "hidden") {
-      setRevealPhase("intro-point");
-      schedule(() => {
-        setRevealPhase(undefined);
-        setResolvedRevealState("closed");
-        scheduleFrame(() => {
-          setResolvedRevealState("open");
-        });
-      }, PANEL_POINT_REVEAL_BEAM_DURATION_MS);
-    } else if (
-      revealState === "hidden" &&
-      revealOutro === "point" &&
-      currentRenderedRevealState !== "hidden"
-    ) {
-      setRevealPhase("outro-point");
-
-      if (currentRenderedRevealState === "open") {
-        setResolvedRevealState("closed");
-        schedule(() => {
-          setResolvedRevealState("hidden");
-        }, PANEL_HOLOGRAPHIC_REVEAL_DURATION_MS);
-        schedule(() => {
-          setRevealPhase(undefined);
-        }, PANEL_HOLOGRAPHIC_REVEAL_DURATION_MS + PANEL_POINT_REVEAL_BEAM_DURATION_MS);
-      } else {
-        setResolvedRevealState("hidden");
-        schedule(() => {
-          setRevealPhase(undefined);
-        }, PANEL_POINT_REVEAL_BEAM_DURATION_MS);
-      }
-    } else {
-      setRevealPhase(undefined);
-      setResolvedRevealState(revealState);
-    }
-
-    return () => {
-      timeoutIds.forEach((timeoutId) => window.clearTimeout(timeoutId));
-      animationFrameIds.forEach((animationFrameId) => window.cancelAnimationFrame(animationFrameId));
-    };
-  }, [reducedMotion, reveal, revealIntro, revealOutro, revealState]);
-
-  return {
-    revealPhase,
-    renderedRevealState,
-  };
-}
-
 export function Panel({
   className,
   cursorTilt,
@@ -215,6 +92,9 @@ export function Panel({
   frame,
   frameColor,
   frameSize,
+  surface,
+  surfaceColor,
+  surfaceBlur,
   reveal,
   revealColor,
   revealIntro,
@@ -231,13 +111,22 @@ export function Panel({
   const resolvedCutCornerColor = cutCornerColor ?? preset?.cutCornerColor ?? "var(--signal-ui-primary)";
   const resolvedCutCornerPlacement = cutCornerPlacement ?? preset?.cutCornerPlacement ?? "top-right";
   const resolvedCutCornerSize = cutCornerSize ?? preset?.cutCornerSize ?? 26;
-  const resolvedRevealColor = revealColor ?? frameColor ?? resolvedCutCornerColor;
-  const { revealPhase, renderedRevealState } = usePanelRevealState({
+  const resolvedSurfaceColor = surfaceColor ?? frameColor ?? resolvedCutCornerColor;
+  const resolvedRevealColor = revealColor ?? resolvedSurfaceColor;
+  const { renderedRevealState, revealPhase } = usePanelShellRevealState({
     reveal,
     revealIntro,
     revealOutro,
     revealState,
   });
+  const shouldRenderPixelReveal = reveal === "holographic" && surface === "glass";
+  const { renderedRevealState: renderedPixelRevealState, revealPhase: pixelRevealPhase } =
+    usePanelPixelRevealState({
+      reveal: shouldRenderPixelReveal ? reveal : undefined,
+      revealIntro,
+      revealOutro,
+      revealState,
+    });
   const { surfacePointerHandlers, surfaceRef } = usePanelCursorTilt({
     enabled: cursorTilt,
   });
@@ -254,6 +143,12 @@ export function Panel({
       ? {
           "--signal-ui-panel-reticle-color": frameColor ?? "var(--signal-ui-primary)",
           "--signal-ui-panel-reticle-size": toCssLength(frameSize) ?? "28px",
+        }
+      : {}),
+    ...(surface === "glass"
+      ? {
+          "--signal-ui-panel-surface-color": resolvedSurfaceColor,
+          "--signal-ui-panel-surface-blur": toCssLength(surfaceBlur) ?? "10px",
         }
       : {}),
     ...(reveal === "holographic"
@@ -289,10 +184,11 @@ export function Panel({
       className={joinClassNames(
         "signal-ui-panel",
         cursorTilt && reveal !== "holographic" ? "signal-ui-panel--cursor-tilt" : undefined,
-        frame ? `signal-ui-panel--frame-${frame}` : undefined,
-        resolvedCutCorner ? `signal-ui-panel--cut-${resolvedCutCorner}` : undefined,
-        resolvedCutCorner ? `signal-ui-panel--corner-${resolvedCutCornerPlacement}` : undefined,
-        reveal ? `signal-ui-panel--reveal-${reveal}` : undefined,
+        frame && `signal-ui-panel--frame-${frame}`,
+        surface && `signal-ui-panel--surface-${surface}`,
+        resolvedCutCorner && `signal-ui-panel--cut-${resolvedCutCorner}`,
+        resolvedCutCorner && `signal-ui-panel--corner-${resolvedCutCornerPlacement}`,
+        reveal && `signal-ui-panel--reveal-${reveal}`,
         className,
       )}
       ref={cursorTilt && reveal !== "holographic" ? surfaceRef : undefined}
@@ -306,6 +202,8 @@ export function Panel({
 
   const shellStyle: PanelShellStyle = {
     "--signal-ui-panel-reveal-color": panelStyle["--signal-ui-panel-reveal-color"],
+    "--signal-ui-panel-surface-blur": panelStyle["--signal-ui-panel-surface-blur"],
+    "--signal-ui-panel-surface-color": panelStyle["--signal-ui-panel-surface-color"],
   };
 
   return (
@@ -317,6 +215,8 @@ export function Panel({
       className={joinClassNames(
         "signal-ui-panel-shell",
         "signal-ui-panel-shell--reveal-holographic",
+        surface === "glass" ? "signal-ui-panel-shell--surface-glass" : undefined,
+        shouldRenderPixelReveal && "signal-ui-panel-shell--pixel-reveal",
         cursorTilt ? "signal-ui-panel-shell--cursor-tilt" : undefined,
       )}
       data-signal-ui-panel-reveal-phase={revealPhase}
@@ -331,8 +231,31 @@ export function Panel({
         className="signal-ui-panel-shell__stage"
         inert={renderedRevealState !== "open" ? true : undefined}
       >
+        {shouldRenderPixelReveal && renderedRevealState !== "hidden" ? (
+          <div aria-hidden="true" className="signal-ui-panel-shell__pixel-layer">
+            <PanelRevealCanvas revealPhase={pixelRevealPhase} revealState={renderedPixelRevealState} />
+          </div>
+        ) : undefined}
         {panelCard}
       </div>
     </div>
   );
+}
+
+function composeEventHandlers<Event>(
+  ...handlers: Array<((event: Event) => void) | undefined>
+) {
+  return (event: Event) => {
+    handlers.forEach((handler) => {
+      handler?.(event);
+    });
+  };
+}
+
+function toCssLength(value: number | string | undefined) {
+  if (value === undefined) {
+    return undefined;
+  }
+
+  return typeof value === "number" ? `${value}px` : value;
 }
