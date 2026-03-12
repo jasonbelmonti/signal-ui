@@ -22,6 +22,8 @@ export { SignalChat } from "./components/SignalChat.js";
 export { SignalButton } from "./components/SignalButton.js";
 export { SignalEmptyState } from "./components/SignalEmptyState.js";
 export { SignalHeaderLockup } from "./components/SignalHeaderLockup.js";
+export { SignalProgressMeter } from "./components/SignalProgressMeter.js";
+export { SignalProgressPanel } from "./components/SignalProgressPanel.js";
 export { SignalStatusTag } from "./components/SignalStatusTag.js";
 export type {
   HashCubeProps,
@@ -50,7 +52,11 @@ export type {
   PanelCutCornerPlacement,
   PanelCutCornerPreset,
   PanelFrame,
+  PanelRevealIntro,
+  PanelRevealOutro,
   PanelProps,
+  PanelReveal,
+  PanelRevealState,
 } from "./components/Panel.js";
 export type {
   SignalChatAttachment,
@@ -72,6 +78,17 @@ export type {
   SignalHeaderLockupTitleLevel,
   SignalHeaderLockupTone,
 } from "./components/SignalHeaderLockup.js";
+export type {
+  SignalProgressMeterProps,
+  SignalProgressMeterTone,
+  SignalProgressMeterVariant,
+} from "./components/SignalProgressMeter.js";
+export type {
+  SignalProgressPanelMetric,
+  SignalProgressPanelMeterVariant,
+  SignalProgressPanelProps,
+  SignalProgressPanelTone,
+} from "./components/SignalProgressPanel.js";
 export type {
   SignalStatusTagContext,
   SignalStatusTagProps,

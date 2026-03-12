@@ -1,5 +1,21 @@
 # @jasonbelmonti/signal-ui
 
+## 0.9.0
+
+### Minor Changes
+
+- a99c513: Add exported `SignalProgressMeter` and `SignalProgressPanel` primitives, including the animated splash progress treatment, completion payoff surface, and example loading flows used in Storybook.
+
+  Polish progress-meter completion behavior, semantics, and audio arming so package-owned progress surfaces render and complete consistently.
+
+## 0.8.0
+
+### Minor Changes
+
+- 89eb145: Add a new `frame="reticle"` option to `Panel` so highlighted surfaces can render the animated acquisition-style border treatment exposed in the latest Storybook examples.
+
+  Update graph canvas and wireframe theming to read from runtime theme variables so custom Signal theme overrides propagate consistently through canvas surfaces, minimap accents, and palette-driven visual effects.
+
 ## 0.7.1
 
 ### Patch Changes
