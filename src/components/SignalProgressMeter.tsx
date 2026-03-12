@@ -41,7 +41,7 @@ export function SignalProgressMeter({
 }: SignalProgressMeterProps) {
   const clampedProgress = normalizeProgress(progress);
   const isFull = clampedProgress >= 100;
-  const isCompleted = completed || isFull;
+  const isCompleted = completed;
   const resolvedSegmentCount = normalizeSegmentCount(segmentCount);
   const displayPercentValue = toDisplayPercentValue(clampedProgress);
   const labelId = useId();

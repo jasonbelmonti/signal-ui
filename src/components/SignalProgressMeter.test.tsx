@@ -4,7 +4,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { SignalProgressMeter } from "./SignalProgressMeter.js";
 
 describe("SignalProgressMeter", () => {
-  test("treats completed as an override even when progress is below 100", () => {
+  test("treats completed as an explicit override even when progress is below 100", () => {
     const markup = renderToStaticMarkup(
       <SignalProgressMeter
         completed
@@ -20,6 +20,24 @@ describe("SignalProgressMeter", () => {
     expect(markup).toMatch(/aria-live="polite"[^>]*>seal verified<\/span>/);
     expect(markup).toContain('aria-valuenow="40"');
     expect(markup).toContain(">040%<");
+  });
+
+  test("keeps a full meter visually distinct from explicit completion", () => {
+    const markup = renderToStaticMarkup(
+      <SignalProgressMeter
+        completed={false}
+        completionLabel="seal verified"
+        progress={100}
+        variant="splash"
+      />,
+    );
+
+    expect(markup).toContain("signal-ui-progress-meter--full");
+    expect(markup).not.toContain("signal-ui-progress-meter--completed");
+    expect(markup).not.toMatch(/aria-describedby="[^"]+"/);
+    expect(markup).not.toMatch(/aria-live="polite"[^>]*>seal verified<\/span>/);
+    expect(markup).toContain('aria-valuenow="100"');
+    expect(markup).toContain(">100%<");
   });
 
   test("normalizes NaN inputs to safe progress and segment defaults", () => {
