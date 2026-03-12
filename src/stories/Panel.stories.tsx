@@ -12,6 +12,8 @@ import { signalPalette } from "../theme/signalTheme.js";
 type SignalReadoutStyle = CSSProperties &
   Record<`--signal-ui-fx-signal-${string}`, string | number>;
 
+type RevealState = NonNullable<PanelProps["revealState"]>;
+
 const meta = {
   title: "Components/Panel",
   component: Panel,
@@ -185,6 +187,13 @@ export const CyberGlassPrototype: Story = {
   render: () => <CyberGlassPrototypeDemo />,
 };
 
+export const CyberGlassClosedState: Story = {
+  parameters: {
+    layout: "fullscreen",
+  },
+  render: () => <CyberGlassPrototypeDemo controls={false} initialRevealState="closed" />,
+};
+
 export const CursorTilt: Story = {
   render: () => (
     <Row gutter={[16, 16]}>
@@ -245,7 +254,7 @@ export const ReticleFrame: Story = {
 };
 
 function HolographicRevealDemo() {
-  const [revealState, setRevealState] = useState<"open" | "closed" | "hidden">("open");
+  const [revealState, setRevealState] = useState<RevealState>("open");
   const [isAutoCycling, setIsAutoCycling] = useState(false);
 
   useEffect(() => {
@@ -349,6 +358,8 @@ function HolographicRevealDemo() {
             revealIntro="point"
             revealOutro="point"
             revealState={revealState}
+            surface="glass"
+            surfaceBlur={12}
             style={holographicPanelStyle}
             title="Docking Aperture"
           >
@@ -554,9 +565,22 @@ function ReticleFrameDemo(args: PanelProps) {
   );
 }
 
-function CyberGlassPrototypeDemo() {
-  const [revealState, setRevealState] = useState<"open" | "closed" | "hidden">("open");
+type CyberGlassPrototypeDemoProps = {
+  controls?: boolean;
+  initialRevealState?: RevealState;
+};
+
+function CyberGlassPrototypeDemo({
+  controls = true,
+  initialRevealState = "open",
+}: CyberGlassPrototypeDemoProps) {
+  const [revealState, setRevealState] = useState<RevealState>(initialRevealState);
   const [isAutoCycling, setIsAutoCycling] = useState(false);
+
+  useEffect(() => {
+    setRevealState(initialRevealState);
+    setIsAutoCycling(false);
+  }, [initialRevealState]);
 
   useEffect(() => {
     if (!isAutoCycling) {
@@ -613,35 +637,41 @@ function CyberGlassPrototypeDemo() {
       <div style={prototypeContentStyle}>
         <Flex align="center" gap={12} justify="space-between" wrap="wrap" style={{ marginBottom: 18 }}>
           <div>
-            <Typography.Text style={eyebrowStyle}>Cyber Glass / Dynamic Blur</Typography.Text>
+            <Typography.Text style={eyebrowStyle}>
+              {controls ? "Cyber Glass / Dynamic Blur" : "Cyber Glass / Closed State"}
+            </Typography.Text>
             <Typography.Title level={3} className="signal-ui-text-display" style={prototypeTitleStyle}>
-              Cyber Glass Panel Prototype
+              {controls ? "Cyber Glass Panel Prototype" : "Cyber Glass Panel Closed State"}
             </Typography.Title>
           </div>
 
-          <Space wrap>
-            <Button
-              onClick={() => {
-                setIsAutoCycling(false);
-                setRevealState("open");
-              }}
-              type={revealState === "open" ? "primary" : "default"}
-            >
-              Open
-            </Button>
-            <Button
-              onClick={() => {
-                setIsAutoCycling(false);
-                setRevealState("hidden");
-              }}
-              type={revealState === "hidden" ? "primary" : "default"}
-            >
-              Hide
-            </Button>
-            <Button onClick={() => setIsAutoCycling((current) => !current)}>
-              {isAutoCycling ? "Stop Loop" : "Auto Cycle"}
-            </Button>
-          </Space>
+          {controls ? (
+            <Space wrap>
+              <Button
+                onClick={() => {
+                  setIsAutoCycling(false);
+                  setRevealState("open");
+                }}
+                type={revealState === "open" ? "primary" : "default"}
+              >
+                Open
+              </Button>
+              <Button
+                onClick={() => {
+                  setIsAutoCycling(false);
+                  setRevealState("hidden");
+                }}
+                type={revealState === "hidden" ? "primary" : "default"}
+              >
+                Hide
+              </Button>
+              <Button onClick={() => setIsAutoCycling((current) => !current)}>
+                {isAutoCycling ? "Stop Loop" : "Auto Cycle"}
+              </Button>
+            </Space>
+          ) : (
+            <Typography.Text style={eyebrowStyle}>Pinned to `closed` for visual regression.</Typography.Text>
+          )}
         </Flex>
 
         <div style={prototypePanelWrapStyle}>
