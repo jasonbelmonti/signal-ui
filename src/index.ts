@@ -52,7 +52,11 @@ export type {
   PanelCutCornerPlacement,
   PanelCutCornerPreset,
   PanelFrame,
+  PanelRevealIntro,
+  PanelRevealOutro,
   PanelProps,
+  PanelReveal,
+  PanelRevealState,
 } from "./components/Panel.js";
 export type {
   SignalChatAttachment,
