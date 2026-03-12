@@ -5,8 +5,14 @@ export {
   type InstallStaticAntdThemeOptions,
 } from "./providers/AntdThemeProvider.js";
 export { HashCube } from "./components/HashCube.js";
+export { GlitchGhost } from "./components/GlitchGhost.js";
 export { GraphCanvas } from "./components/GraphCanvas.js";
 export type { GraphCanvasProps, GraphCanvasReactFlowProps } from "./components/GraphCanvas.js";
+export type {
+  GlitchGhostBlendMode,
+  GlitchGhostMask,
+  GlitchGhostProps,
+} from "./components/GlitchGhost.js";
 export { MarkdownTheme } from "./components/MarkdownTheme.js";
 export { SignalBackdrop } from "./components/SignalBackdrop.js";
 export {
