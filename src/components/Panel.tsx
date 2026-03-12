@@ -3,6 +3,8 @@ import type { CardProps } from "antd";
 import { useEffect, useRef, useState } from "react";
 import type { CSSProperties } from "react";
 
+import { usePanelCursorTilt } from "./panel/usePanelCursorTilt.js";
+
 export type PanelCutCorner = "accent" | "notch";
 export type PanelCutCornerPreset = "tactical" | "architectural";
 export type PanelFrame = "reticle";
@@ -37,6 +39,7 @@ export interface PanelProps extends CardProps {
   revealIntro?: PanelRevealIntro;
   revealOutro?: PanelRevealOutro;
   revealState?: PanelRevealState;
+  cursorTilt?: boolean;
 }
 
 type PanelStyle = CSSProperties & {
@@ -83,6 +86,16 @@ function toCssLength(value: PanelProps["cutCornerSize"]) {
 
 function joinClassNames(...classNames: Array<string | undefined>) {
   return classNames.filter(Boolean).join(" ");
+}
+
+function composeEventHandlers<Event>(
+  ...handlers: Array<((event: Event) => void) | undefined>
+) {
+  return (event: Event) => {
+    handlers.forEach((handler) => {
+      handler?.(event);
+    });
+  };
 }
 
 function prefersReducedMotion() {
@@ -193,6 +206,7 @@ function usePanelRevealState({
 
 export function Panel({
   className,
+  cursorTilt,
   cutCorner,
   cutCornerColor,
   cutCornerPreset,
@@ -207,6 +221,9 @@ export function Panel({
   revealOutro,
   revealState = "open",
   style,
+  onPointerCancel,
+  onPointerLeave,
+  onPointerMove,
   ...cardProps
 }: PanelProps) {
   const preset = cutCornerPreset ? panelCutCornerPresets[cutCornerPreset] : undefined;
@@ -220,6 +237,9 @@ export function Panel({
     revealIntro,
     revealOutro,
     revealState,
+  });
+  const { surfacePointerHandlers, surfaceRef } = usePanelCursorTilt({
+    enabled: cursorTilt,
   });
 
   const panelStyle: PanelStyle = {
@@ -245,14 +265,37 @@ export function Panel({
   const panelCard = (
     <Card
       {...cardProps}
+      onPointerCancel={
+        reveal === "holographic"
+          ? onPointerCancel
+          : cursorTilt
+            ? composeEventHandlers(onPointerCancel, surfacePointerHandlers.onPointerCancel)
+            : onPointerCancel
+      }
+      onPointerLeave={
+        reveal === "holographic"
+          ? onPointerLeave
+          : cursorTilt
+            ? composeEventHandlers(onPointerLeave, surfacePointerHandlers.onPointerLeave)
+            : onPointerLeave
+      }
+      onPointerMove={
+        reveal === "holographic"
+          ? onPointerMove
+          : cursorTilt
+            ? composeEventHandlers(onPointerMove, surfacePointerHandlers.onPointerMove)
+            : onPointerMove
+      }
       className={joinClassNames(
         "signal-ui-panel",
+        cursorTilt && reveal !== "holographic" ? "signal-ui-panel--cursor-tilt" : undefined,
         frame ? `signal-ui-panel--frame-${frame}` : undefined,
         resolvedCutCorner ? `signal-ui-panel--cut-${resolvedCutCorner}` : undefined,
         resolvedCutCorner ? `signal-ui-panel--corner-${resolvedCutCornerPlacement}` : undefined,
         reveal ? `signal-ui-panel--reveal-${reveal}` : undefined,
         className,
       )}
+      ref={cursorTilt && reveal !== "holographic" ? surfaceRef : undefined}
       style={panelStyle}
     />
   );
@@ -267,7 +310,15 @@ export function Panel({
 
   return (
     <div
-      className="signal-ui-panel-shell signal-ui-panel-shell--reveal-holographic"
+      onPointerCancel={cursorTilt ? surfacePointerHandlers.onPointerCancel : undefined}
+      onPointerLeave={cursorTilt ? surfacePointerHandlers.onPointerLeave : undefined}
+      onPointerMove={cursorTilt ? surfacePointerHandlers.onPointerMove : undefined}
+      ref={cursorTilt ? surfaceRef : undefined}
+      className={joinClassNames(
+        "signal-ui-panel-shell",
+        "signal-ui-panel-shell--reveal-holographic",
+        cursorTilt ? "signal-ui-panel-shell--cursor-tilt" : undefined,
+      )}
       data-signal-ui-panel-reveal-phase={revealPhase}
       data-signal-ui-panel-reveal-state={renderedRevealState}
       style={shellStyle}
