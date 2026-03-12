@@ -1,6 +1,7 @@
 import { useEffect, useEffectEvent, useRef } from "react";
 import type { ComponentPropsWithoutRef, CSSProperties, ReactNode } from "react";
 
+import { hasCanvasSnapshotSource } from "./glitchGhost/hasCanvasSnapshotSource.js";
 import { syncGhostSnapshotLayers } from "./glitchGhost/snapshot.js";
 import { joinClassNames } from "../utils/joinClassNames.js";
 
@@ -129,6 +130,34 @@ export function GlitchGhost({
     }
 
     let animationFrameId: number | null = null;
+    let continuousSyncFrameId: number | null = null;
+
+    const stopContinuousSync = () => {
+      if (continuousSyncFrameId === null) {
+        return;
+      }
+
+      window.cancelAnimationFrame(continuousSyncFrameId);
+      continuousSyncFrameId = null;
+    };
+
+    const updateContinuousSync = () => {
+      if (!hasCanvasSnapshotSource(mainElement)) {
+        stopContinuousSync();
+        return;
+      }
+
+      if (continuousSyncFrameId !== null) {
+        return;
+      }
+
+      continuousSyncFrameId = window.requestAnimationFrame(function syncCanvasGhostFrame() {
+        continuousSyncFrameId = null;
+        syncGhostSnapshots();
+        updateContinuousSync();
+      });
+    };
+
     const scheduleSnapshotSync = () => {
       if (animationFrameId !== null) {
         return;
@@ -137,6 +166,7 @@ export function GlitchGhost({
       animationFrameId = window.requestAnimationFrame(() => {
         animationFrameId = null;
         syncGhostSnapshots();
+        updateContinuousSync();
       });
     };
 
@@ -155,6 +185,7 @@ export function GlitchGhost({
 
     return () => {
       observer.disconnect();
+      stopContinuousSync();
 
       if (animationFrameId !== null) {
         window.cancelAnimationFrame(animationFrameId);
