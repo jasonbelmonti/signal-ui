@@ -555,7 +555,7 @@ h6.ant-typography {
 
 /* Shared animated surface used by reticle panels and holographic modal content. */
 .signal-ui-holographic-surface,
-.ant-modal-content,
+.signal-ui-modal--holographic .ant-modal-content,
 .signal-ui-panel--frame-reticle.ant-card {
   position: relative;
   isolation: isolate;
@@ -1824,7 +1824,7 @@ h6.ant-typography {
   }
 
   .signal-ui-holographic-surface,
-  .ant-modal-content,
+  .signal-ui-modal--holographic .ant-modal-content,
   .signal-ui-panel--frame-reticle.ant-card {
     animation: none;
   }
@@ -1870,7 +1870,7 @@ h6.ant-typography {
   }
 
   .signal-ui-holographic-surface,
-  .ant-modal-content {
+  .signal-ui-modal--holographic .ant-modal-content {
     background: Canvas;
     border-color: CanvasText;
     box-shadow: none;
