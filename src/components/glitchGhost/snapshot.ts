@@ -107,13 +107,18 @@ function cloneGhostNode(sourceNode: Node) {
   return cloneNode;
 }
 
+type GhostSnapshotSource = Pick<HTMLElement, "childNodes">;
+type GhostSnapshotTarget = Pick<HTMLDivElement, "replaceChildren">;
+type GhostNodeCloner = (sourceNode: Node) => Node;
+
 export function syncGhostSnapshotLayers(
-  sourceElement: HTMLElement,
-  targetElements: HTMLDivElement[],
+  sourceElement: GhostSnapshotSource,
+  targetElements: GhostSnapshotTarget[],
+  cloneNode: GhostNodeCloner = cloneGhostNode,
 ) {
-  const baseClones = Array.from(sourceElement.childNodes, (node) => cloneGhostNode(node));
+  const sourceNodes = Array.from(sourceElement.childNodes);
 
   for (const targetElement of targetElements) {
-    targetElement.replaceChildren(...baseClones.map((node) => node.cloneNode(true)));
+    targetElement.replaceChildren(...sourceNodes.map((node) => cloneNode(node)));
   }
 }
