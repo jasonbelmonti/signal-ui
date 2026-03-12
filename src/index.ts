@@ -50,7 +50,12 @@ export type {
   PanelCutCornerPlacement,
   PanelCutCornerPreset,
   PanelFrame,
+  PanelRevealIntro,
+  PanelRevealOutro,
   PanelProps,
+  PanelReveal,
+  PanelRevealState,
+  PanelSurface,
 } from "./components/Panel.js";
 export type {
   SignalChatAttachment,
