@@ -88,6 +88,16 @@ function joinClassNames(...classNames: Array<string | undefined>) {
   return classNames.filter(Boolean).join(" ");
 }
 
+function composeEventHandlers<Event>(
+  ...handlers: Array<((event: Event) => void) | undefined>
+) {
+  return (event: Event) => {
+    handlers.forEach((handler) => {
+      handler?.(event);
+    });
+  };
+}
+
 function prefersReducedMotion() {
   return typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
@@ -211,6 +221,9 @@ export function Panel({
   revealOutro,
   revealState = "open",
   style,
+  onPointerCancel,
+  onPointerLeave,
+  onPointerMove,
   ...cardProps
 }: PanelProps) {
   const preset = cutCornerPreset ? panelCutCornerPresets[cutCornerPreset] : undefined;
@@ -252,10 +265,24 @@ export function Panel({
   const panelCard = (
     <Card
       {...cardProps}
-      {...(cursorTilt && reveal !== "holographic" ? surfacePointerHandlers : {})}
+      onPointerCancel={
+        cursorTilt && reveal !== "holographic"
+          ? composeEventHandlers(onPointerCancel, surfacePointerHandlers.onPointerCancel)
+          : onPointerCancel
+      }
+      onPointerLeave={
+        cursorTilt && reveal !== "holographic"
+          ? composeEventHandlers(onPointerLeave, surfacePointerHandlers.onPointerLeave)
+          : onPointerLeave
+      }
+      onPointerMove={
+        cursorTilt && reveal !== "holographic"
+          ? composeEventHandlers(onPointerMove, surfacePointerHandlers.onPointerMove)
+          : onPointerMove
+      }
       className={joinClassNames(
         "signal-ui-panel",
-        cursorTilt ? "signal-ui-panel--cursor-tilt" : undefined,
+        cursorTilt && reveal !== "holographic" ? "signal-ui-panel--cursor-tilt" : undefined,
         frame ? `signal-ui-panel--frame-${frame}` : undefined,
         resolvedCutCorner ? `signal-ui-panel--cut-${resolvedCutCorner}` : undefined,
         resolvedCutCorner ? `signal-ui-panel--corner-${resolvedCutCornerPlacement}` : undefined,
@@ -277,7 +304,21 @@ export function Panel({
 
   return (
     <div
-      {...(cursorTilt ? surfacePointerHandlers : {})}
+      onPointerCancel={
+        cursorTilt
+          ? composeEventHandlers(surfacePointerHandlers.onPointerCancel)
+          : undefined
+      }
+      onPointerLeave={
+        cursorTilt
+          ? composeEventHandlers(surfacePointerHandlers.onPointerLeave)
+          : undefined
+      }
+      onPointerMove={
+        cursorTilt
+          ? composeEventHandlers(surfacePointerHandlers.onPointerMove)
+          : undefined
+      }
       ref={cursorTilt ? surfaceRef : undefined}
       className={joinClassNames(
         "signal-ui-panel-shell",
