@@ -1,5 +1,13 @@
 # @jasonbelmonti/signal-ui
 
+## 0.9.0
+
+### Minor Changes
+
+- a99c513: Add exported `SignalProgressMeter` and `SignalProgressPanel` primitives, including the animated splash progress treatment, completion payoff surface, and example loading flows used in Storybook.
+
+  Polish progress-meter completion behavior, semantics, and audio arming so package-owned progress surfaces render and complete consistently.
+
 ## 0.8.0
 
 ### Minor Changes
