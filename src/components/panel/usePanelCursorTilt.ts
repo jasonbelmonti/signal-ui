@@ -6,12 +6,12 @@ type UsePanelCursorTiltOptions = {
 };
 
 type UsePanelCursorTiltResult = {
-  shellPointerHandlers: {
+  surfacePointerHandlers: {
     onPointerCancel?: PointerEventHandler<HTMLDivElement>;
     onPointerLeave?: PointerEventHandler<HTMLDivElement>;
     onPointerMove?: PointerEventHandler<HTMLDivElement>;
   };
-  shellRef: RefObject<HTMLDivElement | null>;
+  surfaceRef: RefObject<HTMLDivElement | null>;
 };
 
 type TiltState = {
@@ -29,7 +29,7 @@ const DEFAULT_TILT_STATE: TiltState = {
 export function usePanelCursorTilt({
   enabled,
 }: UsePanelCursorTiltOptions): UsePanelCursorTiltResult {
-  const shellRef = useRef<HTMLDivElement | null>(null);
+  const surfaceRef = useRef<HTMLDivElement | null>(null);
   const animationFrameRef = useRef(0);
   const reducedMotionRef = useRef(false);
   const tiltStateRef = useRef<TiltState>(DEFAULT_TILT_STATE);
@@ -37,7 +37,7 @@ export function usePanelCursorTilt({
   const commitTilt = useEffectEvent(() => {
     animationFrameRef.current = 0;
 
-    const shell = shellRef.current;
+    const shell = surfaceRef.current;
 
     if (!shell) {
       return;
@@ -127,14 +127,14 @@ export function usePanelCursorTilt({
   };
 
   return {
-    shellPointerHandlers: enabled
+    surfacePointerHandlers: enabled
       ? {
           onPointerCancel: handlePointerLeave,
           onPointerLeave: handlePointerLeave,
           onPointerMove: handlePointerMove,
         }
       : {},
-    shellRef,
+    surfaceRef,
   };
 }
 

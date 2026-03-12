@@ -225,7 +225,7 @@ export function Panel({
     revealOutro,
     revealState,
   });
-  const { shellPointerHandlers, shellRef } = usePanelCursorTilt({
+  const { surfacePointerHandlers, surfaceRef } = usePanelCursorTilt({
     enabled: cursorTilt,
   });
 
@@ -252,19 +252,22 @@ export function Panel({
   const panelCard = (
     <Card
       {...cardProps}
+      {...(cursorTilt && reveal !== "holographic" ? surfacePointerHandlers : {})}
       className={joinClassNames(
         "signal-ui-panel",
+        cursorTilt ? "signal-ui-panel--cursor-tilt" : undefined,
         frame ? `signal-ui-panel--frame-${frame}` : undefined,
         resolvedCutCorner ? `signal-ui-panel--cut-${resolvedCutCorner}` : undefined,
         resolvedCutCorner ? `signal-ui-panel--corner-${resolvedCutCornerPlacement}` : undefined,
         reveal ? `signal-ui-panel--reveal-${reveal}` : undefined,
         className,
       )}
+      ref={cursorTilt && reveal !== "holographic" ? surfaceRef : undefined}
       style={panelStyle}
     />
   );
 
-  if (reveal !== "holographic" && !cursorTilt) {
+  if (reveal !== "holographic") {
     return panelCard;
   }
 
@@ -272,40 +275,29 @@ export function Panel({
     "--signal-ui-panel-reveal-color": panelStyle["--signal-ui-panel-reveal-color"],
   };
 
-  const wrappedPanel =
-    reveal === "holographic" ? (
-      <div
-        className="signal-ui-panel-shell signal-ui-panel-shell--reveal-holographic"
-        data-signal-ui-panel-reveal-phase={revealPhase}
-        data-signal-ui-panel-reveal-state={renderedRevealState}
-        style={shellStyle}
-      >
-        <div aria-hidden="true" className="signal-ui-panel-shell__pixels" />
-        <div aria-hidden="true" className="signal-ui-panel-shell__beam" />
-        <div aria-hidden="true" className="signal-ui-panel-shell__edges" />
-        <div
-          aria-hidden={renderedRevealState !== "open"}
-          className="signal-ui-panel-shell__stage"
-          inert={renderedRevealState !== "open" ? true : undefined}
-        >
-          {panelCard}
-        </div>
-      </div>
-    ) : (
-      panelCard
-    );
-
-  if (!cursorTilt) {
-    return wrappedPanel;
-  }
-
   return (
     <div
-      {...shellPointerHandlers}
-      ref={shellRef}
-      className="signal-ui-panel-tilt-shell"
+      {...(cursorTilt ? surfacePointerHandlers : {})}
+      ref={cursorTilt ? surfaceRef : undefined}
+      className={joinClassNames(
+        "signal-ui-panel-shell",
+        "signal-ui-panel-shell--reveal-holographic",
+        cursorTilt ? "signal-ui-panel-shell--cursor-tilt" : undefined,
+      )}
+      data-signal-ui-panel-reveal-phase={revealPhase}
+      data-signal-ui-panel-reveal-state={renderedRevealState}
+      style={shellStyle}
     >
-      <div className="signal-ui-panel-tilt-shell__plane">{wrappedPanel}</div>
+      <div aria-hidden="true" className="signal-ui-panel-shell__pixels" />
+      <div aria-hidden="true" className="signal-ui-panel-shell__beam" />
+      <div aria-hidden="true" className="signal-ui-panel-shell__edges" />
+      <div
+        aria-hidden={renderedRevealState !== "open"}
+        className="signal-ui-panel-shell__stage"
+        inert={renderedRevealState !== "open" ? true : undefined}
+      >
+        {panelCard}
+      </div>
     </div>
   );
 }

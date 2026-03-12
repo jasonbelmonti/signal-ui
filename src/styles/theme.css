@@ -549,20 +549,14 @@ h6.ant-typography {
   position: relative;
 }
 
-.signal-ui-panel-tilt-shell {
+.signal-ui-panel--cursor-tilt.ant-card,
+.signal-ui-panel-shell--cursor-tilt {
   --signal-ui-panel-tilt-lift: 0px;
   --signal-ui-panel-tilt-perspective: 1440px;
   --signal-ui-panel-tilt-rotate-x: 0deg;
   --signal-ui-panel-tilt-rotate-y: 0deg;
-  perspective: var(--signal-ui-panel-tilt-perspective);
-}
-
-.signal-ui-panel-tilt-shell__plane {
-  position: relative;
-}
-
-.signal-ui-panel-tilt-shell > .signal-ui-panel-tilt-shell__plane {
   transform:
+    perspective(var(--signal-ui-panel-tilt-perspective))
     translate3d(0, var(--signal-ui-panel-tilt-lift), 0)
     rotateX(var(--signal-ui-panel-tilt-rotate-x))
     rotateY(var(--signal-ui-panel-tilt-rotate-y));
@@ -574,12 +568,14 @@ h6.ant-typography {
   will-change: transform;
 }
 
-@media (hover: hover) and (pointer: fine) {
-  .signal-ui-panel-tilt-shell:hover {
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .signal-ui-panel--cursor-tilt.ant-card:hover,
+  .signal-ui-panel-shell--cursor-tilt:hover {
     --signal-ui-panel-tilt-lift: -2px;
   }
 
-  .signal-ui-panel-tilt-shell:hover > .signal-ui-panel-tilt-shell__plane {
+  .signal-ui-panel--cursor-tilt.ant-card:hover,
+  .signal-ui-panel-shell--cursor-tilt:hover {
     filter: brightness(1.02) saturate(1.04);
   }
 }
@@ -2833,7 +2829,8 @@ h6.ant-typography {
   .signal-ui-panel-shell__beam,
   .signal-ui-panel-shell__edges::before,
   .signal-ui-panel-shell__edges::after,
-  .signal-ui-panel-tilt-shell > .signal-ui-panel-tilt-shell__plane {
+  .signal-ui-panel--cursor-tilt.ant-card,
+  .signal-ui-panel-shell--cursor-tilt {
     animation: none;
     transition: none;
     will-change: auto;
