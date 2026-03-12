@@ -656,7 +656,7 @@ function CyberGlassPrototypeDemo() {
             revealState={revealState}
             style={prototypePanelStyle}
             surface="glass"
-            surfaceBlur={42}
+            surfaceBlur={14}
             title="Cryostatic Console"
           >
             <Space direction="vertical" size={16} style={{ width: "100%" }}>
@@ -1063,7 +1063,6 @@ const prototypeScrimStyle: CSSProperties = {
 
 const prototypeContentStyle: CSSProperties = {
   position: "relative",
-  zIndex: 1,
   display: "flex",
   flexDirection: "column",
   gap: 24,

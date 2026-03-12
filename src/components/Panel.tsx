@@ -55,6 +55,8 @@ type PanelStyle = CSSProperties & {
 
 type PanelShellStyle = CSSProperties & {
   "--signal-ui-panel-reveal-color"?: string;
+  "--signal-ui-panel-surface-blur"?: string;
+  "--signal-ui-panel-surface-color"?: string;
 };
 
 type PanelCutCornerPresetDefinition = {
@@ -146,7 +148,7 @@ export function Panel({
     ...(surface === "glass"
       ? {
           "--signal-ui-panel-surface-color": resolvedSurfaceColor,
-          "--signal-ui-panel-surface-blur": toCssLength(surfaceBlur) ?? "30px",
+          "--signal-ui-panel-surface-blur": toCssLength(surfaceBlur) ?? "10px",
         }
       : {}),
     ...(reveal === "holographic"
@@ -200,6 +202,8 @@ export function Panel({
 
   const shellStyle: PanelShellStyle = {
     "--signal-ui-panel-reveal-color": panelStyle["--signal-ui-panel-reveal-color"],
+    "--signal-ui-panel-surface-blur": panelStyle["--signal-ui-panel-surface-blur"],
+    "--signal-ui-panel-surface-color": panelStyle["--signal-ui-panel-surface-color"],
   };
 
   return (
@@ -211,6 +215,7 @@ export function Panel({
       className={joinClassNames(
         "signal-ui-panel-shell",
         "signal-ui-panel-shell--reveal-holographic",
+        surface === "glass" ? "signal-ui-panel-shell--surface-glass" : undefined,
         shouldRenderPixelReveal && "signal-ui-panel-shell--pixel-reveal",
         cursorTilt ? "signal-ui-panel-shell--cursor-tilt" : undefined,
       )}
