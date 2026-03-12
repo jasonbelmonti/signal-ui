@@ -266,19 +266,25 @@ export function Panel({
     <Card
       {...cardProps}
       onPointerCancel={
-        cursorTilt && reveal !== "holographic"
-          ? composeEventHandlers(onPointerCancel, surfacePointerHandlers.onPointerCancel)
-          : onPointerCancel
+        reveal === "holographic"
+          ? onPointerCancel
+          : cursorTilt
+            ? composeEventHandlers(onPointerCancel, surfacePointerHandlers.onPointerCancel)
+            : onPointerCancel
       }
       onPointerLeave={
-        cursorTilt && reveal !== "holographic"
-          ? composeEventHandlers(onPointerLeave, surfacePointerHandlers.onPointerLeave)
-          : onPointerLeave
+        reveal === "holographic"
+          ? onPointerLeave
+          : cursorTilt
+            ? composeEventHandlers(onPointerLeave, surfacePointerHandlers.onPointerLeave)
+            : onPointerLeave
       }
       onPointerMove={
-        cursorTilt && reveal !== "holographic"
-          ? composeEventHandlers(onPointerMove, surfacePointerHandlers.onPointerMove)
-          : onPointerMove
+        reveal === "holographic"
+          ? onPointerMove
+          : cursorTilt
+            ? composeEventHandlers(onPointerMove, surfacePointerHandlers.onPointerMove)
+            : onPointerMove
       }
       className={joinClassNames(
         "signal-ui-panel",
@@ -304,21 +310,9 @@ export function Panel({
 
   return (
     <div
-      onPointerCancel={
-        cursorTilt
-          ? composeEventHandlers(surfacePointerHandlers.onPointerCancel)
-          : undefined
-      }
-      onPointerLeave={
-        cursorTilt
-          ? composeEventHandlers(surfacePointerHandlers.onPointerLeave)
-          : undefined
-      }
-      onPointerMove={
-        cursorTilt
-          ? composeEventHandlers(surfacePointerHandlers.onPointerMove)
-          : undefined
-      }
+      onPointerCancel={cursorTilt ? surfacePointerHandlers.onPointerCancel : undefined}
+      onPointerLeave={cursorTilt ? surfacePointerHandlers.onPointerLeave : undefined}
+      onPointerMove={cursorTilt ? surfacePointerHandlers.onPointerMove : undefined}
       ref={cursorTilt ? surfaceRef : undefined}
       className={joinClassNames(
         "signal-ui-panel-shell",
