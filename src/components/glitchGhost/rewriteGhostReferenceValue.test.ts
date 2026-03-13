@@ -12,14 +12,20 @@ describe("rewriteGhostReferenceValue", () => {
     expect(rewriteGhostReferenceValue("fill", "url(#ghost-fill)", idMap)).toBe(
       "url(#signal-ui-glitch-ghost-1-ghost-fill)",
     );
+    expect(rewriteGhostReferenceValue("fill", 'url("#ghost-fill")', idMap)).toBe(
+      'url("#signal-ui-glitch-ghost-1-ghost-fill")',
+    );
+    expect(rewriteGhostReferenceValue("fill", "url('#ghost-fill')", idMap)).toBe(
+      "url('#signal-ui-glitch-ghost-1-ghost-fill')",
+    );
     expect(
       rewriteGhostReferenceValue(
         "style",
-        "filter:url(#ghost-mask);clip-path:url(#ghost-fill)",
+        `filter:url("#ghost-mask");clip-path:url('#ghost-fill')`,
         idMap,
       ),
     ).toBe(
-      "filter:url(#signal-ui-glitch-ghost-1-ghost-mask);clip-path:url(#signal-ui-glitch-ghost-1-ghost-fill)",
+      `filter:url("#signal-ui-glitch-ghost-1-ghost-mask");clip-path:url('#signal-ui-glitch-ghost-1-ghost-fill')`,
     );
   });
 
