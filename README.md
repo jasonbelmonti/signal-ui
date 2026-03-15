@@ -11,9 +11,21 @@ bun run typecheck
 bun run build
 ```
 
+The Storybook catalog is organized in this order:
+
+1. `Overview` – landing, getting started, and catalog context.
+2. `Foundations` – baseline visual and token references.
+3. `Components` – primary reusable components.
+4. `Recipes` – recommended patterns and composition examples for real product flows.
+5. `Lab` – secondary experimental or edge-case surfaces.
+
 Pushes to `main` also publish the static Storybook to GitHub Pages via
 `.github/workflows/storybook-pages.yml`, so the theme can be shared without a local build.
 The default URL for this repository is `https://jasonbelmonti.github.io/signal-ui/`.
+
+`Recipes` and `Lab` remain in the catalog intentionally, but they are secondary to
+`Foundations` and `Components` so designers and integrators can quickly separate stable
+reference surfaces from exploratory patterns.
 
 `bun run build` emits the consumable package contract in `dist/`:
 

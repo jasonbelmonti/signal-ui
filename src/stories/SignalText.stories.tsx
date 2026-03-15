@@ -219,7 +219,7 @@ function SignalTextShowcase() {
 }
 
 const meta = {
-  title: "Effects/Signal Text",
+  title: "Lab/Signal Text",
   component: SignalTextPlayground,
   args: {
     text: "GRID UPLINK ONLINE",

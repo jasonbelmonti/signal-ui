@@ -4,7 +4,7 @@ import { NavigationChromeScene } from "./navigationChrome/NavigationChromeScene.
 import "./navigationChrome/navigationChrome.css";
 
 const meta = {
-  title: "Patterns/Navigation Chrome",
+  title: "Recipes/Navigation Chrome",
   component: NavigationChromeScene,
   args: {
     scenario: "top-navigation",

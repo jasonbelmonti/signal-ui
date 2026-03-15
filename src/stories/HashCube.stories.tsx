@@ -11,7 +11,7 @@ const alertHash = "f24723c0ffee9f4dff86b400d9ff67050f0f0f1c";
 const viewportListEntries = createViewportListEntries();
 
 const meta = {
-  title: "Effects/Hash Cube",
+  title: "Lab/Hash Cube",
   component: HashCube,
   parameters: {
     layout: "fullscreen",

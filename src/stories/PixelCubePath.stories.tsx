@@ -8,7 +8,7 @@ import { signalPalette } from "../theme/signalTheme.js";
 const viewportBankEntries = createViewportBankEntries();
 
 const meta = {
-  title: "Effects/Pixel Cube Path",
+  title: "Lab/Pixel Cube Path",
   component: PixelCubePath,
   parameters: {
     layout: "fullscreen",
