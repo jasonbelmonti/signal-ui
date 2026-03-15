@@ -41,7 +41,7 @@ export function FullScreenWipe({
   ...divProps
 }: FullScreenWipeProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const { blocksInteraction, phase, renderedState } = useFullScreenWipeState({
+  const { blocksInteraction, phase, reducedMotion, renderedState } = useFullScreenWipeState({
     durationMs,
     state,
   });
@@ -53,6 +53,7 @@ export function FullScreenWipe({
     canvasRef,
     durationMs: phaseDurationMs,
     phase: variant === "procedural-pixel" ? phase : undefined,
+    reducedMotion,
     state: variant === "procedural-pixel" ? state : "open",
   });
 

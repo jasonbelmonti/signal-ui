@@ -10,6 +10,7 @@ type UseProceduralPixelWipeCanvasOptions = {
   canvasRef: RefObject<HTMLCanvasElement | null>;
   durationMs: number;
   phase?: FullScreenWipePhase;
+  reducedMotion: boolean;
   state: FullScreenWipeState;
 };
 
@@ -17,6 +18,7 @@ export function useProceduralPixelWipeCanvas({
   canvasRef,
   durationMs,
   phase,
+  reducedMotion,
   state,
 }: UseProceduralPixelWipeCanvasOptions) {
   const phaseStartTimeRef = useRef<number | null>(null);
@@ -64,7 +66,7 @@ export function useProceduralPixelWipeCanvas({
         phase: "closed",
         progress: 1,
         rows,
-        timeMs,
+        timeMs: reducedMotion ? 0 : timeMs,
       });
 
       return;
@@ -100,6 +102,7 @@ export function useProceduralPixelWipeCanvas({
     let animationFrameId = 0;
     let resizeObserver: ResizeObserver | undefined;
     let disposed = false;
+    const shouldAnimate = phase !== undefined || (state === "closed" && !reducedMotion);
 
     const renderLoop = (timeMs: number) => {
       if (disposed) {
@@ -108,7 +111,7 @@ export function useProceduralPixelWipeCanvas({
 
       drawFrame(timeMs);
 
-      if (phase || state === "closed") {
+      if (shouldAnimate) {
         animationFrameId = window.requestAnimationFrame(renderLoop);
       }
     };
@@ -119,7 +122,7 @@ export function useProceduralPixelWipeCanvas({
       activePhaseRef.current = phase;
       drawFrame(performance.now());
 
-      if (phase || state === "closed") {
+      if (shouldAnimate) {
         animationFrameId = window.requestAnimationFrame(renderLoop);
       }
     };
@@ -138,7 +141,7 @@ export function useProceduralPixelWipeCanvas({
       window.cancelAnimationFrame(animationFrameId);
       resizeObserver?.disconnect();
     };
-  }, [canvasRef, drawFrame, durationMs, phase, state]);
+  }, [canvasRef, drawFrame, durationMs, phase, reducedMotion, state]);
 }
 
 function getCanvasGrid(width: number, height: number) {
