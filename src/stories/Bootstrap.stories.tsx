@@ -3,6 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react-webpack5";
 
 const meta = {
   title: "Overview/Getting Started",
+  id: "setup-bootstrap",
   component: Card,
   args: {
     title: "Signal UI",
@@ -69,4 +70,4 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const GettingStarted: Story = {};
+export const WorkspaceSmokeTest: Story = {};

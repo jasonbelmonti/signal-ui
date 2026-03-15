@@ -277,6 +277,7 @@ const denseEdges = withGraphCanvasEdgeType([
 
 const meta = {
   title: "Lab/GraphCanvas",
+  id: "graphs-graph-canvas",
   component: GraphCanvas,
   args: {
     edges: foundationEdges,

@@ -5,6 +5,7 @@ import "./chatUi/chatUi.css";
 
 const meta = {
   title: "Recipes/Chat UI",
+  id: "patterns-chat-ui",
   component: ChatUiScene,
   parameters: {
     layout: "fullscreen",
