@@ -42,7 +42,7 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const SemanticTones: Story = {};
+export const Playground: Story = {};
 
 const tagGroups = [
   {

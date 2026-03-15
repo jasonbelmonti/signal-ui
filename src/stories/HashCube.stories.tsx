@@ -11,7 +11,7 @@ const alertHash = "f24723c0ffee9f4dff86b400d9ff67050f0f0f1c";
 const viewportListEntries = createViewportListEntries();
 
 const meta = {
-  title: "Lab/Hash Cube",
+  title: "Components/HashCube",
   component: HashCube,
   parameters: {
     layout: "fullscreen",
@@ -40,7 +40,7 @@ const meta = {
               Let the hash become the artifact.
             </Typography.Title>
             <Typography.Paragraph style={copyStyle}>
-              This prototype maps a hash onto a stable 3x3x3 voxel shell. Higher values push cubes
+              This component maps a hash onto a stable 3x3x3 voxel shell. Higher values push cubes
               solid, lower values drop them into wireframe or ghost states, and the hash also
               selects accent channels so the object feels encoded instead of randomly decorated.
             </Typography.Paragraph>
@@ -119,9 +119,9 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const DefaultHashCube: Story = {};
+export const Playground: Story = {};
 
-export const ViewportGatedList: Story = {
+export const ViewportList: Story = {
   render: () => (
     <Flex vertical gap={24} style={{ maxWidth: 1120, margin: "0 auto" }}>
       <Card style={heroCardStyle}>

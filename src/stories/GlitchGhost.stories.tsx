@@ -126,7 +126,7 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const DockingPanel: Story = {};
+export const Playground: Story = {};
 
 export const SignalTextEcho: Story = {
   args: {

@@ -6,10 +6,11 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
 import { MarkdownTheme } from "../components/MarkdownTheme.js";
+import type { MarkdownThemeProps } from "../components/MarkdownTheme.js";
 import { Panel } from "../components/Panel.js";
 import { signalPalette } from "../theme/signalTheme.js";
 
-interface MarkdownThemeStoryProps {
+interface MarkdownThemeStoryProps extends MarkdownThemeProps {
   markdown: string;
 }
 
@@ -117,7 +118,7 @@ Links like [Storybook docs](https://storybook.js.org/docs) stay clearly interact
 > Optional callouts and disclosure blocks are still supported as trusted HTML helpers, but they are demonstrated separately from this live markdown control so pasted Storybook args stay inert.
 `;
 
-function MarkdownThemeStory({ markdown }: MarkdownThemeStoryProps) {
+function MarkdownThemeStory({ markdown, ...articleProps }: MarkdownThemeStoryProps) {
   return (
     <Flex vertical gap={24} style={{ maxWidth: 1320, margin: "0 auto" }}>
       <Panel
@@ -158,7 +159,7 @@ function MarkdownThemeStory({ markdown }: MarkdownThemeStoryProps) {
             extra="Story Args + GFM + HLJS"
             cutCornerPreset="architectural"
           >
-            <MarkdownTheme>
+            <MarkdownTheme {...articleProps}>
               <ReactMarkdown rehypePlugins={[rehypeHighlight]} remarkPlugins={[remarkGfm]}>
                 {markdown}
               </ReactMarkdown>
@@ -253,13 +254,23 @@ function MarkdownThemeStory({ markdown }: MarkdownThemeStoryProps) {
   );
 }
 
+type MarkdownThemeStoryArgs = MarkdownThemeProps & {
+  markdown: string;
+};
+
 const meta = {
-  title: "Recipes/Markdown Theme",
-  component: MarkdownThemeStory,
+  title: "Components/MarkdownTheme",
+  component: MarkdownTheme,
   args: {
     markdown: defaultMarkdown,
   },
   argTypes: {
+    children: {
+      control: false,
+    },
+    className: {
+      control: false,
+    },
     markdown: {
       control: "text",
       description: "Raw markdown rendered through react-markdown with GFM and syntax highlighting.",
@@ -269,13 +280,14 @@ const meta = {
     layout: "fullscreen",
   },
   tags: ["autodocs"],
-} satisfies Meta<typeof MarkdownThemeStory>;
+  render: (args) => <MarkdownThemeStory {...args} />,
+} satisfies Meta<MarkdownThemeStoryArgs>;
 
 export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const DefaultMarkdownTheme: Story = {};
+export const Playground: Story = {};
 
 const accentLabelRowStyle: CSSProperties = {
   display: "flex",
