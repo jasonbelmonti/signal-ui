@@ -43,6 +43,8 @@ export interface PanelProps extends CardProps {
   cursorTilt?: boolean;
 }
 
+type PanelRevealCssVariable = `--signal-ui-panel-reveal-${string}`;
+
 type PanelStyle = CSSProperties & {
   "--signal-ui-panel-cut-color"?: string;
   "--signal-ui-panel-cut-size"?: string;
@@ -51,13 +53,13 @@ type PanelStyle = CSSProperties & {
   "--signal-ui-panel-reveal-color"?: string;
   "--signal-ui-panel-surface-blur"?: string;
   "--signal-ui-panel-surface-color"?: string;
-};
+} & Partial<Record<PanelRevealCssVariable, string | number>>;
 
-type PanelShellStyle = CSSProperties & {
-  "--signal-ui-panel-reveal-color"?: string;
-  "--signal-ui-panel-surface-blur"?: string;
-  "--signal-ui-panel-surface-color"?: string;
-};
+type PanelShellStyle = CSSProperties &
+  Partial<Record<PanelRevealCssVariable, string | number>> & {
+    "--signal-ui-panel-surface-blur"?: string;
+    "--signal-ui-panel-surface-color"?: string;
+  };
 
 type PanelCutCornerPresetDefinition = {
   cutCorner: PanelCutCorner;
@@ -80,6 +82,12 @@ export const panelCutCornerPresets = {
     cutCornerSize: 24,
   },
 } satisfies Record<PanelCutCornerPreset, PanelCutCornerPresetDefinition>;
+
+function getPanelRevealCssVariables(style: PanelStyle) {
+  return Object.fromEntries(
+    Object.entries(style).filter(([propertyName]) => propertyName.startsWith("--signal-ui-panel-reveal-")),
+  ) as Partial<Record<PanelRevealCssVariable, string | number>>;
+}
 
 export function Panel({
   className,
@@ -201,7 +209,7 @@ export function Panel({
   }
 
   const shellStyle: PanelShellStyle = {
-    "--signal-ui-panel-reveal-color": panelStyle["--signal-ui-panel-reveal-color"],
+    ...getPanelRevealCssVariables(panelStyle),
     "--signal-ui-panel-surface-blur": panelStyle["--signal-ui-panel-surface-blur"],
     "--signal-ui-panel-surface-color": panelStyle["--signal-ui-panel-surface-color"],
   };

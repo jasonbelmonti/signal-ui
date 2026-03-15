@@ -11,6 +11,8 @@ import { signalPalette } from "../theme/signalTheme.js";
 
 type SignalReadoutStyle = CSSProperties &
   Record<`--signal-ui-fx-signal-${string}`, string | number>;
+type PanelRevealStyle = CSSProperties &
+  Partial<Record<`--signal-ui-panel-reveal-${string}`, string | number>>;
 
 type RevealState = NonNullable<PanelProps["revealState"]>;
 
@@ -1247,11 +1249,14 @@ const modalPanelWrapStyle: CSSProperties = {
   alignSelf: "center",
 };
 
-const modalPanelStyle: CSSProperties = {
+const modalPanelStyle: PanelRevealStyle = {
   minHeight: 360,
   background:
     "linear-gradient(180deg, rgba(255, 255, 255, 0.05), transparent 44%), rgba(7, 7, 7, 0.92)",
   backdropFilter: "blur(16px)",
+  "--signal-ui-panel-reveal-duration": "585ms",
+  "--signal-ui-panel-reveal-intro-duration": "248ms",
+  "--signal-ui-panel-reveal-outro-duration": "248ms",
 };
 
 const reticleMetrics = [
