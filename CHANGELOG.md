@@ -1,5 +1,12 @@
 # @jasonbelmonti/signal-ui
 
+## 0.10.0
+
+### Minor Changes
+
+- 700ae9f: Add the `GlitchGhost` component to the public package and preserve ghost snapshot updates for
+  canvas-backed content.
+
 ## 0.9.0
 
 ### Minor Changes
