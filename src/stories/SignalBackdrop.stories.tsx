@@ -16,7 +16,7 @@ import { SignalStatusTag } from "../components/SignalStatusTag.js";
 import { signalPalette } from "../theme/signalTheme.js";
 
 const meta = {
-  title: "Lab/Signal Backdrop",
+  title: "Components/SignalBackdrop",
   component: SignalBackdrop,
   parameters: {
     layout: "fullscreen",
@@ -54,9 +54,9 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const ContourLatticeField: Story = {};
+export const Playground: Story = {};
 
-export const VioletEventChannel: Story = {
+export const VioletTone: Story = {
   args: {
     density: "high",
     telemetry: {
@@ -68,7 +68,7 @@ export const VioletEventChannel: Story = {
   },
 };
 
-export const FieldStudy: Story = {
+export const FullBleedSurface: Story = {
   args: {
     density: "high",
     telemetry: {

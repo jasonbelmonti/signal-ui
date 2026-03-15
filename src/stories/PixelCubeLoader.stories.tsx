@@ -6,7 +6,7 @@ import { PixelCubeLoader } from "../components/PixelCubeLoader.js";
 import { signalPalette } from "../theme/signalTheme.js";
 
 const meta = {
-  title: "Lab/Pixel Cube Loader",
+  title: "Components/PixelCubeLoader",
   component: PixelCubeLoader,
   parameters: {
     layout: "fullscreen",
@@ -116,7 +116,7 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const DefaultPixelCubeLoader: Story = {};
+export const Playground: Story = {};
 
 const eyebrowStyle: CSSProperties = {
   display: "block",

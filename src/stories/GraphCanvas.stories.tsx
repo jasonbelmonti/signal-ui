@@ -276,8 +276,7 @@ const denseEdges = withGraphCanvasEdgeType([
 ]);
 
 const meta = {
-  title: "Lab/GraphCanvas",
-  id: "graphs-graph-canvas",
+  title: "Components/GraphCanvas",
   component: GraphCanvas,
   args: {
     edges: foundationEdges,
@@ -294,12 +293,12 @@ const meta = {
   tags: ["autodocs"],
   render: (args) => renderShowcase({
     args,
-    cardTitle: "Foundation",
+    cardTitle: "Playground",
     copy:
-      "The graph canvas now owns its own chrome: hard-edge nodes, restrained lime edge routing, themed minimap, and operator controls that no longer look like they wandered in from a different product.",
-    extra: "Read-Only Defaults",
-    eyebrow: "React Flow Styling",
-    title: "Make the graph look like it belongs here.",
+      "GraphCanvas packages Signal-native nodes, themed edge routing, a minimap, and operator controls into one read-only workflow surface for plans, diagnostics, and system maps.",
+    extra: "Reference Surface",
+    eyebrow: "Workflow Canvas",
+    title: "Signal-native graph workflows with built-in chrome.",
   }),
 } satisfies Meta<GraphCanvasStoryArgs>;
 
@@ -307,9 +306,9 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const Foundation: Story = {};
+export const Playground: Story = {};
 
-export const DenseSignals: Story = {
+export const DenseFlow: Story = {
   args: {
     edges: denseEdges,
     fitViewOptions: { padding: 0.16 },
@@ -321,14 +320,14 @@ export const DenseSignals: Story = {
       args,
       cardTitle: "Dense Flow",
       copy:
-        "The denser pass keeps lanes distinct with tone shifts and chip punctuation while preserving legibility against the grid. If this one reads, the sparse case is easy.",
-      extra: "Density Check",
-      eyebrow: "Stress View",
-      title: "More nodes. Same visual language.",
+        "Use the denser layout when a flow needs more nodes, tonal grouping, and badges without giving up scanability or visual hierarchy.",
+      extra: "Scaled Example",
+      eyebrow: "Dense Layout",
+      title: "Scale the canvas without losing hierarchy.",
     }),
 };
 
-export const LoadingOverlay: Story = {
+export const LoadingState: Story = {
   args: {
     edges: foundationEdges,
     loading: true,
@@ -338,16 +337,16 @@ export const LoadingOverlay: Story = {
   render: (args) =>
     renderShowcase({
       args,
-      cardTitle: "Loading Overlay",
+      cardTitle: "Loading State",
       copy:
-        "The graph can keep its context visible while a themed status card sits over the canvas. This covers the loading branch without falling back to generic app chrome.",
-      extra: "Verification",
-      eyebrow: "Overlay State",
-      title: "Loading should still look deliberate.",
+        "Loading can preserve the graph frame and overlay status so operators keep their bearings while fresh data arrives.",
+      extra: "Supported State",
+      eyebrow: "Loading Pattern",
+      title: "Loading keeps the frame and the user's context.",
     }),
 };
 
-export const EmptyOverlay: Story = {
+export const EmptyState: Story = {
   args: {
     edges: [],
     emptyState: "No Graph Data",
@@ -359,12 +358,12 @@ export const EmptyOverlay: Story = {
   render: (args) =>
     renderShowcase({
       args,
-      cardTitle: "Empty Overlay",
+      cardTitle: "Empty State",
       copy:
-        "An empty graph should still feel like part of the system. This verifies the fallback canvas state instead of letting it drift untested behind the happy path stories.",
-      extra: "Verification",
-      eyebrow: "Overlay State",
-      title: "Empty should be a first-class state too.",
+        "Empty datasets still inherit the same canvas chrome, which makes onboarding, zero-results, and first-run states feel intentional instead of unfinished.",
+      extra: "Supported State",
+      eyebrow: "Empty Pattern",
+      title: "Empty states stay inside the same system.",
     }),
 };
 

@@ -8,7 +8,7 @@ import { signalPalette } from "../theme/signalTheme.js";
 const viewportBankEntries = createViewportBankEntries();
 
 const meta = {
-  title: "Lab/Pixel Cube Path",
+  title: "Components/PixelCubePath",
   component: PixelCubePath,
   parameters: {
     layout: "fullscreen",
@@ -36,9 +36,8 @@ const meta = {
               Flat. Symmetric. Alive.
             </Typography.Title>
             <Typography.Paragraph style={copyStyle}>
-              This recasts the reference effect as a compact 3x3x3 voxel cube, keeps the flatter
-              hard-edge geometry, and swaps hover-triggered glow for a deterministic path that
-              continuously sweeps across the visible faces.
+              PixelCubePath renders a compact 3x3x3 voxel cube with flatter hard-edge geometry and
+              a deterministic path that continuously sweeps across the visible faces.
             </Typography.Paragraph>
             <Typography.Paragraph style={copyStyle}>
               Viewport rendering is now the default so dense banks and scrolling lists can use the
@@ -139,9 +138,9 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const DefaultPixelCubePath: Story = {};
+export const Playground: Story = {};
 
-export const ViewportGatedBank: Story = {
+export const ViewportBank: Story = {
   render: () => (
     <Flex vertical gap={24} style={{ maxWidth: 1120, margin: "0 auto" }}>
       <Card style={heroCardStyle}>

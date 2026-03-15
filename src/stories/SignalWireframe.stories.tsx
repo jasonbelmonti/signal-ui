@@ -9,7 +9,7 @@ import { signalPalette } from "../theme/signalTheme.js";
 const viewportStackEntries = createViewportStackEntries();
 
 const meta = {
-  title: "Lab/Signal Wireframe",
+  title: "Components/SignalWireframe",
   component: SignalWireframe,
   parameters: {
     layout: "fullscreen",
@@ -130,9 +130,9 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const DefaultSignalWireframe: Story = {};
+export const Playground: Story = {};
 
-export const ViewportGatedStack: Story = {
+export const ViewportStack: Story = {
   render: () => (
     <Flex vertical gap={24} style={{ maxWidth: 1180, margin: "0 auto" }}>
       <Card style={heroCardStyle}>
