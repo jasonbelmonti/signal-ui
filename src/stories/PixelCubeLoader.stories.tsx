@@ -6,7 +6,7 @@ import { PixelCubeLoader } from "../components/PixelCubeLoader.js";
 import { signalPalette } from "../theme/signalTheme.js";
 
 const meta = {
-  title: "Effects/Pixel Cube Loader",
+  title: "Lab/Pixel Cube Loader",
   component: PixelCubeLoader,
   parameters: {
     layout: "fullscreen",

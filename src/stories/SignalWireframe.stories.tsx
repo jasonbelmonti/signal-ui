@@ -9,7 +9,7 @@ import { signalPalette } from "../theme/signalTheme.js";
 const viewportStackEntries = createViewportStackEntries();
 
 const meta = {
-  title: "Effects/Signal Wireframe",
+  title: "Lab/Signal Wireframe",
   component: SignalWireframe,
   parameters: {
     layout: "fullscreen",

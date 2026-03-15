@@ -16,7 +16,7 @@ import { SignalStatusTag } from "../components/SignalStatusTag.js";
 import { signalPalette } from "../theme/signalTheme.js";
 
 const meta = {
-  title: "Effects/Signal Backdrop",
+  title: "Lab/Signal Backdrop",
   component: SignalBackdrop,
   parameters: {
     layout: "fullscreen",

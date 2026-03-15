@@ -254,7 +254,7 @@ function MarkdownThemeStory({ markdown }: MarkdownThemeStoryProps) {
 }
 
 const meta = {
-  title: "Patterns/Markdown Theme",
+  title: "Recipes/Markdown Theme",
   component: MarkdownThemeStory,
   args: {
     markdown: defaultMarkdown,

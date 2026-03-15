@@ -4,7 +4,8 @@ import { ChatUiScene } from "./chatUi/ChatUiScene.js";
 import "./chatUi/chatUi.css";
 
 const meta = {
-  title: "Patterns/Chat UI",
+  title: "Recipes/Chat UI",
+  id: "patterns-chat-ui",
   component: ChatUiScene,
   parameters: {
     layout: "fullscreen",

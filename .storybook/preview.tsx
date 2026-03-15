@@ -17,6 +17,12 @@ const preview: Preview = {
   ],
   parameters: {
     layout: "fullscreen",
+    options: {
+      storySort: {
+        order: ["Overview", "Foundations", "Components", "Recipes", "Lab"],
+        method: "alphabetical",
+      },
+    },
     backgrounds: {
       disable: true,
     },
