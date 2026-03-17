@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-webpack5";
 
-import { PanelMaterialExperimentsScene } from "./panel/PanelSecondaryScenes.js";
+import { PanelMaterialExperimentsScene } from "./panel/PanelMaterialExperimentsScene.js";
 
 const meta = {
   title: "Lab/Panel Material Experiments",
