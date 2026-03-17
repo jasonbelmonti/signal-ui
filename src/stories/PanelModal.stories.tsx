@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-webpack5";
 
-import { PanelModalScene } from "./panel/PanelSecondaryScenes.js";
+import { PanelModalScene } from "./panel/PanelModalScene.js";
 
 const meta = {
   title: "Recipes/Panel Modal",
