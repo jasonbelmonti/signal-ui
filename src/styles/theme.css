@@ -118,6 +118,7 @@ select {
   --signal-ui-signal-button-cooldown: 0;
   --signal-ui-signal-button-edge-width: 24px;
   --signal-ui-signal-button-fill-size: 64%;
+  --signal-ui-signal-button-ink-rgb: 249 255 239;
   --signal-ui-signal-button-shake-amp: 0px;
   min-height: 54px;
   padding-inline: 1.2rem;
@@ -129,34 +130,37 @@ select {
   gap: 0;
   overflow: visible;
   isolation: isolate;
-  border-color: rgb(var(--signal-ui-signal-button-accent-rgb) / 0.34);
+  border-color: rgb(var(--signal-ui-signal-button-accent-rgb) / 0.52);
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.045), transparent 52%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.08), transparent 54%),
+    radial-gradient(circle at 50% 0%, rgb(var(--signal-ui-signal-button-accent-rgb) / 0.24), transparent 58%),
     linear-gradient(
       135deg,
-      rgb(var(--signal-ui-signal-button-accent-rgb) / calc(0.12 - var(--signal-ui-signal-button-cooldown) * 0.04)),
-      transparent 32%
+      rgb(var(--signal-ui-signal-button-accent-rgb) / calc(0.2 - var(--signal-ui-signal-button-cooldown) * 0.05)),
+      transparent 36%
     ),
     linear-gradient(
       180deg,
-      rgb(var(--signal-ui-signal-button-accent-rgb) / calc(var(--signal-ui-signal-button-cooldown) * 0.08)),
-      transparent 72%
+      rgb(var(--signal-ui-signal-button-accent-rgb) / calc(0.1 + var(--signal-ui-signal-button-cooldown) * 0.04)),
+      transparent 78%
     ),
-    rgba(8, 8, 8, 0.96);
-  color: rgb(var(--signal-ui-signal-button-accent-rgb) / 0.96);
+    rgb(8 10 8 / 0.97);
+  color: rgb(var(--signal-ui-signal-button-ink-rgb) / 0.98);
   box-shadow:
-    inset 0 0 0 1px rgba(255, 255, 255, 0.04),
-    0 0 0 1px rgba(0, 0, 0, 0.54),
-    0 10px 24px rgba(0, 0, 0, 0.28),
-    0 0 calc(12px + var(--signal-ui-signal-button-burst-flash) * 34px)
+    inset 0 0 0 1px rgb(var(--signal-ui-signal-button-accent-rgb) / 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 0 0 1px rgba(0, 0, 0, 0.62),
+    0 14px 32px rgba(0, 0, 0, 0.34),
+    0 0 calc(14px + var(--signal-ui-signal-button-burst-flash) * 34px)
       rgb(
         var(--signal-ui-signal-button-accent-rgb) /
-          calc(0.08 + var(--signal-ui-signal-button-burst-flash) * 0.38 - var(--signal-ui-signal-button-cooldown) * 0.03)
+          calc(0.16 + var(--signal-ui-signal-button-burst-flash) * 0.36 - var(--signal-ui-signal-button-cooldown) * 0.03)
       );
   filter:
-    brightness(calc(1 + var(--signal-ui-signal-button-burst-flash) * 0.18 - var(--signal-ui-signal-button-cooldown) * 0.03))
-    saturate(calc(1 - var(--signal-ui-signal-button-cooldown) * 0.18));
-  text-shadow: 0 0 0.5em rgb(var(--signal-ui-signal-button-accent-rgb) / calc(0.18 - var(--signal-ui-signal-button-cooldown) * 0.04));
+    brightness(calc(1.03 + var(--signal-ui-signal-button-burst-flash) * 0.18 - var(--signal-ui-signal-button-cooldown) * 0.02))
+    saturate(calc(1.18 - var(--signal-ui-signal-button-cooldown) * 0.1));
+  text-shadow: 0 0 0.5em
+    rgb(var(--signal-ui-signal-button-accent-rgb) / calc(0.26 - var(--signal-ui-signal-button-cooldown) * 0.04));
   transform-origin: center;
   will-change: transform;
   animation: signal-ui-signal-button-vibrate 78ms steps(1, end) infinite;
@@ -186,7 +190,7 @@ select {
   position: absolute;
   inset: 2px;
   z-index: 0;
-  border: 1px solid rgba(255, 255, 255, 0.04);
+  border: 1px solid rgb(var(--signal-ui-signal-button-accent-rgb) / 0.14);
   pointer-events: none;
 }
 
@@ -226,30 +230,39 @@ select {
 
 .signal-ui-signal-button.ant-btn:not(:disabled):hover,
 .signal-ui-signal-button.ant-btn:not(:disabled):focus-visible {
-  border-color: rgb(var(--signal-ui-signal-button-accent-rgb) / 0.56);
-  color: var(--signal-ui-fx-signal-ink);
+  border-color: rgb(var(--signal-ui-signal-button-accent-rgb) / 0.72);
+  color: rgb(var(--signal-ui-signal-button-ink-rgb) / 0.99);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.09), transparent 52%),
+    radial-gradient(circle at 50% 0%, rgb(var(--signal-ui-signal-button-accent-rgb) / 0.28), transparent 60%),
+    linear-gradient(135deg, rgb(var(--signal-ui-signal-button-accent-rgb) / 0.24), transparent 38%),
+    linear-gradient(180deg, rgb(var(--signal-ui-signal-button-accent-rgb) / 0.12), transparent 80%),
+    rgb(8 10 8 / 0.98);
   box-shadow:
-    inset 0 0 0 1px rgba(255, 255, 255, 0.06),
-    0 0 0 1px rgb(var(--signal-ui-signal-button-accent-rgb) / 0.18),
-    0 0 24px rgb(var(--signal-ui-signal-button-accent-rgb) / 0.18);
+    inset 0 0 0 1px rgb(var(--signal-ui-signal-button-accent-rgb) / 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 0 0 1px rgb(var(--signal-ui-signal-button-accent-rgb) / 0.28),
+    0 0 28px rgb(var(--signal-ui-signal-button-accent-rgb) / 0.28),
+    0 16px 34px rgba(0, 0, 0, 0.38);
 }
 
 .signal-ui-signal-button.ant-btn:active {
-  border-color: rgb(var(--signal-ui-signal-button-accent-rgb) / 0.62);
+  border-color: rgb(var(--signal-ui-signal-button-accent-rgb) / 0.76);
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent 52%),
-    linear-gradient(135deg, rgb(var(--signal-ui-signal-button-accent-rgb) / 0.16), transparent 32%),
-    rgba(5, 5, 5, 0.98);
+    linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 52%),
+    radial-gradient(circle at 50% 0%, rgb(var(--signal-ui-signal-button-accent-rgb) / 0.18), transparent 56%),
+    linear-gradient(135deg, rgb(var(--signal-ui-signal-button-accent-rgb) / 0.2), transparent 36%),
+    rgb(5 6 5 / 0.98);
 }
 
 .signal-ui-signal-button.ant-btn:disabled,
 .signal-ui-signal-button.ant-btn.ant-btn-disabled {
-  color: rgb(var(--signal-ui-signal-button-accent-rgb) / 0.56);
-  border-color: rgb(var(--signal-ui-signal-button-accent-rgb) / 0.2);
+  color: rgb(var(--signal-ui-signal-button-ink-rgb) / 0.5);
+  border-color: rgb(var(--signal-ui-signal-button-accent-rgb) / 0.24);
   box-shadow:
-    inset 0 0 0 1px rgba(255, 255, 255, 0.02),
+    inset 0 0 0 1px rgb(var(--signal-ui-signal-button-accent-rgb) / 0.08),
     0 0 0 1px rgba(0, 0, 0, 0.48);
-  filter: saturate(0.72);
+  filter: saturate(0.8) brightness(0.92);
 }
 
 .signal-ui-signal-button.ant-btn:disabled .signal-ui-signal-button__surface,
@@ -264,13 +277,14 @@ select {
   overflow: hidden;
   pointer-events: none;
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 52%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.05), transparent 48%),
+    radial-gradient(circle at 50% 0%, rgb(var(--signal-ui-signal-button-accent-rgb) / 0.16), transparent 62%),
     linear-gradient(
       180deg,
-      rgb(var(--signal-ui-signal-button-accent-rgb) / calc(var(--signal-ui-signal-button-cooldown) * 0.07)),
-      transparent 70%
+      rgb(var(--signal-ui-signal-button-accent-rgb) / calc(0.12 + var(--signal-ui-signal-button-cooldown) * 0.04)),
+      transparent 72%
     ),
-    rgba(6, 6, 6, 0.9);
+    rgb(7 9 7 / 0.93);
 }
 
 .signal-ui-signal-button__surface::after {
@@ -287,7 +301,7 @@ select {
     ),
     linear-gradient(180deg, rgba(255, 255, 255, 0.08), transparent 48%);
   mix-blend-mode: screen;
-  opacity: calc(0.24 - var(--signal-ui-signal-button-cooldown) * 0.08);
+  opacity: calc(0.16 - var(--signal-ui-signal-button-cooldown) * 0.05);
 }
 
 .signal-ui-signal-button__canvas,
@@ -306,15 +320,15 @@ select {
 
 .signal-ui-signal-button__sheen {
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.06), transparent 46%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.08), transparent 44%),
     linear-gradient(
       90deg,
       transparent 0 78%,
-      rgb(var(--signal-ui-signal-button-accent-rgb) / 0.08) 78% 92%,
-      rgb(var(--signal-ui-signal-button-accent-rgb) / 0.14) 92% 100%
+      rgb(var(--signal-ui-signal-button-accent-rgb) / 0.12) 78% 92%,
+      rgb(var(--signal-ui-signal-button-accent-rgb) / 0.22) 92% 100%
     );
   mix-blend-mode: screen;
-  opacity: calc(0.42 - var(--signal-ui-signal-button-cooldown) * 0.16);
+  opacity: calc(0.5 - var(--signal-ui-signal-button-cooldown) * 0.14);
 }
 
 .signal-ui-signal-button__label {
@@ -324,9 +338,11 @@ select {
   align-items: center;
   justify-content: center;
   inline-size: 100%;
-  color: var(--signal-ui-fx-signal-ink);
-  filter: drop-shadow(0 1px 0 rgb(0 0 0 / 0.56)) drop-shadow(0 0 0.32em rgb(255 255 255 / 0.18));
-  text-shadow: 0 0 0.45em rgb(0 0 0 / 0.22);
+  color: rgb(var(--signal-ui-signal-button-ink-rgb) / 0.98);
+  filter:
+    drop-shadow(0 1px 0 rgb(0 0 0 / 0.82))
+    drop-shadow(0 0 0.24em rgb(var(--signal-ui-signal-button-accent-rgb) / 0.18));
+  text-shadow: 0 0 0.42em rgb(0 0 0 / 0.28);
 }
 
 .signal-ui-signal-button__content {
@@ -351,18 +367,11 @@ select {
   line-height: 0.88;
   text-transform: uppercase;
   text-shadow:
-    0 0 0.22em rgb(255 255 255 / 0.34),
-    1px 0 0 rgb(0 0 0 / 0.72),
-    -1px 0 0 rgb(0 0 0 / 0.72),
-    0 1px 0 rgb(0 0 0 / 0.72),
-    0 -1px 0 rgb(0 0 0 / 0.72);
-}
-
-@supports (mix-blend-mode: exclusion) {
-  .signal-ui-signal-button__label {
-    color: rgb(252 252 252 / 0.96);
-    mix-blend-mode: exclusion;
-  }
+    0 0 0.18em rgb(255 255 255 / 0.24),
+    1px 0 0 rgb(0 0 0 / 0.82),
+    -1px 0 0 rgb(0 0 0 / 0.82),
+    0 1px 0 rgb(0 0 0 / 0.82),
+    0 -1px 0 rgb(0 0 0 / 0.82);
 }
 
 .ant-btn:not(:disabled):hover,
