@@ -1,5 +1,11 @@
 # @jasonbelmonti/signal-ui
 
+## 0.10.1
+
+### Patch Changes
+
+- 857978a: Improve Signal Button contrast so text and state styling read more clearly across themes.
+
 ## 0.10.0
 
 ### Minor Changes
